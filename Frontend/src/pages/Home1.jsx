@@ -6,9 +6,9 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { FaFacebook, FaPhoneAlt, FaInstagramSquare } from "react-icons/fa";
 import { Link, Element } from 'react-scroll';
-import Services from './Services';
+import Services from '../Components/Services';
 import { NavLink } from "react-router-dom";
-import Footer from './Footer';
+import Footer from '../Components/Footer';
 
 
 const Home1 = () => {

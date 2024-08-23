@@ -1,18 +1,17 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home1 from './Components/Home1';
-import Login from './Components/Login';
-import Sign_up from './Components/Sign_up';
-import Home2 from './Components/Home2';
+import Home1 from './pages/Home1';
+import Login from './pages/Login';
+import Sign_up from './pages/Sign_up';
+import Home2 from './pages/Home2';
 import Menu from './Components/Menu';
 import My_cart from './Components/My_cart';
 import My_order from './Components/My_order';
-import My_account from './Components/My_account';
+import My_account from './pages/My_account';
 import Cart_table from './Components/Cart_table';
 import Order_table from './Components/Order_table';
 import Services from './Components/Services';
 import Restaurent from './Components/Restaurent';
-// import Restaurentcategory from './Components/Restaurentcategory';
 import Admin_control_panel from './Components/Admin_control_panel';
 
 function App() {
