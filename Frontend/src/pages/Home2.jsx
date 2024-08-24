@@ -1,27 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import { MdEmail } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
-import {
-  FaFacebook,
-  FaPhoneAlt,
-  FaInstagramSquare,
-  FaCartArrowDown,
-} from "react-icons/fa";
+import { FaCartArrowDown } from "react-icons/fa";
 import { Link, Element } from "react-scroll";
 import { MdOutlineLogout, MdAccountCircle } from "react-icons/md";
+import { CgLogIn } from "react-icons/cg";
 import { FaBagShopping } from "react-icons/fa6";
 import Slider from "react-slick";
 import Offers_array from "../Components/Array/Offers_array";
-import Services from "../Components/Services";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
-import Card from "../Components/Card";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { findUser } from "../utils/findUser";
+import { logout } from "../utils/logout";
 
 const Home2 = () => {
   const navigate = useNavigate();
@@ -34,20 +28,6 @@ const Home2 = () => {
   //Refresh Function-----------
   const refreshMenu = () => {
     window.location.reload();
-  };
-
-  //Email Link-----------
-  const EmailClick = () => {
-    const email = "keya.tarafdar2003@gmail.com";
-    const mailtoLink = "mailto: ${email}";
-    window.location.href = mailtoLink;
-  };
-
-  //Phone Link----------------
-  const PhoneClick = () => {
-    const phoneNumber = "9647336816";
-    const telLink = "tel: ${phoneNumber}";
-    window.location.href = telLink;
   };
 
   // Card Slider(For xl)----------------------
@@ -91,15 +71,22 @@ const Home2 = () => {
     { label: "4", value: 4 },
   ];
 
+  const [account, setAccount] = useState("My Account");
+
   // Logout API
-  const logout = async () => {
-    try {
-      await axios.get("http://localhost:8000/users/logout");
-      navigate("/");
-    } catch (err) {
-      console.log(err);
+  const handleLogout = async () => {
+    if ((await logout()) == "Logout successfully") {
+      navigate("/Home2");
+      setAccount("My Account");
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      setAccount(await findUser());
+    };
+    fetchUser();
+  }, []);
 
   return (
     <div className="container-fluid m-0 p-0" style={{ width: "100%" }}>
@@ -196,22 +183,36 @@ const Home2 = () => {
                       className="header_menu"
                       style={{ height: "25px", width: "25px" }}
                     />
-                    <span className="header_menu">
-                      &nbsp;&nbsp;My&nbsp;Account
-                    </span>
+                    <span className="header_menu">&nbsp;&nbsp;{account}</span>
                   </NavLink>
                 </div>
                 <div
                   className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
                   style={{ float: "left" }}
                 >
-                  <MdOutlineLogout
-                    className="header_menu"
-                    style={{ height: "25px", width: "25px" }}
-                  />
-                  <span className="header_menu" onClick={logout}>
-                    &nbsp;&nbsp;Log&nbsp;out
-                  </span>
+                  {account !== "My Account" ? (
+                    <>
+                      <MdOutlineLogout
+                        className="header_menu"
+                        style={{ height: "25px", width: "25px" }}
+                      />
+                      <span className="header_menu" onClick={handleLogout}>
+                        &nbsp;&nbsp;Log&nbsp;out
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <NavLink to={"/Login"}>
+                        <CgLogIn
+                          className="header_menu"
+                          style={{ height: "25px", width: "25px" }}
+                        />
+                        <span className="header_menu">
+                          &nbsp;&nbsp;Log&nbsp;in
+                        </span>
+                      </NavLink>
+                    </>
+                  )}
                 </div>
               </div>
 

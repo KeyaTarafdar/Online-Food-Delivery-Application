@@ -21,7 +21,7 @@ module.exports.registerUser = async (req, res) => {
             email,
             password: hash,
             username,
-            contact
+            contact,
           });
 
           let token = generateToken(user);
@@ -40,26 +40,34 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.loginUser = async (req, res) => {
   try {
-    let { email, password } = req.body;
-    console.log(req.body);
-    if (email && password) {
-      let user = await userModel.findOne({ email });
-
-      if (user) {
-        bcrypt.compare(password, user.password, (err, result) => {
-          if (result) {
-            let token = generateToken(user);
-            res.cookie("token", token);
-            res.send("Login successfully");
-          } else {
-            res.send("Wrong Password");
-          }
-        });
-      } else {
-        return res.status(401).send("Email or Password is wrong");
-      }
+    let token = req.cookies.token;
+    if (token) {
+      res.send("You are already logged in.");
     } else {
-      return res.send("Something is missing");
+      let { email, password } = req.body;
+      if (email && password) {
+        let user = await userModel.findOne({ email });
+
+        if (user) {
+          bcrypt.compare(password, user.password, (err, result) => {
+            if (result) {
+              let token = generateToken(user);
+              res.cookie("token", token,{
+                httpOnly: true, // Cookie is only accessible by the web server
+                secure: false,  // Set to true if using HTTPS
+                sameSite: 'Lax' // Controls whether cookies are sent with cross-site requests
+              });
+              res.send("Login successfully");
+            } else {
+              res.send("Wrong Password");
+            }
+          });
+        } else {
+          return res.status(401).send("Email or Password is wrong");
+        }
+      } else {
+        return res.send("Something is missing");
+      }
     }
   } catch (err) {
     return res.status(501).send("Something went wrong");
@@ -72,5 +80,16 @@ module.exports.logoutUser = async (req, res) => {
     res.send("Logout successfully");
   } catch (err) {
     res.send("Something went wrong");
+  }
+};
+
+module.exports.getUser = async (req, res) => {
+  try {
+    if (req.user) {
+      let user = await userModel.findOne({ email: req.user.email });
+      res.send(user);
+    }
+  } catch (err) {
+    console.log(err.message);
   }
 };

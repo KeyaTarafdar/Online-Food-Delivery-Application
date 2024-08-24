@@ -23,6 +23,8 @@ const Login = () => {
         let response = await axios.post("http://localhost:8000/users/login", {
           email,
           password,
+        }, {
+          withCredentials: true // Ensure cookies are sent and received
         });
         if (response.data == "Login successfully") {
           navigate("/Home2");

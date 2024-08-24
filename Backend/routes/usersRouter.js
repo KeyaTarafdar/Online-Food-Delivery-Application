@@ -4,7 +4,7 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const {
   registerUser,
   loginUser,
-  logoutUser,
+  logoutUser,getUser
 } = require("../controller/authController");
 const userModel = require("../models/user-model");
 
@@ -18,10 +18,6 @@ router.post("/login", loginUser);
 
 router.get("/logout", isLoggedIn, logoutUser);
 
-router.get("/getdata", async (req, res) => {
-  let user = await userModel.findOne({ email: "keya@gmail.com" });
-  console.log(user.username)
-  res.send(user);
-});
+router.get("/getuser",isLoggedIn, getUser);
 
 module.exports = router;
