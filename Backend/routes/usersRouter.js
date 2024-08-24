@@ -4,9 +4,9 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const {
   registerUser,
   loginUser,
-  logoutUser,getUser
+  logoutUser,
+  getUser,
 } = require("../controller/authController");
-const userModel = require("../models/user-model");
 
 router.get("/", (req, res) => {
   res.send("User");
@@ -18,6 +18,6 @@ router.post("/login", loginUser);
 
 router.get("/logout", isLoggedIn, logoutUser);
 
-router.get("/getuser",isLoggedIn, getUser);
+router.get("/getuser", isLoggedIn, getUser);
 
 module.exports = router;

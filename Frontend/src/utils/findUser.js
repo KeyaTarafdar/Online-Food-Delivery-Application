@@ -5,8 +5,8 @@ export const findUser = async () => {
     let response = await axios.get("http://localhost:8000/users/getuser", {
       withCredentials: true,
     });
-    if (response.data.username) {
-      return response.data.username;
+    if (response.data) {
+      return response.data;
     } else {
       return "My Account";
     }

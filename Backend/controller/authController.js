@@ -5,6 +5,7 @@ const { generateToken } = require("../utils/generateToken");
 module.exports.registerUser = async (req, res) => {
   try {
     let { email, password, username, contact } = req.body;
+
     if (email && password && username && contact) {
       // Checks all fielda are given or not
       if (await userModel.findOne({ email })) {
@@ -52,10 +53,10 @@ module.exports.loginUser = async (req, res) => {
           bcrypt.compare(password, user.password, (err, result) => {
             if (result) {
               let token = generateToken(user);
-              res.cookie("token", token,{
+              res.cookie("token", token, {
                 httpOnly: true, // Cookie is only accessible by the web server
-                secure: false,  // Set to true if using HTTPS
-                sameSite: 'Lax' // Controls whether cookies are sent with cross-site requests
+                secure: false, // Set to true if using HTTPS
+                sameSite: "Lax", // Controls whether cookies are sent with cross-site requests
               });
               res.send("Login successfully");
             } else {

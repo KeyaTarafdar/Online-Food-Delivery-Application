@@ -1,13 +1,18 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { MdOutlineLogout } from "react-icons/md";
 import { PiPencilSimpleLineBold } from "react-icons/pi";
-import axios from "axios";
+import { findUser } from "../utils/findUser";
+import { logout } from "../utils/logout";
+import { useNavigate } from "react-router-dom";
 
 const My_account = () => {
+  const navigate = useNavigate();
   const [username, setusername] = useState(false);
 
-  const [name, setname] = useState("User");
+  const [name, setname] = useState("");
+  const [phone, setphone] = useState("");
+  const [email, setemail] = useState("");
 
   const update_username = () => {
     setusername(true);
@@ -15,14 +20,21 @@ const My_account = () => {
   const handleSubmit = () => {
     setusername(false);
   };
-  const getData = async () => {
-    const response = await axios.get("http://localhost:8000/users/getdata");
-    console.log(response.data.username)
-    setname(response.data.username);
+
+  const handleLogout = async () => {
+    if ((await logout()) === "Logout successfully") {
+      navigate("/Home2");
+    }
   };
 
   useEffect(() => {
-    getData();
+    const fetchuser = async () => {
+      const user = await findUser();
+      setname(user.username);
+      setemail(user.email);
+      setphone(user.contact);
+    };
+    fetchuser();
   }, []);
 
   return (
@@ -61,15 +73,18 @@ const My_account = () => {
             <MdOutlineLogout
               className="header_menu"
               style={{ height: "22px", width: "22px" }}
+              onClick={handleLogout}
             />
-            <span className="header_menu">&nbsp;&nbsp;Log&nbsp;Out</span>
+            <span className="header_menu" onClick={handleLogout}>
+              &nbsp;&nbsp;Log&nbsp;Out
+            </span>
           </div>
         </Navbar>
       </div>
       <div className="col-12 my_cart_background m-0 p-0">
         <div className="col-12 m-0 p-0 pt-5" style={{ display: "flex" }}>
           <div className="col-12 col-sm-12 col-md-10 col-lg-7">
-            <h2 className="col-7 col-md-5 col-sm-7 m-auto">Hi {name}</h2>
+            <h2 className="col-7 col-md-5 col-sm-7 m-auto"><strong>Hi!</strong>&nbsp; {name}</h2>
           </div>
         </div>
         <div
@@ -90,7 +105,7 @@ const My_account = () => {
                   height: "50px",
                 }}
               >
-                _Username_
+                {name}
               </div>
             </div>
             <div className="col-12 pt-3" style={{ display: "flex" }}>
@@ -105,7 +120,7 @@ const My_account = () => {
                   height: "50px",
                 }}
               >
-                _Phone no_
+                {phone}
               </div>
             </div>
             <div className="col-12 pt-3" style={{ display: "flex" }}>
@@ -120,7 +135,7 @@ const My_account = () => {
                   height: "50px",
                 }}
               >
-                _Email Id_
+                {email}
               </div>
             </div>
             <div className="col-12 pt-3" style={{ display: "flex" }}>

@@ -75,15 +75,29 @@ const Home2 = () => {
 
   // Logout API
   const handleLogout = async () => {
-    if ((await logout()) == "Logout successfully") {
+    if ((await logout()) === "Logout successfully") {
       navigate("/Home2");
       setAccount("My Account");
     }
   };
 
+  const myAccount = async () => {
+    const user = await findUser();
+    if (user.username) {
+      navigate("/My_account");
+    } else {
+      alert("You have to Login first!");
+    }
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
-      setAccount(await findUser());
+      const user = await findUser();
+      if (user.username) {
+        setAccount(user.username);
+      } else {
+        setAccount("My Account");
+      }
     };
     fetchUser();
   }, []);
@@ -178,13 +192,16 @@ const Home2 = () => {
                   className="col-lg-3 col-md-3 m-0 p-0 d-sm-none  d-md-none d-none d-lg-block"
                   style={{ float: "left" }}
                 >
-                  <NavLink to={"/My_account"} style={{ paddingTop: "0px" }}>
-                    <MdAccountCircle
-                      className="header_menu"
-                      style={{ height: "25px", width: "25px" }}
-                    />
-                    <span className="header_menu">&nbsp;&nbsp;{account}</span>
-                  </NavLink>
+                  {/* <NavLink to={"/My_account"} style={{ paddingTop: "0px" }}> */}
+                  <MdAccountCircle
+                    className="header_menu"
+                    style={{ height: "25px", width: "25px" }}
+                    onClick={myAccount}
+                  />
+                  <span className="header_menu" onClick={myAccount}>
+                    &nbsp;&nbsp;{account}
+                  </span>
+                  {/* </NavLink> */}
                 </div>
                 <div
                   className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"

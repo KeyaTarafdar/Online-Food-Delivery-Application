@@ -71,7 +71,7 @@ const Sign_up = () => {
             contact,
           }
         );
-        if (response.data != "User created successfully") alert(response.data);
+        if (response.data !== "User created successfully") alert(response.data);
         else navigate("/Home2");
       } catch (err) {
         console.log(err);
