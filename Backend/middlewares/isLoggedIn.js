@@ -4,7 +4,7 @@ const userModel = require("../models/user-model");
 module.exports = async (req, res, next) => {
   try {
     let token = req.cookies.token;
-    // console.log(token)
+    console.log(token)
     if (token) {
       let decode = jwt.verify(token, process.env.JWT_KEY);
       let user = await userModel

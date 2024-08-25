@@ -89,16 +89,13 @@ const Home2 = () => {
       alert("You have to Login first!");
     }
   };
+  
+  const fetchUser = async () => {
+    const user = await findUser();
+    setAccount(user.username || "My Account");
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const user = await findUser();
-      if (user.username) {
-        setAccount(user.username);
-      } else {
-        setAccount("My Account");
-      }
-    };
     fetchUser();
   }, []);
 

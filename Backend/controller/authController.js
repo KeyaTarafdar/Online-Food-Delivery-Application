@@ -1,6 +1,7 @@
 const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
+const dbgr = require("debug")("development:usercheck");
 
 module.exports.registerUser = async (req, res) => {
   try {
@@ -26,7 +27,12 @@ module.exports.registerUser = async (req, res) => {
           });
 
           let token = generateToken(user);
-          res.cookie("token", token);
+          res.cookie("token", token, {
+            httpOnly: true, // Cookie is only accessible by the web server
+            secure: false, // Set to true if using HTTPS
+            sameSite: "Lax", // Controls whether cookies are sent with cross-site requests
+          });
+          dbgr("Cookie sent");
 
           res.send("User created successfully");
         });
@@ -46,6 +52,7 @@ module.exports.loginUser = async (req, res) => {
       res.send("You are already logged in.");
     } else {
       let { email, password } = req.body;
+
       if (email && password) {
         let user = await userModel.findOne({ email });
 
@@ -64,7 +71,7 @@ module.exports.loginUser = async (req, res) => {
             }
           });
         } else {
-          return res.status(401).send("Email or Password is wrong");
+          return res.send("Email or Password is wrong");
         }
       } else {
         return res.send("Something is missing");

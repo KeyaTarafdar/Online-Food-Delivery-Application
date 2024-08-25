@@ -69,10 +69,16 @@ const Sign_up = () => {
             password,
             username,
             contact,
+          },
+          {
+            withCredentials: true, // Ensure cookies are sent and received
           }
         );
-        if (response.data !== "User created successfully") alert(response.data);
-        else navigate("/Home2");
+        if (response.data !== "User created successfully") {
+          alert(response.data);
+        } else {
+          navigate("/Home2");
+        }
       } catch (err) {
         console.log(err);
       }
