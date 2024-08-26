@@ -32,8 +32,8 @@ function App() {
           <Route exact path='/Order_table' element={<Order_table/>}></Route>
           <Route exact path='/Services' element={<Services/>}></Route>
           {/* <Route exact path='/Restaurentcategory' element={<Restaurentcategory/>}></Route> */}
-          <Route exact path='/Admin' element={<Login/>}></Route>
-          <Route exact path='/Admin_control_panel' element={<Admin_control_panel/>}></Route>
+          {/* <Route exact path='/Admin' element={<Login/>}></Route> */}
+          <Route exact path='/Admin' element={<Admin_control_panel/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

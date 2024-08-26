@@ -46,15 +46,16 @@ const Home1 = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     let user = await findUser();
-  //     if (user !== "My Account") {
-  //       navigate("/Home2");
-  //     }
-  //   };
-  //   fetchUser();
-  // }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      let user = await findUser();
+      console.log(user)
+      if (user.username) {
+        navigate("/Home2");
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <>

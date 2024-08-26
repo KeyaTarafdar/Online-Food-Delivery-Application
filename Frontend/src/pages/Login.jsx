@@ -20,16 +20,34 @@ const Login = () => {
     // Login API
     try {
       if (email.length > 0 && password.length > 0) {
-        let response = await axios.post("http://localhost:8000/users/login", {
-          email,
-          password,
-        }, {
-          withCredentials: true // Ensure cookies are sent and received
-        });
+        let response = await axios.post(
+          "http://localhost:8000/users/login",
+          {
+            email,
+            password,
+          },
+          {
+            withCredentials: true, // Ensure cookies are sent and received
+          }
+        );
         if (response.data == "Login successfully") {
           navigate("/Home2");
         } else {
-          alert(response.data);
+          let response = await axios.post(
+            "http://localhost:8000/admins/login",
+            {
+              email,
+              password,
+            },
+            {
+              withCredentials: true, // Ensure cookies are sent and received
+            }
+          );
+          if (response.data == "Login successfully") {
+            navigate("/Admin");
+          }else{
+            alert(response.data)
+          }
         }
       }
     } catch (err) {
