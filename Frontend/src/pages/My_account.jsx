@@ -5,20 +5,53 @@ import { PiPencilSimpleLineBold } from "react-icons/pi";
 import { findUser } from "../utils/findUser";
 import { logout } from "../utils/logout";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const My_account = () => {
   const navigate = useNavigate();
-  const [username, setusername] = useState(false);
+  const [updateButtonClick, setupdateButtonClick] = useState(false);
 
   const [name, setname] = useState("");
   const [phone, setphone] = useState("");
   const [email, setemail] = useState("");
+  const [address, setaddress] = useState("");
+
+  const [newname, setnewname] = useState(name);
+  const [newphone, setnewphone] = useState("");
+  const [newemail, setnewemail] = useState("");
+  const [newaddress, setnewaddress] = useState("");
+
+  const fetchUser = async () => {
+    const user = await findUser();
+    setname(user.username);
+    setemail(user.email);
+    setphone(user.contact);
+    setaddress(user.address);
+  };
 
   const update_username = () => {
-    setusername(true);
+    setupdateButtonClick(true);
   };
-  const handleSubmit = () => {
-    setusername(false);
+  const handleSubmit = async () => {
+    setupdateButtonClick(false);
+
+    // Update API
+    try {
+      let response = await axios.put(
+        "http://localhost:8000/users/updateuser",
+        {
+          username: newname || name,
+          contact: newphone || phone,
+          email: newemail || email,
+          address: newaddress || address,
+        },
+        { withCredentials: true }
+      );
+      await fetchUser();
+      alert(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   const handleLogout = async () => {
@@ -28,13 +61,7 @@ const My_account = () => {
   };
 
   useEffect(() => {
-    const fetchuser = async () => {
-      const user = await findUser();
-      setname(user.username);
-      setemail(user.email);
-      setphone(user.contact);
-    };
-    fetchuser();
+    fetchUser();
   }, []);
 
   return (
@@ -84,7 +111,9 @@ const My_account = () => {
       <div className="col-12 my_cart_background m-0 p-0">
         <div className="col-12 m-0 p-0 pt-5" style={{ display: "flex" }}>
           <div className="col-12 col-sm-12 col-md-10 col-lg-7">
-            <h2 className="col-7 col-md-5 col-sm-7 m-auto"><strong>Hi!</strong>&nbsp; {name}</h2>
+            <h2 className="col-7 col-md-5 col-sm-7 m-auto">
+              <strong>Hi!</strong>&nbsp; {name}
+            </h2>
           </div>
         </div>
         <div
@@ -150,7 +179,7 @@ const My_account = () => {
                   height: "50px",
                 }}
               >
-                _Address_
+                {address}
               </div>
             </div>
             <div style={{ marginTop: "5%" }}>
@@ -162,7 +191,7 @@ const My_account = () => {
               />
             </div>
           </div>
-          {username ? (
+          {updateButtonClick ? (
             <div className="col-lg-5 update mt-0 pt-5 mt-0 pb-3 d-none d-sm-none d-md-none d-lg-block d-xl-block">
               <div className="col-12" style={{ display: "flex" }}>
                 <div className="col-4 pl-0 pt-0">
@@ -176,6 +205,7 @@ const My_account = () => {
                     borderRadius: "5px",
                     height: "50px",
                   }}
+                  onChange={(e) => setnewname(e.target.value)}
                 ></input>
               </div>
               <div className="col-12 pt-3" style={{ display: "flex" }}>
@@ -190,6 +220,7 @@ const My_account = () => {
                     borderRadius: "5px",
                     height: "50px",
                   }}
+                  onChange={(e) => setnewphone(e.target.value)}
                 ></input>
               </div>
               <div className="col-12 pt-3" style={{ display: "flex" }}>
@@ -204,6 +235,7 @@ const My_account = () => {
                     borderRadius: "5px",
                     height: "50px",
                   }}
+                  onChange={(e) => setnewemail(e.target.value)}
                 ></input>
               </div>
               <div className="col-12 pt-3" style={{ display: "flex" }}>
@@ -218,6 +250,7 @@ const My_account = () => {
                     borderRadius: "5px",
                     height: "50px",
                   }}
+                  onChange={(e) => setnewaddress(e.target.value)}
                 ></input>
               </div>
               <button
@@ -232,7 +265,7 @@ const My_account = () => {
             ""
           )}
         </div>
-        {username ? (
+        {updateButtonClick ? (
           <div
             className="col-10 col-md-9 mt-5 update col-4 pt-5 pb-3 d-lg-none d-xl-none d-block d-sm-block"
             style={{ marginLeft: "8%" }}
@@ -249,6 +282,8 @@ const My_account = () => {
                   borderRadius: "5px",
                   height: "50px",
                 }}
+                value={name}
+                onChange={(e) => setnewname(e.target.value)}
               ></input>
             </div>
             <div className="col-12 pt-3 pl-0" style={{ display: "flex" }}>
@@ -263,6 +298,8 @@ const My_account = () => {
                   borderRadius: "5px",
                   height: "50px",
                 }}
+                value={phone}
+                onChange={(e) => setnewphone(e.target.value)}
               ></input>
             </div>
             <div className="col-12 pt-3 pl-0" style={{ display: "flex" }}>
@@ -277,6 +314,8 @@ const My_account = () => {
                   borderRadius: "5px",
                   height: "50px",
                 }}
+                value={email}
+                onChange={(e) => setnewemail(e.target.value)}
               ></input>
             </div>
             <div className="col-12 pt-3 pl-0" style={{ display: "flex" }}>
@@ -291,6 +330,8 @@ const My_account = () => {
                   borderRadius: "5px",
                   height: "50px",
                 }}
+                value={address}
+                onChange={(e) => setnewaddress(e.target.value)}
               ></input>
             </div>
             <button

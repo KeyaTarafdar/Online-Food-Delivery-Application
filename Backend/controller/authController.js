@@ -101,3 +101,19 @@ module.exports.getUser = async (req, res) => {
     console.log(err.message);
   }
 };
+
+module.exports.updateUser = async (req, res) => {
+  try {
+    let { username, contact, email, address } = req.body;
+    console.log(req.body)
+    let user = req.user;
+    console.log(user);
+    await userModel.updateOne(
+      { email: user.email },
+      { $set: { username, contact, email, address } }
+    );
+    res.send("Updated successfully");
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};

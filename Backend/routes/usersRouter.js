@@ -6,6 +6,7 @@ const {
   loginUser,
   logoutUser,
   getUser,
+  updateUser,
 } = require("../controller/authController");
 
 router.get("/", (req, res) => {
@@ -23,5 +24,8 @@ router.get("/logout", isLoggedIn, logoutUser);
 
 // GET SINGLE USER
 router.get("/getuser", isLoggedIn, getUser);
+
+// UPDATE USER DETAILS
+router.put("/updateuser", isLoggedIn, updateUser);
 
 module.exports = router;

@@ -1,57 +1,50 @@
-// LOGIN  PAGE
 import React, { useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../Components/Loader"; // Importing the Loader component
 
 const Login = () => {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [error, seterror] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (email.length === 0 || password.length === 0) seterror(true);
-    else seterror(false);
+    if (email.length === 0 || password.length === 0) {
+      setError(true);
+      return;
+    } else {
+      setError(false);
+    }
+
+    setLoading(true); // Show loader when login process starts
 
     // Login API
     try {
-      if (email.length > 0 && password.length > 0) {
-        let response = await axios.post(
-          "http://localhost:8000/users/login",
-          {
-            email,
-            password,
-          },
-          {
-            withCredentials: true, // Ensure cookies are sent and received
-          }
-        );
-        if (response.data == "Login successfully") {
-          navigate("/Home2");
-        } else {
-          let response = await axios.post(
-            "http://localhost:8000/admins/login",
-            {
-              email,
-              password,
-            },
-            {
-              withCredentials: true, // Ensure cookies are sent and received
-            }
-          );
-          if (response.data == "Login successfully") {
-            navigate("/Admin");
-          }else{
-            alert(response.data)
-          }
-        }
+      let response = await axios.post(
+        "http://localhost:8000/users/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      
+      setTimeout(()=>{
+      setLoading(false); 
+
+      if (response.data === "Login successfully") {
+        navigate("/Home2");
+      } else {
+        alert(response.data); 
       }
+    },2000);
     } catch (err) {
+      setLoading(false); 
       console.log("Error");
+      alert("An error occurred during login.");
     }
   };
 
@@ -61,7 +54,7 @@ const Login = () => {
         className="c1 container-fluid m-0 p-0"
         style={{ overflow: "hidden" }}
       >
-        {/* Navbar------------------------------------------------------------------------------------------- */}
+        {/* Navbar */}
         <div className="row">
           <Navbar expand="lg" className="bg-body-tertiary header">
             <div
@@ -90,7 +83,6 @@ const Login = () => {
           <div className="col-12 m-0 p-0 LoginPage">
             <div
               className="col-xl-6 col-lg-8 col-md-10 col-sm-12 col-xs-12"
-              style={{}}
             >
               <form className="col-7 pl-0 pr-0" style={{ width: "90%" }}>
                 <h1 className="login_heading">
@@ -108,18 +100,18 @@ const Login = () => {
                     className="login_input"
                     placeholder="Email"
                     type="text"
-                    onChange={(e) => setemail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   ></input>
-                  {error && email.length == 0 ? (
+                  {error && email.length === 0 ? (
                     <label style={{ color: "red" }}>Email is Required!</label>
                   ) : null}
                   <input
                     className="login_input"
                     placeholder="Password"
                     type="password"
-                    onChange={(e) => setpassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                   ></input>
-                  {error && password.length == 0 ? (
+                  {error && password.length === 0 ? (
                     <label style={{ color: "red" }}>
                       Password is Required!
                     </label>
@@ -136,6 +128,24 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {/* Dimming background and loader */}
+      {loading && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)", 
+              zIndex: 999, 
+            }}
+          ></div>
+          <Loader />
+        </>
+      )}
     </>
   );
 };
