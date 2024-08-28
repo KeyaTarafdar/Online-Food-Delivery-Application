@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { MdEmail } from "react-icons/md";
 import { FaFacebook, FaPhoneAlt, FaInstagramSquare } from "react-icons/fa";
 
-const Footer = () => {
+const Footer = ({phone,email,fbLink,instaLink}) => {
     return (
         <>
             <Navbar bg='dark' variant='dark' expand="lg" className="bg-body-tertiary footer">
@@ -12,12 +12,12 @@ const Footer = () => {
                     {/*Contact Div */}
                     <div className='col-6' style={{ color: 'white' }}>
                         <h4>Contact</h4>
-                        <div style={{ paddingTop: '40px', marginLeft: '-23px' }}><FaPhoneAlt className='icon' /> : <span className='link'>0123456789</span></div>
-                        <div style={{ paddingTop: '10px', marginLeft: '-23px' }}><MdEmail className='icon' /> : <span className='link'>bonapetite.fooddelivery@gmail.com</span></div>
-                        <div style={{ paddingTop: '10px', marginLeft: '-23px' }}><a href='https://www.facebook.com/keya.tarafdar.75' target='new'>
+                        <div style={{ paddingTop: '40px', marginLeft: '-23px' }}><FaPhoneAlt className='icon' /> : <span className='link'>{phone}</span></div>
+                        <div style={{ paddingTop: '10px', marginLeft: '-23px' }}><MdEmail className='icon' /> : <span className='link'>{email}</span></div>
+                        <div style={{ paddingTop: '10px', marginLeft: '-23px' }}><a href={fbLink} target='new'>
                             <FaFacebook className='icon' />
                         </a>
-                            <a href='https://www.instagram.com/keya.tarafdar.75/' target='new'>
+                            <a href={instaLink} target='new'>
                                 <FaInstagramSquare className='icon' />
                             </a></div>
                     </div>

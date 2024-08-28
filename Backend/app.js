@@ -6,6 +6,7 @@ const adminsRouter = require("./routes/adminsRouter");
 const foodsRouter = require("./routes/foodsRouter");
 const usersRouter = require("./routes/usersRouter");
 const cors = require("cors");
+const companyDetailsModel = require("./models/companyDetails-model");
 
 require("dotenv").config();
 
@@ -24,5 +25,14 @@ app.use(cookieParser());
 app.use("/admins", adminsRouter);
 app.use("/users", usersRouter);
 app.use("/foods", foodsRouter);
+
+app.get("/companyDetails", async (req, res) => {
+  try {
+    const details = await companyDetailsModel.find({});
+    res.send(details);
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+});
 
 app.listen(8000);

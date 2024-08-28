@@ -11,8 +11,15 @@ import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { findUser } from "../utils/findUser";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Home1 = () => {
+  const [companyName, setcompanyName] = useState();
+  const [companyEmail, setcompanyEmail] = useState();
+  const [companyPhone, setcompanyPhone] = useState();
+  const [companyFB, setcompanyFB] = useState();
+  const [companyInsta, setcompanyInsta] = useState();
+
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
   const toggleMenu = () => {
@@ -46,14 +53,25 @@ const Home1 = () => {
 
   const navigate = useNavigate();
 
+  const fetchUser = async () => {
+    let user = await findUser();
+    console.log(user);
+    if (user.username) {
+      navigate("/Home2");
+    }
+  };
+
+  const fetchCompanyDetails = async () => {
+    let response = await axios.get("http://localhost:8000/companyDetails");
+    setcompanyName(response.data[0].name.toUpperCase());
+    setcompanyEmail(response.data[0].email);
+    setcompanyPhone(response.data[0].phone);
+    setcompanyFB(response.data[0].fbLink);
+    setcompanyInsta(response.data[0].instaLink);
+  };
+
   useEffect(() => {
-    const fetchUser = async () => {
-      let user = await findUser();
-      console.log(user)
-      if (user.username) {
-        navigate("/Home2");
-      }
-    };
+    fetchCompanyDetails();
     fetchUser();
   }, []);
 
@@ -79,11 +97,13 @@ const Home1 = () => {
                 className="col-lg-10 col-md-11 col-sm-8 col-xs-11"
                 style={{
                   paddingTop: "1.8%",
-                  paddingRight: "140px",
                   fontFamily: "brittany",
+                  display: "flex",
+                  justifyContent: "left",
+                  alignItems: "center",
                 }}
               >
-                <h4>BON&nbsp;&nbsp;APPETITE</h4>
+                <h4>{companyName}</h4>
               </div>
             </div>
 
@@ -497,7 +517,12 @@ const Home1 = () => {
 
         {/*Footer------------------------------------------------------- */}
         <Element name="section" className="element">
-          <Footer />
+          <Footer
+            phone={companyPhone}
+            email={companyEmail}
+            fbLink={companyFB}
+            instaLink={companyInsta}
+          />
         </Element>
       </div>
     </>

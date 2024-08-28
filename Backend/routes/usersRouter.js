@@ -7,7 +7,7 @@ const {
   logoutUser,
   getUser,
   updateUser,
-} = require("../controller/authController");
+} = require("../controller/userController");
 
 router.get("/", (req, res) => {
   res.send("User");

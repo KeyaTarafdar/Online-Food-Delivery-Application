@@ -105,7 +105,7 @@ module.exports.getUser = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   try {
     let { username, contact, email, address } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     let user = req.user;
     console.log(user);
     await userModel.updateOne(
