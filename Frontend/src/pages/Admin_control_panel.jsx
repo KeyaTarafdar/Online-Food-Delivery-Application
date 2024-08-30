@@ -64,7 +64,6 @@ const Admin_control_panel = () => {
 
   const [deliver_boy_info, setDelivery_boy_info] = useState(false);
   const DeliverBoyInfo = () => {
-    setData(Delivery_boy_info_array);
     setOrder_info(false);
     setUser_info(false);
     setDelivery_boy_info(true);
@@ -73,6 +72,8 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+
+    getDeliveryBoy()
   };
 
   const [update, setUpdate] = useState(false);
@@ -272,13 +273,13 @@ const Admin_control_panel = () => {
     //For Delivery_boy
     if (deliver_boy_info === true) {
       serial_delivery = 1;
-      const updateItem2 = Delivery_boy_info_array.filter((currEle) => {
+      const updateItem2 = deliveryBoy.filter((currEle) => {
         return (
-          currEle.name.toLowerCase() === search_item.toLowerCase() ||
-          currEle.id === search_item
+          currEle.username.toLowerCase() === search_item.toLowerCase()
+          // currEle.id === search_item
         );
       });
-      setData(updateItem2);
+      setdeliveryBoy(updateItem2);
     }
 
     //For Restaurent
