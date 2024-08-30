@@ -3,6 +3,7 @@ const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
 const adminModel = require("../models/admin-model");
 const companyDetailModel = require("../models/companyDetails-model");
+const deliveryBoyModel = require("../models/deliveryBoy-model");
 
 // Create Admin
 module.exports.createAdmin = async (req, res) => {
@@ -155,6 +156,35 @@ module.exports.updateCompanyEmail = async (req, res) => {
 module.exports.getAdmin = async (req, res) => {
   try {
     res.send(req.admin);
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};
+
+// Create Delivery Boy
+module.exports.createDeliveryBoy = async (req, res) => {
+  try {
+    let { username, contact, address } = req.body;
+    if (username && contact && address) {
+      await deliveryBoyModel.create({
+        username,
+        contact,
+        address,
+      });
+      res.send("Delivery Boy added successfully");
+    } else {
+      res.send("Something is missing");
+    }
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};
+
+// Fetch Delivery Boy Info
+module.exports.getDeliveryBoy = async (req, res) => {
+  try {
+    let deliveryBoys = await deliveryBoyModel.find({});
+    res.send(deliveryBoys);
   } catch (err) {
     res.send("Something went wrong");
   }

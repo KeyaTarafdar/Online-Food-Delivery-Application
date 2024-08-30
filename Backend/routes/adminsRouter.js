@@ -10,6 +10,7 @@ const {
   updateCompanyName,
   updateCompanyPhone,
   updateCompanyEmail,
+  getDeliveryBoy,createDeliveryBoy
 } = require("../controller/adminController");
 
 // ADMIN REGISTER
@@ -30,7 +31,7 @@ router.post("/logout", isLoggedIn, logoutAdmin);
 // ADD COMPANY DETAILS
 router.post("/createcompanydetails", isLoggedIn, createCompanyDetails);
 
-// UPDATE COMPANY Name
+// UPDATE COMPANY NAME
 router.put("/updatecompanyname", isLoggedIn, updateCompanyName);
 
 // UPDATE COMPANY PHONE
@@ -41,5 +42,11 @@ router.put("/updatecompanyemail", isLoggedIn, updateCompanyEmail);
 
 // FETCH ADMIN DETAILS
 router.get("/getadmin", isLoggedIn, getAdmin);
+
+// CREATE DELIVERY BOY
+router.post("/createdeliveryboy", isLoggedIn, createDeliveryBoy);
+
+// GET DELIVERY BOY
+router.get("/getdeliveryboy", isLoggedIn, getDeliveryBoy);
 
 module.exports = router;

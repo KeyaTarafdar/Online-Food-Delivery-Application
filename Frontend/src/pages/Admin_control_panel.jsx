@@ -238,7 +238,7 @@ const Admin_control_panel = () => {
     setUpdate_web_details_phone(false);
   };
 
-  // Search Event-------------------------------------------------------------
+  // Search Event--------------------------------------------------
   const [data, setData] = useState();
   let textInput = React.createRef();
   function handleSearch() {
@@ -318,7 +318,7 @@ const Admin_control_panel = () => {
   }
 
   const [loading, setLoading] = useState(false);
-  // Logout Admin
+  // Logout Admin--------------------------------------------------
   const logoutAdmin = async () => {
     setLoading(true);
     try {
@@ -343,11 +343,13 @@ const Admin_control_panel = () => {
     }
   };
 
+  // Fetching company details--------------------------------------------------
   const fetchCompanyDetails = async () => {
     let response = await axios.get("http://localhost:8000/companyDetails");
     setcompanyName(response.data[0].name.toUpperCase());
   };
 
+  // Fetching admin details--------------------------------------------------
   const fetchAdmin = async () => {
     try {
       let response = await axios.get("http://localhost:8000/admins/getadmin", {
@@ -358,9 +360,25 @@ const Admin_control_panel = () => {
       console.log(err.message);
     }
   };
+
+  // Fetching Delivery boy
+  const [deliveryBoy, setdeliveryBoy] = useState([]);
+  const getDeliveryBoy = async () => {
+    try {
+      let response = await axios.get(
+        "http://localhost:8000/admins/getdeliveryboy",
+        { withCredentials: true }
+      );
+      setdeliveryBoy(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     fetchCompanyDetails();
     fetchAdmin();
+    getDeliveryBoy();
   }, []);
 
   return (
@@ -514,9 +532,7 @@ const Admin_control_panel = () => {
                 <BsEmojiLaughing style={{ height: "50px", width: "50px" }} />
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* User Info----------------------------------------------------------------------------------------------------------------- */}
           {user_info ? (
@@ -637,9 +653,7 @@ const Admin_control_panel = () => {
                 );
               })}
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Order Info------------------------------------------------------------------------------------------------------------------------ */}
           {order_info ? (
@@ -749,9 +763,7 @@ const Admin_control_panel = () => {
                 );
               })}
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Delivery boy info--------------------------------------------------------------------------------------------------------- */}
           {deliver_boy_info ? (
@@ -764,16 +776,10 @@ const Admin_control_panel = () => {
                   Serial no
                 </div>
                 <div
-                  className="head col-2 pt-2 pb-2"
+                  className="head col-3 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Name
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-2"
-                  style={{ border: "1px solid black" }}
-                >
-                  Id
                 </div>
                 <div
                   className="head col-3 pt-2 pb-2"
@@ -782,19 +788,13 @@ const Admin_control_panel = () => {
                   Phone no
                 </div>
                 <div
-                  className="head col-3 pt-2 pb-2"
-                  style={{ border: "1px solid black" }}
-                >
-                  Email
-                </div>
-                <div
-                  className="head col-2 pt-2 pb-2"
+                  className="head col-5 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Address
                 </div>
               </div>
-              {data.map((elem) => {
+              {deliveryBoy.map((elem) => {
                 const { name, phone, address } = elem;
                 return (
                   <>
@@ -814,20 +814,12 @@ const Admin_control_panel = () => {
                         {serial_delivery++}
                       </div>
                       <div
-                        className="col-2"
+                        className="col-3"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.name}
-                      </div>
-                      <div
-                        className="col-1"
-                        style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-                        }}
-                      >
-                        {elem.id}
+                        {elem.username}
                       </div>
                       <div
                         className="col-3"
@@ -835,18 +827,10 @@ const Admin_control_panel = () => {
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.phone}
+                        {elem.contact}
                       </div>
                       <div
-                        className="col-3"
-                        style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-                        }}
-                      >
-                        {elem.email}
-                      </div>
-                      <div
-                        className="col-2"
+                        className="col-5"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
@@ -858,9 +842,7 @@ const Admin_control_panel = () => {
                 );
               })}
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Update--------------------------------------------------------------------------------------------------------------------- */}
           {update ? (
@@ -892,9 +874,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Update Web Info---------------------------------------------------------------------------------------------------------------- */}
           {update_web_details ? (
@@ -1033,9 +1013,7 @@ const Admin_control_panel = () => {
                 ""
               )}
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Update restaurent list----------------------------------------------------------------------------------------------------- */}
           {add_res ? (
@@ -1205,9 +1183,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Update food category---------------------------------------------------------------------------------------------------- */}
           {update_food_category ? (
@@ -1333,9 +1309,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           {/* Update food item----------------------------------------------------------------------------------------------------------- */}
           {update_food_item ? (
@@ -1519,9 +1493,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
         </div>
       </div>
 
