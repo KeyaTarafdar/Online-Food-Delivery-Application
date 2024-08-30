@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Components/Loader"; // Importing the Loader component
 
 const Login = () => {
+  const [companyName, setcompanyName] = useState();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -26,27 +28,45 @@ const Login = () => {
 
     // Login API
     try {
-      let response = await axios.post(
+      let response_user = await axios.post(
         "http://localhost:8000/users/login",
         { email, password },
         { withCredentials: true }
       );
-      
-      setTimeout(()=>{
-      setLoading(false); 
 
-      if (response.data === "Login successfully") {
-        navigate("/Home2");
-      } else {
-        alert(response.data); 
-      }
-    },2000);
+      let response_admin = await axios.post(
+        "http://localhost:8000/admins/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      console.log(response_admin.data || response_user.data);
+
+      setTimeout(() => {
+        setLoading(false);
+
+        if (response_user.data === "Login successfully") {
+          navigate("/Home2");
+        } else if (response_admin.data === "Login successfully") {
+          navigate("/Admin");
+        } else {
+          alert(response_user.data || response_admin);
+        }
+      }, 2000);
     } catch (err) {
-      setLoading(false); 
+      setLoading(false);
       console.log("Error");
       alert("An error occurred during login.");
     }
   };
+
+  const fetchCompanyDetails = async () => {
+    let response = await axios.get("http://localhost:8000/companyDetails");
+    setcompanyName(response.data[0].name.toUpperCase());
+  };
+
+  useEffect(() => {
+    fetchCompanyDetails();
+  }, []);
 
   return (
     <>
@@ -73,7 +93,7 @@ const Login = () => {
                 className="col-lg-3 col-md-6 col-sm-5 col-xs-5"
                 style={{ paddingTop: "0.5%", fontFamily: "brittany" }}
               >
-                <h4>BON&nbsp;&nbsp;APETITE</h4>
+                <h4>{companyName}</h4>
               </div>
               <div className="col-lg-7 col-md-4"></div>
             </div>
@@ -81,9 +101,7 @@ const Login = () => {
         </div>
         <div className="row">
           <div className="col-12 m-0 p-0 LoginPage">
-            <div
-              className="col-xl-6 col-lg-8 col-md-10 col-sm-12 col-xs-12"
-            >
+            <div className="col-xl-6 col-lg-8 col-md-10 col-sm-12 col-xs-12">
               <form className="col-7 pl-0 pr-0" style={{ width: "90%" }}>
                 <h1 className="login_heading">
                   <b>Login</b>
@@ -139,8 +157,8 @@ const Login = () => {
               left: 0,
               width: "100%",
               height: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.5)", 
-              zIndex: 999, 
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 999,
             }}
           ></div>
           <Loader />

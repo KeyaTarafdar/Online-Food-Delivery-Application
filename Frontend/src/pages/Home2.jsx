@@ -16,8 +16,15 @@ import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import { findUser } from "../utils/findUser";
 import { logout } from "../utils/logout";
+import axios from "axios";
 
 const Home2 = () => {
+  const [companyName, setcompanyName] = useState();
+  const [companyEmail, setcompanyEmail] = useState();
+  const [companyPhone, setcompanyPhone] = useState();
+  const [companyFB, setcompanyFB] = useState();
+  const [companyInsta, setcompanyInsta] = useState();
+
   const navigate = useNavigate();
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
@@ -89,13 +96,27 @@ const Home2 = () => {
       alert("You have to Login first!");
     }
   };
-  
+
   const fetchUser = async () => {
     const user = await findUser();
-    setAccount(user.username || "My Account");
+    if (user.username) {
+      setAccount(user.username.split(" ")[0]);
+    } else {
+      setAccount("My Account");
+    }
+  };
+
+  const fetchCompanyDetails = async () => {
+    let response = await axios.get("http://localhost:8000/companyDetails");
+    setcompanyName(response.data[0].name.toUpperCase());
+    setcompanyEmail(response.data[0].email);
+    setcompanyPhone(response.data[0].phone);
+    setcompanyFB(response.data[0].fbLink);
+    setcompanyInsta(response.data[0].instaLink);
   };
 
   useEffect(() => {
+    fetchCompanyDetails();
     fetchUser();
   }, []);
 
@@ -121,14 +142,16 @@ const Home2 = () => {
                   </h4>
                 </div>
                 <div
-                  className="col-lg-2 col-md-11 col-sm-11 col-xs-11"
+                  className="col-xl-8 col-lg-2 col-md-11 col-sm-11 col-xs-11"
                   style={{
-                    paddingTop: "3%",
-                    paddingRight: "140px",
+                    alignItems: "center",
+                    paddingTop: "2%",
                     fontFamily: "brittany",
+                    display: "flex",
+                    justifyContent: "left",
                   }}
                 >
-                  <h4>BON&nbsp;&nbsp;APETITE</h4>
+                  <h4>{companyName}</h4>
                 </div>
                 <div className="col-5"></div>
               </div>
@@ -531,7 +554,12 @@ const Home2 = () => {
 
       {/*Footer----------------------------------------------------------------------------------------------------------------------------------*/}
       <Element name="section" className="element">
-        <Footer />
+        <Footer
+          phone={companyPhone}
+          email={companyEmail}
+          fbLink={companyFB}
+          instaLink={companyInsta}
+        />
       </Element>
     </div>
   );

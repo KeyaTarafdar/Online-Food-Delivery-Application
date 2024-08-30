@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
 
+// Register User
 module.exports.registerUser = async (req, res) => {
   try {
     let { email, password, username, contact } = req.body;
@@ -45,6 +46,7 @@ module.exports.registerUser = async (req, res) => {
   }
 };
 
+// Login
 module.exports.loginUser = async (req, res) => {
   try {
     let token = req.cookies.token;
@@ -82,6 +84,7 @@ module.exports.loginUser = async (req, res) => {
   }
 };
 
+// Logout
 module.exports.logoutUser = async (req, res) => {
   try {
     res.cookie("token", "");
@@ -91,6 +94,7 @@ module.exports.logoutUser = async (req, res) => {
   }
 };
 
+// Get Single User
 module.exports.getUser = async (req, res) => {
   try {
     if (req.user) {
@@ -102,12 +106,11 @@ module.exports.getUser = async (req, res) => {
   }
 };
 
+// Update User Details
 module.exports.updateUser = async (req, res) => {
   try {
     let { username, contact, email, address } = req.body;
-    console.log(req.body);
     let user = req.user;
-    console.log(user);
     await userModel.updateOne(
       { email: user.email },
       { $set: { username, contact, email, address } }

@@ -12,7 +12,7 @@ import Cart_table from './Components/Cart_table';
 import Order_table from './Components/Order_table';
 import Services from './Components/Services';
 import Restaurent from './Components/Restaurent';
-import Admin_control_panel from './Components/Admin_control_panel';
+import Admin_control_panel from './pages/Admin_control_panel';
 
 function App() {
   return (

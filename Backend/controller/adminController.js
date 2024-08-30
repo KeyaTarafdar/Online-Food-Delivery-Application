@@ -4,7 +4,7 @@ const dbgr = require("debug")("development:usercheck");
 const adminModel = require("../models/admin-model");
 const companyDetailModel = require("../models/companyDetails-model");
 
-// CREATE ADMIN
+// Create Admin
 module.exports.createAdmin = async (req, res) => {
   let admins = await adminModel.find();
   if (admins.length > 0) {
@@ -34,6 +34,7 @@ module.exports.createAdmin = async (req, res) => {
   }
 };
 
+// Login Admin
 module.exports.loginAdmin = async (req, res) => {
   try {
     let token = req.cookies.token;
@@ -71,6 +72,7 @@ module.exports.loginAdmin = async (req, res) => {
   }
 };
 
+// Logout Admin
 module.exports.logoutAdmin = async (req, res) => {
   try {
     res.cookie("token", "");
@@ -80,6 +82,7 @@ module.exports.logoutAdmin = async (req, res) => {
   }
 };
 
+// Create Company Details
 module.exports.createCompanyDetails = async (req, res) => {
   try {
     let { name, phone, email, fbLink, instaLink } = req.body;
@@ -99,6 +102,60 @@ module.exports.createCompanyDetails = async (req, res) => {
     res.send("Company details added successfully");
   } catch (err) {
     console.log(err.message);
+    res.send("Something went wrong");
+  }
+};
+
+// Update Company Name
+module.exports.updateCompanyName = async (req, res) => {
+  try {
+    let { name } = req.body;
+    if (name) {
+      await companyDetailModel.updateMany({}, { $set: { name } });
+      res.send("Name updated successfully");
+    } else {
+      res.send("You have to give a New Name");
+    }
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Company Phone
+module.exports.updateCompanyPhone = async (req, res) => {
+  try {
+    let { phone } = req.body;
+    if (phone) {
+      await companyDetailModel.updateMany({}, { $set: { phone } });
+      res.send("Phone updated successfully");
+    } else {
+      res.send("You have to give a New Phone Number");
+    }
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Update Company Email
+module.exports.updateCompanyEmail = async (req, res) => {
+  try {
+    let { email } = req.body;
+    if (email) {
+      await companyDetailModel.updateMany({}, { $set: { email } });
+      res.send("Email updated successfully");
+    } else {
+      res.send("You have to give a New Email Id");
+    }
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch Single Admin
+module.exports.getAdmin = async (req, res) => {
+  try {
+    res.send(req.admin);
+  } catch (err) {
     res.send("Something went wrong");
   }
 };

@@ -8,7 +8,7 @@ const adminSchema = mongoose.Schema({
   },
   email: String,
   password: String,
-  picture: String,
+  image: String,
   products: {
     type: Array,
     default: [],

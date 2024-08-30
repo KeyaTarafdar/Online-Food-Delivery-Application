@@ -6,6 +6,7 @@ import { findUser } from "../utils/findUser";
 import { logout } from "../utils/logout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../Components/Loader";
 
 const My_account = () => {
   const navigate = useNavigate();
@@ -20,6 +21,15 @@ const My_account = () => {
   const [newphone, setnewphone] = useState("");
   const [newemail, setnewemail] = useState("");
   const [newaddress, setnewaddress] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // const showLoaderAndNavigate=(path)=>{
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     navigate(path);
+  //   }, 2000);
+  // }
 
   const fetchUser = async () => {
     const user = await findUser();
@@ -34,8 +44,7 @@ const My_account = () => {
   };
   const handleSubmit = async () => {
     setupdateButtonClick(false);
-
-    // Update API
+    setLoading(true);
     try {
       let response = await axios.put(
         "http://localhost:8000/users/updateuser",
@@ -51,12 +60,24 @@ const My_account = () => {
       alert(response.data);
     } catch (err) {
       console.log(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Update API
   const handleLogout = async () => {
-    if ((await logout()) === "Logout successfully") {
-      navigate("/Home2");
+    setLoading(true);
+    try {
+      if ((await logout()) === "Logout successfully") {
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/Home2");
+        }, 3000);
+      }
+    } catch (err) {
+      setLoading(false);
+      console.log(err.message);
     }
   };
 
@@ -176,7 +197,8 @@ const My_account = () => {
                 style={{
                   borderStyle: "solid",
                   borderRadius: "5px",
-                  height: "50px",
+                  maxHeight: "15vh",
+                  paddingBottom: "1rem",
                 }}
               >
                 {address}
@@ -346,6 +368,23 @@ const My_account = () => {
           ""
         )}
       </div>
+
+      {loading && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 999,
+            }}
+          ></div>
+          <Loader />
+        </>
+      )}
     </>
   );
 };

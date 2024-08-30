@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
   },
   contact: Number,
   address:String,
-  picture: String,
+  image: String,
 });
 
 module.exports = mongoose.model("user", userSchema);

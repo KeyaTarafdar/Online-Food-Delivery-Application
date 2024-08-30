@@ -1,16 +1,20 @@
 // SIGN  UP
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Components/Loader";
 
 const Sign_up = () => {
+  const [companyName, setcompanyName] = useState();
+
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [confirm_password, setconfirm_password] = useState("");
   const [contact, setcontact] = useState("");
   const [email, setemail] = useState("");
+
   const [usernameerror, setusernameerror] = useState(false);
   const [contacterror, setcontacterror] = useState(false);
   const [emailerror, setemailerror] = useState(false);
@@ -18,7 +22,7 @@ const Sign_up = () => {
   const [notsame, setnotsame] = useState(false);
   const [wrongcontact, setwrongcontact] = useState(false);
   const [wrongpasswordlength, setwrongpasswordlength] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = async (e) => {
@@ -53,6 +57,8 @@ const Sign_up = () => {
       setwrongpasswordlength(true);
     else setwrongpasswordlength(false);
 
+    setLoading(true);
+
     //   Sign up API
     if (
       username.length > 0 &&
@@ -74,16 +80,29 @@ const Sign_up = () => {
             withCredentials: true, // Ensure cookies are sent and received
           }
         );
-        if (response.data !== "User created successfully") {
-          alert(response.data);
-        } else {
-          navigate("/Home2");
-        }
+        setTimeout(() => {
+          setLoading(false);
+
+          if (response.data !== "User created successfully") {
+            alert(response.data);
+          } else {
+            navigate("/Home2");
+          }
+        },3000);
       } catch (err) {
         console.log(err);
       }
     }
   };
+
+  const fetchCompanyDetails = async () => {
+    let response = await axios.get("http://localhost:8000/companyDetails");
+    setcompanyName(response.data[0].name.toUpperCase());
+  };
+
+  useEffect(() => {
+    fetchCompanyDetails();
+  }, []);
 
   return (
     <>
@@ -109,7 +128,7 @@ const Sign_up = () => {
                 className="col-lg-3 col-md-6 col-sm-5 col-xs-5"
                 style={{ paddingTop: "0.5%", fontFamily: "brittany" }}
               >
-                <h4>BON&nbsp;&nbsp;APETITE</h4>
+                <h4>{companyName}</h4>
               </div>
               <div className="col-lg-7 col-md-4 col-xs-6"></div>
             </div>
@@ -227,6 +246,24 @@ const Sign_up = () => {
           </div>
         </div>
       </div>
+
+      {/* -------------------------Loader dimming------------------ */}
+      {loading && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 999,
+            }}
+          ></div>
+          <Loader />
+        </>
+      )}
     </>
   );
 };
