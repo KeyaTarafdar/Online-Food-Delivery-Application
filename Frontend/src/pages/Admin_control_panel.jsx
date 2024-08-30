@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FaUser } from "react-icons/fa";
-import { FaGift } from "react-icons/fa";
-import { FaRegCircleStop } from "react-icons/fa6";
+import { FaUser, FaGift } from "react-icons/fa";
+import { FaRegCircleStop, FaMagnifyingGlass } from "react-icons/fa6";
 import { MdDeliveryDining } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import Navbar from "react-bootstrap/Navbar";
 import { BsEmojiLaughing } from "react-icons/bs";
+import Navbar from "react-bootstrap/Navbar";
 import User_info_array from "../Components/Array/User_info_array";
 import Admin_order_array from "../Components/Array/Admin_order_array";
-import Delivery_boy_info_array from "../Components/Array/Delivery_boy_info_array";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import Table_row from "../Components/Table_row";
 import Restaurent_list_array from "../Components/Array/Restaurent_list_array";
 import Update_Res from "../Components/Update_Res";
@@ -31,8 +28,6 @@ const Admin_control_panel = () => {
     serial_delivery = 1;
 
   const navigate = useNavigate();
-
-  const [adminName, setadminName] = useState();
 
   const [companyName, setcompanyName] = useState();
 
@@ -73,7 +68,7 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
 
-    getDeliveryBoy()
+    getDeliveryBoy();
   };
 
   const [update, setUpdate] = useState(false);
@@ -143,58 +138,75 @@ const Admin_control_panel = () => {
     setUpdate_food_item(false);
   };
 
+  // Update company name---------------------------------------------------
   const [newcompanyName, setnewcompanyName] = useState();
-  const [newcompanyEmail, setnewcompanyEmail] = useState();
-  const [newcompanyPhone, setnewcompanyPhone] = useState();
-
   const handleSubmitName = async () => {
     setUpdate_web_details_phone(false);
     setUpdate_web_details_mail(false);
     setUpdate_web_details_name(false);
 
     try {
+      setLoading(true);
       await axios.put(
         "http://localhost:8000/admins/updatecompanyname",
         { name: newcompanyName },
         { withCredentials: true }
       );
-      alert("Company Name updated successfully");
-      fetchCompanyDetails();
+      setTimeout(() => {
+        setLoading(false);
+        alert("Company Name updated successfully");
+        fetchCompanyDetails();
+      }, 3000);
     } catch (err) {
+      setLoading(false);
       alert("Something went wrong");
     }
   };
 
+  // Update company email---------------------------------------------------
+  const [newcompanyEmail, setnewcompanyEmail] = useState();
   const handleSubmitEmail = async () => {
     setUpdate_web_details_phone(false);
     setUpdate_web_details_mail(false);
     setUpdate_web_details_name(false);
 
     try {
+      setLoading(true);
       await axios.put(
         "http://localhost:8000/admins/updatecompanyemail",
         { email: newcompanyEmail },
         { withCredentials: true }
       );
-      alert("Email updated successfully");
+      setTimeout(() => {
+        setLoading(false);
+        alert("Email updated successfully");
+      }, 3000);
     } catch (err) {
+      setLoading(false);
       alert("Something went wrong");
     }
   };
 
+  // Update company phone no---------------------------------------------------
+  const [newcompanyPhone, setnewcompanyPhone] = useState();
   const handleSubmitPhone = async () => {
     setUpdate_web_details_phone(false);
     setUpdate_web_details_mail(false);
     setUpdate_web_details_name(false);
 
     try {
+      setLoading(true);
       await axios.put(
         "http://localhost:8000/admins/updatecompanyphone",
         { phone: newcompanyPhone },
         { withCredentials: true }
       );
-      alert("Phone updated successfully");
+      setTimeout(() => {
+        setLoading(false);
+        alert("Phone updated successfully");
+      }, 3000);
     } catch (err) {
+      setLoading(false);
       alert("Something went wrong");
     }
   };
@@ -319,6 +331,7 @@ const Admin_control_panel = () => {
   }
 
   const [loading, setLoading] = useState(false);
+
   // Logout Admin--------------------------------------------------
   const logoutAdmin = async () => {
     setLoading(true);
@@ -351,6 +364,7 @@ const Admin_control_panel = () => {
   };
 
   // Fetching admin details--------------------------------------------------
+  const [adminName, setadminName] = useState();
   const fetchAdmin = async () => {
     try {
       let response = await axios.get("http://localhost:8000/admins/getadmin", {
@@ -362,7 +376,7 @@ const Admin_control_panel = () => {
     }
   };
 
-  // Fetching Delivery boy
+  // Fetching Delivery boy--------------------------------------------------
   const [deliveryBoy, setdeliveryBoy] = useState([]);
   const getDeliveryBoy = async () => {
     try {
@@ -796,7 +810,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {deliveryBoy.map((elem) => {
-                const { name, phone, address } = elem;
+                const { username, contact, address } = elem;
                 return (
                   <>
                     <div
@@ -820,7 +834,7 @@ const Admin_control_panel = () => {
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.username}
+                        {username}
                       </div>
                       <div
                         className="col-3"
@@ -828,7 +842,7 @@ const Admin_control_panel = () => {
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.contact}
+                        {contact}
                       </div>
                       <div
                         className="col-5"
@@ -836,7 +850,7 @@ const Admin_control_panel = () => {
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.address}
+                        {address}
                       </div>
                     </div>
                   </>
