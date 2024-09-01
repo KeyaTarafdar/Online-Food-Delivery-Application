@@ -2,6 +2,7 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
+const fs = require("fs");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
@@ -118,5 +119,28 @@ module.exports.updateUser = async (req, res) => {
     res.send("Updated successfully");
   } catch (err) {
     res.send("Something went wrong");
+  }
+};
+
+// Upload Profile Picture
+module.exports.uploadProfilePicture = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+  try {
+    const oldImage = req.user.image;
+    await userModel.updateOne(
+      { email: req.user.email },
+      { $set: { image: req.file.filename } }
+    );
+    if (oldImage)
+      fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
+        if (err) {
+          console.log(err.message);
+        }
+      });
+    res.send("File uploaded successfully.");
+  } catch (err) {
+    res.send(err.message);
   }
 };

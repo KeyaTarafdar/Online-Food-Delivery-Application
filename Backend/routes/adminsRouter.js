@@ -10,8 +10,13 @@ const {
   updateCompanyName,
   updateCompanyPhone,
   updateCompanyEmail,
-  getDeliveryBoy,createDeliveryBoy
+  getDeliveryBoy,
+  createDeliveryBoy,
+  getAllUsers,
+  deleteDeliveryBoy,
+  uploadProfilePicture,
 } = require("../controller/adminController");
+const { uploadAdminProfile } = require("../middlewares/multer");
 
 // ADMIN REGISTER
 if (process.env.NODE_ENV === "development") {
@@ -48,5 +53,14 @@ router.post("/createdeliveryboy", isLoggedIn, createDeliveryBoy);
 
 // GET DELIVERY BOY
 router.get("/getdeliveryboy", isLoggedIn, getDeliveryBoy);
+
+// DELETE DELIVERY BOY
+router.delete("/deletedeliveryboy", isLoggedIn, deleteDeliveryBoy);
+
+// GET ALL USERS
+router.get("/getallusers", isLoggedIn, getAllUsers);
+
+// UPLOAD PROFILE PICTURE
+router.post("/uploadprofilepicture", isLoggedIn, uploadAdminProfile.single("image"), uploadProfilePicture);
 
 module.exports = router;

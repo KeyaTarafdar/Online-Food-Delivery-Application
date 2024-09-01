@@ -7,7 +7,9 @@ const {
   logoutUser,
   getUser,
   updateUser,
+  uploadProfilePicture,
 } = require("../controller/userController");
+const { uploadUserProfile } = require("../middlewares/multer");
 
 router.get("/", (req, res) => {
   res.send("User");
@@ -27,5 +29,8 @@ router.get("/getuser", isLoggedIn, getUser);
 
 // UPDATE USER DETAILS
 router.put("/updateuser", isLoggedIn, updateUser);
+
+// UPLOAD PROFILE PICTURE
+router.post("/uploadprofilepicture", isLoggedIn, uploadUserProfile.single("image"), uploadProfilePicture);
 
 module.exports = router;

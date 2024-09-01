@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { MdOutlineLogout } from "react-icons/md";
 import { PiPencilSimpleLineBold } from "react-icons/pi";
+import { MdAccountCircle } from "react-icons/md";
 import { findUser } from "../utils/findUser";
 import { logout } from "../utils/logout";
 import { useNavigate } from "react-router-dom";
@@ -21,15 +22,8 @@ const My_account = () => {
   const [newphone, setnewphone] = useState("");
   const [newemail, setnewemail] = useState("");
   const [newaddress, setnewaddress] = useState("");
+  const [profilePicture, SetprofilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // const showLoaderAndNavigate=(path)=>{
-  //   setLoading(true);
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     navigate(path);
-  //   }, 2000);
-  // }
 
   const fetchUser = async () => {
     const user = await findUser();
@@ -37,6 +31,7 @@ const My_account = () => {
     setemail(user.email);
     setphone(user.contact);
     setaddress(user.address);
+    SetprofilePicture(user.image);
   };
 
   const update_username = () => {
@@ -77,6 +72,40 @@ const My_account = () => {
       }
     } catch (err) {
       setLoading(false);
+      console.log(err.message);
+    }
+  };
+
+  const fileInputRef = useRef(null);
+
+  const [image, setImage] = useState();
+  // Upload profile image
+  const handleProfileImage = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      alert("Please Upload an Image");
+      return;
+    }
+
+    setImage(file);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/users/uploadprofilepicture",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      alert(response.data);
+      fetchUser();
+    } catch (err) {
       console.log(err.message);
     }
   };
@@ -131,8 +160,58 @@ const My_account = () => {
       </div>
       <div className="col-12 my_cart_background m-0 p-0">
         <div className="col-12 m-0 p-0 pt-5" style={{ display: "flex" }}>
-          <div className="col-12 col-sm-12 col-md-10 col-lg-7">
-            <h2 className="col-7 col-md-5 col-sm-7 m-auto">
+          <div
+            className="col-12 col-sm-12 col-md-10 col-lg-7"
+            style={{ display: "flex", marginLeft: "10%" }}
+          >
+            <div
+              className="col-2"
+              style={{
+                height: "5rem",
+                alignItems: "center",
+                display: "flex",
+              }}
+            >
+              {profilePicture ? (
+                <img
+                  src={`/userProfilePictures/${profilePicture}`}
+                  onClick={() => {
+                    fileInputRef.current.click();
+                  }}
+                  style={{
+                    height: "70px",
+                    width: "70px",
+                    cursor: "pointer",
+                    borderRadius: "50px",
+                  }}
+                ></img>
+              ) : (
+                <MdAccountCircle
+                  title="Upload new Profile Image"
+                  style={{ height: "70px", width: "70px", cursor: "pointer" }}
+                  onClick={() => {
+                    fileInputRef.current.click();
+                  }}
+                />
+              )}
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleProfileImage}
+                accept="image/*"
+              />
+            </div>
+            <h2
+              className="col-11 col-md-11 col-sm-11"
+              style={{
+                display: "flex",
+                justifyContent: "left",
+                height: "5rem",
+                alignItems: "center",
+                marginLeft: "-3rem",
+              }}
+            >
               <strong>Hi!</strong>&nbsp; {name}
             </h2>
           </div>
@@ -283,9 +362,7 @@ const My_account = () => {
                 Submit
               </button>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
         </div>
         {updateButtonClick ? (
           <div
@@ -364,9 +441,7 @@ const My_account = () => {
               Submit
             </button>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
       </div>
 
       {loading && (

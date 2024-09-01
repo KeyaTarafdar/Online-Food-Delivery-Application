@@ -6,7 +6,6 @@ import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
 import Navbar from "react-bootstrap/Navbar";
-import User_info_array from "../Components/Array/User_info_array";
 import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
 import Restaurent_list_array from "../Components/Array/Restaurent_list_array";
@@ -33,7 +32,6 @@ const Admin_control_panel = () => {
 
   const [user_info, setUser_info] = useState(false);
   const UserInfo = () => {
-    setData(User_info_array);
     setUser_info(true);
     setOrder_info(false);
     setDelivery_boy_info(false);
@@ -42,6 +40,8 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+
+    getAllUsers();
   };
 
   const [order_info, setOrder_info] = useState(false);
@@ -257,20 +257,18 @@ const Admin_control_panel = () => {
   function handleSearch() {
     var search_item = textInput.current.value;
 
-    //For User
+    //For User search
     if (user_info === true) {
       serial_user = 1;
-      const updateItem = User_info_array.filter((currEle) => {
-        return (
-          currEle.name.toLowerCase() === search_item.toLowerCase() ||
-          currEle.id === search_item
-        );
+      const updateItem = users.filter((currEle) => {
+        return currEle.username
+          .toLowerCase()
+          .includes(search_item.toLowerCase());
       });
-      console.log(updateItem);
-      setData(updateItem);
+      setusers(updateItem);
     }
 
-    //For Order
+    //For Order search
     if (order_info === true) {
       serial_order = 1;
       const updateItem1 = Admin_order_array.filter((currEle) => {
@@ -282,19 +280,16 @@ const Admin_control_panel = () => {
       setData(updateItem1);
     }
 
-    //For Delivery_boy
+    //For Delivery_boy search
     if (deliver_boy_info === true) {
       serial_delivery = 1;
       const updateItem2 = deliveryBoy.filter((currEle) => {
-        return (
-          currEle.username.toLowerCase() === search_item.toLowerCase()
-          // currEle.id === search_item
-        );
+        return currEle.username.toLowerCase().includes(search_item.toLowerCase()) || currEle.address.toLowerCase().includes(search_item.toLowerCase())
       });
       setdeliveryBoy(updateItem2);
     }
 
-    //For Restaurent
+    //For Restaurent search
     if (add_res === true) {
       serial_res = 1;
       const updateItem3 = Restaurent_list_array.filter((currEle) => {
@@ -307,7 +302,7 @@ const Admin_control_panel = () => {
       setData(updateItem3);
     }
 
-    //For Food Item
+    //For Food Item search
     if (update_food_item === true) {
       serial_food_item = 1;
       const updateItem4 = Food_array.filter((currEle) => {
@@ -320,7 +315,7 @@ const Admin_control_panel = () => {
       setData(updateItem4);
     }
 
-    //For Food Category
+    //For Food Category search
     if (update_food_category === true) {
       serial_food_category = 1;
       const updateItem5 = Category_array.filter((currEle) => {
@@ -390,10 +385,25 @@ const Admin_control_panel = () => {
     }
   };
 
+  // Fetching All Users--------------------------------------------------
+  const [users, setusers] = useState([]);
+  const getAllUsers = async () => {
+    try {
+      let response = await axios.get(
+        "http://localhost:8000/admins/getallusers",
+        { withCredentials: true }
+      );
+      setusers(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   useEffect(() => {
     fetchCompanyDetails();
     fetchAdmin();
     getDeliveryBoy();
+    getAllUsers();
   }, []);
 
   return (
@@ -566,38 +576,26 @@ const Admin_control_panel = () => {
                   Username
                 </div>
                 <div
-                  className="head col-1 pt-2 pb-2"
-                  style={{ border: "1px solid black" }}
-                >
-                  User Id
-                </div>
-                <div
                   className="head col-2 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Phone no
                 </div>
                 <div
-                  className="head col-2 pt-2 pb-2"
+                  className="head col-3 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Email
                 </div>
                 <div
-                  className="head col-2 pt-2 pb-2"
+                  className="head col-4 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Address
                 </div>
-                <div
-                  className="head col-2 pt-2 pb-2"
-                  style={{ border: "1px solid black" }}
-                >
-                  Account Password
-                </div>
               </div>
-              {data.map((elem) => {
-                const { name, phone, email, password, address, id } = elem;
+              {users.map((elem) => {
+                const { username, contact, email, address } = elem;
                 return (
                   <>
                     <div
@@ -619,17 +617,10 @@ const Admin_control_panel = () => {
                         className="col-2"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                          overflow: "hidden",
                         }}
                       >
-                        {elem.name}
-                      </div>
-                      <div
-                        className="col-1"
-                        style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-                        }}
-                      >
-                        {elem.id}
+                        {username}
                       </div>
                       <div
                         className="col-2"
@@ -637,31 +628,24 @@ const Admin_control_panel = () => {
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.phone}
+                        {contact}
                       </div>
                       <div
-                        className="col-2"
+                        className="col-3"
+                        style={{
+                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {email}
+                      </div>
+                      <div
+                        className="col-4"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
-                        {elem.email}
-                      </div>
-                      <div
-                        className="col-2"
-                        style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-                        }}
-                      >
-                        {elem.address}
-                      </div>
-                      <div
-                        className="col-2"
-                        style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-                        }}
-                      >
-                        {elem.password}
+                        {address}
                       </div>
                     </div>
                   </>
@@ -810,7 +794,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {deliveryBoy.map((elem) => {
-                const { username, contact, address } = elem;
+                const { username, contact, address, _id } = elem;
                 return (
                   <>
                     <div
