@@ -496,7 +496,7 @@ form {
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 
-/*Admin------------------------------------------------------------------------*/
+/* Admin------------------------------------------------------------------------ */
 .dashboard{
   background-image: url('Image/pizza.jpg');
   height: 250px;
@@ -506,11 +506,14 @@ form {
 }
 .admin_img{
   margin: auto;
-  margin-top: 7%;
+  margin-top: 6%;
   border-radius: 100px;
-  box-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px; ;
+  box-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px; 
   height: 85px;
   width: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .admin_name{
   margin: auto;
@@ -543,7 +546,9 @@ form {
 
 .update_div{
   height: 100%;
-  padding: 5% 2% 2% 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 60px;
   background-image: linear-gradient(to bottom right, rgb(61, 214, 217), rgb(37, 244, 165));
@@ -557,6 +562,8 @@ form {
 .outer_update_div{
   height: 25%;
   margin-top: 8%;
+  gap:5rem;
+  justify-content: center;
 }
 
 

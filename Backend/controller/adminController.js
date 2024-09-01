@@ -223,13 +223,13 @@ module.exports.uploadProfilePicture = async (req, res) => {
     return res.status(400).send("No file uploaded.");
   }
   try {
-    const oldImage = req.user.image;
-    await userModel.updateOne(
-      { email: req.user.email },
+    const oldImage = req.admin.image;
+    await adminModel.updateOne(
+      { email: req.admin.email },
       { $set: { image: req.file.filename } }
     );
     if (oldImage)
-      fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
+      fs.unlink(`../Frontend/public/adminProfilePictures/${oldImage}`, (err) => {
         if (err) {
           console.log(err.message);
         }

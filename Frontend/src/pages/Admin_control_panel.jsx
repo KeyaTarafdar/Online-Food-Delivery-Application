@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaUser, FaGift } from "react-icons/fa";
 import { FaRegCircleStop, FaMagnifyingGlass } from "react-icons/fa6";
-import { MdDeliveryDining } from "react-icons/md";
+import { MdDeliveryDining, MdDelete } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
@@ -71,6 +71,22 @@ const Admin_control_panel = () => {
     getDeliveryBoy();
   };
 
+  const [update_delivery_boy, setUpdate_delivery_boy] = useState(false);
+  const UpdateDeliveryBoy = () => {
+    setUpdate_delivery_boy(true);
+    setUpdate_food_item(false);
+    setUser_info(false);
+    setOrder_info(false);
+    setDelivery_boy_info(false);
+    setUpdate(false);
+    setUpdate_web_details(false);
+    setUpdate_food_category(false);
+    setAdd_res(false);
+    setUpdate_web_details_name(false);
+    setUpdate_web_details_mail(false);
+    setUpdate_web_details_phone(false);
+  };
+
   const [update, setUpdate] = useState(false);
   const UpdateInfo = () => {
     setOrder_info(false);
@@ -81,6 +97,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setUpdate_delivery_boy(false);
   };
 
   const [update_web_details, setUpdate_web_details] = useState(false);
@@ -284,7 +301,10 @@ const Admin_control_panel = () => {
     if (deliver_boy_info === true) {
       serial_delivery = 1;
       const updateItem2 = deliveryBoy.filter((currEle) => {
-        return currEle.username.toLowerCase().includes(search_item.toLowerCase()) || currEle.address.toLowerCase().includes(search_item.toLowerCase())
+        return (
+          currEle.username.toLowerCase().includes(search_item.toLowerCase()) ||
+          currEle.address.toLowerCase().includes(search_item.toLowerCase())
+        );
       });
       setdeliveryBoy(updateItem2);
     }
@@ -360,12 +380,14 @@ const Admin_control_panel = () => {
 
   // Fetching admin details--------------------------------------------------
   const [adminName, setadminName] = useState();
+  const [profilePicture, SetprofilePicture] = useState(null);
   const fetchAdmin = async () => {
     try {
       let response = await axios.get("http://localhost:8000/admins/getadmin", {
         withCredentials: true,
       });
       setadminName(response.data.username);
+      SetprofilePicture(response.data.image);
     } catch (err) {
       console.log(err.message);
     }
@@ -398,6 +420,45 @@ const Admin_control_panel = () => {
       console.log(err.message);
     }
   };
+
+  const fileInputRef = useRef(null);
+  const [image, setImage] = useState();
+  // Upload profile image
+  const handleProfileImage = async (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    if (!file) {
+      alert("Please Upload an Image");
+      return;
+    }
+
+    setImage(file);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/admins/uploadprofilepicture",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      alert(response.data);
+      fetchAdmin();
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  // Add Delivery boy
+  function handleSubmit_deliveryBoy() {
+    setUpdate_delivery_boy(false);
+  }
 
   useEffect(() => {
     fetchCompanyDetails();
@@ -462,12 +523,39 @@ const Admin_control_panel = () => {
         <div className="container-fluid m-0 p-0 d-flex">
           {/* Side_menu----------------------------------------------------------------------------------------------- */}
           <div className="col-2 m-0 p-0 panel">
-            <div className="col-12 dashboard m-0 p-0">
+            <div className="col-12 dashboard m-0 p-0 pt-3">
               <div className="col-6 admin_img ">
-                <FaUser
-                  style={{ height: "50px", width: "50px", paddingTop: "20px" }}
+                {profilePicture ? (
+                  <img
+                    src={`/adminProfilePictures/${profilePicture}`}
+                    onClick={() => {
+                      fileInputRef.current.click();
+                    }}
+                    style={{
+                      height: "100px",
+                      width: "100px",
+                      cursor: "pointer",
+                      borderRadius: "50px",
+                    }}
+                  ></img>
+                ) : (
+                  <FaUser
+                    title="Upload new Profile Image"
+                    style={{ height: "40px", width: "40px", cursor: "pointer" }}
+                    onClick={() => {
+                      fileInputRef.current.click();
+                    }}
+                  />
+                )}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleProfileImage}
+                  accept="image/*"
                 />
               </div>
+
               <div className="admin_name p-0">{adminName}</div>
               <div className="admin_deg ">Admin</div>
             </div>
@@ -543,7 +631,8 @@ const Admin_control_panel = () => {
           !update_web_details &&
           !add_res &&
           !update_food_category &&
-          !update_food_item ? (
+          !update_food_item &&
+          !update_delivery_boy ? (
             <div
               className="col-10 admin_default_page"
               style={{ height: "98vh" }}
@@ -766,7 +855,7 @@ const Admin_control_panel = () => {
 
           {/* Delivery boy info--------------------------------------------------------------------------------------------------------- */}
           {deliver_boy_info ? (
-            <div className="col-10 m-0 p-0">
+            <div className="col-11 m-0 p-0 ">
               <div className="col-12 m-0 p-0 d-flex">
                 <div
                   className="head col-1 pt-2 pb-2"
@@ -781,20 +870,26 @@ const Admin_control_panel = () => {
                   Name
                 </div>
                 <div
-                  className="head col-3 pt-2 pb-2"
+                  className="head col-2 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Phone no
                 </div>
                 <div
-                  className="head col-5 pt-2 pb-2"
+                  className="head col-4 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Address
                 </div>
+                <div
+                  className="head col-1 pt-2 pb-2"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delete
+                </div>
               </div>
               {deliveryBoy.map((elem) => {
-                const { username, contact, address, _id } = elem;
+                const { username, contact, address } = elem;
                 return (
                   <>
                     <div
@@ -821,7 +916,7 @@ const Admin_control_panel = () => {
                         {username}
                       </div>
                       <div
-                        className="col-3"
+                        className="col-2"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
@@ -829,12 +924,23 @@ const Admin_control_panel = () => {
                         {contact}
                       </div>
                       <div
-                        className="col-5"
+                        className="col-4"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
                         {address}
+                      </div>
+
+                      <div
+                        className="col-1"
+                        style={{
+                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                        }}
+                      >
+                        <MdDelete
+                          style={{ fontSize: "24px", color: "black" }}
+                        />
                       </div>
                     </div>
                   </>
@@ -853,23 +959,23 @@ const Admin_control_panel = () => {
               }}
             >
               <div className="col-12 d-flex outer_update_div">
-                <div className="col-2"></div>
                 <div className="col-3 update_div" onClick={UpdateWebInfo}>
                   <h5>Update Website Info</h5>
                 </div>
-                <div className="col-1"></div>
                 <div className="col-3 update_div" onClick={AddRes}>
                   <h5>Add New Restaurent</h5>
                 </div>
               </div>
+
               <div className="col-12 d-flex outer_update_div">
-                <div className="col-2"></div>
                 <div className="col-3 update_div" onClick={UpdateFoodItem}>
                   <h5>Update Food Items</h5>
                 </div>
-                <div className="col-1"></div>
                 <div className="col-3 update_div" onClick={UpdateFoodCategori}>
                   <h5>Update Food Category</h5>
+                </div>
+                <div className="col-3 update_div" onClick={UpdateDeliveryBoy}>
+                  <h5>Add Delivery Boy</h5>
                 </div>
               </div>
             </div>
@@ -1490,6 +1596,75 @@ const Admin_control_panel = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          ) : null}
+
+          {/*Add Delivery boy------------------------------------------------------------ */}
+          {update_delivery_boy ? (
+            <div className="container-fluid m-0 p-0 admin_default_page">
+              <div
+                className="col-lg-6 pt-5 pb-3 d-lg-block d-xl-block"
+                style={{
+                  width: "60%",
+                  height: "50%",
+                  boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
+                  border: "2px solid black",
+                  borderRadius: "50px",
+                  marginLeft: "25%",
+                  marginTop: "12%",
+                }}
+              >
+                <div className="col-12" style={{ display: "flex" }}>
+                  <div className="col-4 pl-0 pt-0">
+                    <h5>Enter Delivery Boy Name: </h5>
+                  </div>
+                  <input
+                    className="col-8 pt-0"
+                    placeholder="Enter New Name..."
+                    style={{
+                      borderStyle: "solid",
+                      borderRadius: "5px",
+                      height: "50px",
+                    }}
+                  ></input>
+                </div>
+                <div className="col-12 pt-3" style={{ display: "flex" }}>
+                  <div className="col-4 pl-0 pt-0">
+                    <h5 style={{ marginTop: "7px" }}>Enter Phone no: </h5>
+                  </div>
+                  <input
+                    className="col-8 pt-0"
+                    placeholder="Enter New Phone no..."
+                    style={{
+                      borderStyle: "solid",
+                      borderRadius: "5px",
+                      height: "50px",
+                    }}
+                  ></input>
+                </div>
+                <div className="col-12 pt-3" style={{ display: "flex" }}>
+                  <div className="col-4 pl-0 pt-0">
+                    <h5 style={{ marginTop: "7px" }}>Enter Address: </h5>
+                  </div>
+                  <input
+                    className="col-8 pt-0"
+                    placeholder="Enter New Address..."
+                    style={{
+                      borderStyle: "solid",
+                      borderRadius: "5px",
+                      height: "50px",
+                    }}
+                  ></input>
+                </div>
+
+                <button
+                  className="btn btn-success"
+                  style={{ marginLeft: "9%", marginTop: "6%", width: "20%" }}
+                  onClick={handleSubmit_deliveryBoy}
+                >
+                  Submit
+                </button>
               </div>
             </div>
           ) : null}
