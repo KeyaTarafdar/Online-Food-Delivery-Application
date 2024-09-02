@@ -31,8 +31,8 @@ const storageFoodItem = multer.diskStorage({
     cb(null, "../Frontend/public/foodItemsPictures");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + path.extname(file.originalname);
-    cb(null, uniqueSuffix);
+    {const uniqueSuffix = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueSuffix);}
   },
 });
 module.exports.uploadFoodItem = multer({ storage: storageFoodItem });

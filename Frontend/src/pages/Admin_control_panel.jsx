@@ -29,6 +29,7 @@ import {
   updateCompanyEmail,
   updateCompanyPhone,
   addNewFoodItem,
+  fetchAllFoods,
 } from "../utils/utils";
 
 const Admin_control_panel = () => {
@@ -258,6 +259,11 @@ const Admin_control_panel = () => {
     setUpdate_web_details_name(false);
     setUpdate_web_details_mail(false);
     setUpdate_web_details_phone(false);
+
+    fetchAllFoods().then((response) => {
+      console.log(response);
+      setfoods(response);
+    });
   };
 
   // Search Event--------------------------------------------------
@@ -429,7 +435,7 @@ const Admin_control_panel = () => {
   // Add new food item
   const handleAddNewFoodItem = async () => {
     const formData = new FormData();
-    
+
     formData.append("image", image);
     formData.append("name", foodname);
     formData.append("price", foodPrice);
@@ -437,16 +443,27 @@ const Admin_control_panel = () => {
     formData.append("quantity", foodQuantity);
     formData.append("restaurent", restaurentName);
 
+    setUpdate_food_item(true);
+
     addNewFoodItem(formData).then((response) => {
       alert(response);
     });
+    fetchAllFoods();
   };
+
+  // Fetch all foods
+  const [foods, setfoods] = useState([]);
 
   useEffect(() => {
     getCompanyDetails();
     getAdmin();
     getDeliveryBoy();
     getAllUsers();
+    setInterval(() => {
+      fetchAllFoods().then((response) => {
+        setfoods(response);
+      });
+    }, 5000);
   }, []);
 
   return (
@@ -1155,24 +1172,19 @@ const Admin_control_panel = () => {
                     Serial no
                   </div>
                   <div
-                    className="head col-2 pt-3 pb-2"
+                    className="head col-3 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Restaurent Name
                   </div>
 
                   <div
-                    className="head col-2 pt-3 pb-2"
+                    className="head col-3 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Restaurent Image
                   </div>
-                  <div
-                    className="head col-2 pt-3 pb-2"
-                    style={{ border: "1px solid black" }}
-                  >
-                    Id
-                  </div>
+
                   <div
                     className="head col-3 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
@@ -1251,17 +1263,6 @@ const Admin_control_panel = () => {
                             <input
                               type="text"
                               placeholder="Enter Restaurent Address..."
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Enter Restaurent Id:</b>
-                          </div>
-                          <div className="col-6 m-0 p-0">
-                            <input
-                              type="text"
-                              placeholder="Enter Restaurent Id..."
                             ></input>
                           </div>
                         </div>
@@ -1429,74 +1430,128 @@ const Admin_control_panel = () => {
                 <div className="col-12 m-0 p-0 d-flex">
                   <div
                     className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Serial no
                   </div>
                   <div
-                    className="head col-3 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    className="head col-2 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Food Name
                   </div>
 
                   <div
                     className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Food Image
                   </div>
 
                   <div
-                    className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    className="head col-2 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Category
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Price
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Quantity
                   </div>
 
                   <div
                     className="head col-2 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Restaurent Name
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Update Details
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     Delete
                   </div>
                 </div>
-                {data.map((elem) => {
-                  const { name, img, res, categori, qty } = elem;
+                {foods.map((elem) => {
+                  const {
+                    _id,
+                    name,
+                    image,
+                    restaurent,
+                    category,
+                    quantity,
+                    price,
+                  } = elem;
                   return (
                     <>
                       <Update_Food
+                        id={_id}
                         serial={serial_food_item++}
-                        name={elem.name}
-                        img={elem.img}
-                        categori={elem.categori}
-                        price={elem.price}
-                        res={elem.res}
-                        qty={elem.qty}
+                        name={name}
+                        image={image}
+                        category={category}
+                        price={price}
+                        restaurent={restaurent}
+                        quantity={quantity}
                       />
                     </>
                   );
@@ -1623,10 +1678,12 @@ const Admin_control_panel = () => {
                       </div>
                       <div className="modal-footer">
                         <button
-                          type="button"
                           className="btn btn-success"
                           data-dismiss="modal"
-                          onClick={handleAddNewFoodItem}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAddNewFoodItem();
+                          }}
                         >
                           Save
                         </button>

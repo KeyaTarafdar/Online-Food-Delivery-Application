@@ -3,13 +3,46 @@ import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Category_array from "./Array/Category_array";
 import Restaurant_list_array from "./Array/Restaurent_list_array";
+import { deleteFoodItem, updateFoodItem } from "../utils/utils";
 
-const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
+const Update_Food = ({
+  id,
+  serial,
+  name,
+  category,
+  image,
+  price,
+  restaurent,
+  quantity,
+}) => {
   const [clicked_update, setClicked_update] = useState(false);
 
-  const handleClick_Update = () => {
+  const [updatedItemName, setupdatedItemName] = useState();
+  const [updatedItemQuantity, setupdatedItemQuantity] = useState();
+  const [updatedItemPrice, setupdatedItemPrice] = useState(0);
+  const [updatedItemRestaurent, setupdatedItemRestaurent] = useState();
+  const [updatedItemCategory, setupdatedItemCategory] = useState();
+
+  const [foodImage, setfoodImage] = useState();
+
+  const handleUpdateFood = () => {
     setClicked_update(!clicked_update);
+
+    const formData = new FormData();
+
+    formData.append("id", id);
+    formData.append("image", foodImage);
+    formData.append("name", updatedItemName);
+    formData.append("price", updatedItemPrice);
+    formData.append("category", updatedItemCategory);
+    formData.append("quantity", updatedItemQuantity);
+    formData.append("restaurent", updatedItemRestaurent);
+
+    updateFoodItem(formData).then((response) => {
+      alert(response);
+    });
   };
+
   return (
     <>
       <div
@@ -21,60 +54,130 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
       >
         <div
           className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           {serial}
         </div>
         <div
-          className="col-3"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          className="col-2"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           {name}
         </div>
         <div
           className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <img style={{ height: "100%", width: "70%" }} src={img}></img>
+          <img
+            style={{ height: "100%", width: "70%" }}
+            src={`/foodItemsPictures/${image}`}
+          ></img>
+        </div>
+        <div
+          className="col-2"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {category}
         </div>
         <div
           className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
-        >
-          {categori}
-        </div>
-        <div
-          className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           {price}
         </div>
         <div
           className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          {qty}
+          {quantity === "undefined" ? "" : quantity}
         </div>
         <div
           className="col-2"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          {res}
+          {restaurent}
         </div>
         <div
           className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
-          onClick={handleClick_Update}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <HiPencil />
+          <HiPencil
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setClicked_update(!clicked_update);
+            }}
+          />
         </div>
         <div
           className="col-1"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <RiDeleteBin6Line />
+          <RiDeleteBin6Line
+            style={{
+              cursor: "pointer"
+            }}
+            onClick={() => {
+              deleteFoodItem(id).then((response) => {
+                alert(response);
+              });
+            }}
+          />
         </div>
       </div>
+
       {clicked_update ? (
         <div className="pb-4">
           <div class="pb-2 pt-2">
@@ -92,13 +195,19 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                 className="mt-3 form-control"
                 type="text"
                 placeholder="Enter Food Name..."
+                onChange={(e) => {
+                  setupdatedItemName(e.target.value);
+                }}
               ></input>
             </div>
             <div className="pt-2">
               <input
                 className="mt-3 form-control"
-                type="text"
+                type="number"
                 placeholder="Enter Price..."
+                onChange={(e) => {
+                  setupdatedItemPrice(e.target.value);
+                }}
               ></input>
             </div>
             <div className="pt-2">
@@ -106,6 +215,9 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                 className="mt-3 form-control"
                 type="text"
                 placeholder="Enter Quantity..."
+                onChange={(e) => {
+                  setupdatedItemQuantity(e.target.value);
+                }}
               ></input>
             </div>
             <div className="d-flex mt-3 p-0">
@@ -115,6 +227,9 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                   width: "35rem",
                   height: "2.2rem",
                   borderRadius: "4px",
+                }}
+                onChange={(e) => {
+                  setupdatedItemCategory(e.target.value);
                 }}
               >
                 <option value="" disabled selected>
@@ -132,6 +247,9 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                   width: "35rem",
                   height: "2.2rem",
                   borderRadius: "4px",
+                }}
+                onChange={(e) => {
+                  setupdatedItemRestaurent(e.target.value);
                 }}
               >
                 <option value="" disabled selected>
@@ -154,6 +272,9 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                     accept="image/*"
                     required=""
                     id="file-input"
+                    onChange={(e) => {
+                      if (e) setfoodImage(e.target.files[0]);
+                    }}
                   />
                 </label>
               </form>
@@ -165,7 +286,7 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                 type="button"
                 class="btn btn-success"
                 data-dismiss="modal"
-                onClick={handleClick_Update}
+                onClick={handleUpdateFood}
               >
                 OK
               </button>

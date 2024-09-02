@@ -231,3 +231,53 @@ export const addNewFoodItem = async (formData) => {
     console.log(err.message);
   }
 };
+
+// Fetch all food items
+export const fetchAllFoods = async () => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/foods/getallfooditems",
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Delete food item
+export const deleteFoodItem = async (id) => {
+  try {
+    let response = await axios.delete(
+      "http://localhost:8000/foods/deletefooditem",
+      {
+        params: {
+          id,
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update food item
+export const updateFoodItem = async (formData) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/foods/updatefooditem",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
