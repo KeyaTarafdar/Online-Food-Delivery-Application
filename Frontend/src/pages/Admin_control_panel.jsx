@@ -17,6 +17,18 @@ import Update_Food from "../Components/Update_Food";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
+import {
+  deleteDeliveryBoy,
+  fetchAllDeliveryBoy,
+  fetchAllUsers,
+  fetchAdmin,
+  fetchCompanyDetails,
+  logoutAdmin,
+  addDeliveryBoy,
+  updateCompanyName,
+  updateCompanyEmail,
+  updateCompanyPhone,
+} from "../utils/utils";
 
 const Admin_control_panel = () => {
   var serial_food_item = 1,
@@ -162,22 +174,15 @@ const Admin_control_panel = () => {
     setUpdate_web_details_mail(false);
     setUpdate_web_details_name(false);
 
-    try {
+    updateCompanyName(newcompanyName).then((response) => {
       setLoading(true);
-      await axios.put(
-        "http://localhost:8000/admins/updatecompanyname",
-        { name: newcompanyName },
-        { withCredentials: true }
-      );
+
       setTimeout(() => {
         setLoading(false);
-        alert("Company Name updated successfully");
-        fetchCompanyDetails();
+        alert(response);
+        getCompanyDetails();
       }, 3000);
-    } catch (err) {
-      setLoading(false);
-      alert("Something went wrong");
-    }
+    });
   };
 
   // Update company email---------------------------------------------------
@@ -187,21 +192,15 @@ const Admin_control_panel = () => {
     setUpdate_web_details_mail(false);
     setUpdate_web_details_name(false);
 
-    try {
+    updateCompanyEmail(newcompanyEmail).then((response) => {
       setLoading(true);
-      await axios.put(
-        "http://localhost:8000/admins/updatecompanyemail",
-        { email: newcompanyEmail },
-        { withCredentials: true }
-      );
+
       setTimeout(() => {
         setLoading(false);
-        alert("Email updated successfully");
+        alert(response);
+        getCompanyDetails();
       }, 3000);
-    } catch (err) {
-      setLoading(false);
-      alert("Something went wrong");
-    }
+    });
   };
 
   // Update company phone no---------------------------------------------------
@@ -211,21 +210,13 @@ const Admin_control_panel = () => {
     setUpdate_web_details_mail(false);
     setUpdate_web_details_name(false);
 
-    try {
+    updateCompanyPhone(newcompanyPhone).then((response) => {
       setLoading(true);
-      await axios.put(
-        "http://localhost:8000/admins/updatecompanyphone",
-        { phone: newcompanyPhone },
-        { withCredentials: true }
-      );
       setTimeout(() => {
         setLoading(false);
-        alert("Phone updated successfully");
+        alert(response);
       }, 3000);
-    } catch (err) {
-      setLoading(false);
-      alert("Something went wrong");
-    }
+    });
   };
 
   const [add_res, setAdd_res] = useState(false);
@@ -347,78 +338,37 @@ const Admin_control_panel = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Logout Admin--------------------------------------------------
-  const logoutAdmin = async () => {
-    setLoading(true);
-    try {
-      let response = await axios.post(
-        "http://localhost:8000/admins/logout",
-        {},
-        { withCredentials: true }
-      );
-
-      setTimeout(() => {
-        setLoading(false);
-
-        if (response.data == "Logout successfully") {
-          navigate("/Login");
-        } else {
-          alert(response.data);
-        }
-      }, 3000);
-    } catch (err) {
-      setLoading(false);
-      console.log(err.message);
-    }
-  };
-
   // Fetching company details--------------------------------------------------
-  const fetchCompanyDetails = async () => {
-    let response = await axios.get("http://localhost:8000/companyDetails");
-    setcompanyName(response.data[0].name.toUpperCase());
+  const getCompanyDetails = () => {
+    fetchCompanyDetails().then((response) => {
+      setcompanyName(response.name.toUpperCase());
+    });
   };
 
   // Fetching admin details--------------------------------------------------
   const [adminName, setadminName] = useState();
   const [profilePicture, SetprofilePicture] = useState(null);
-  const fetchAdmin = async () => {
-    try {
-      let response = await axios.get("http://localhost:8000/admins/getadmin", {
-        withCredentials: true,
-      });
-      setadminName(response.data.username);
-      SetprofilePicture(response.data.image);
-    } catch (err) {
-      console.log(err.message);
-    }
+  const getAdmin = () => {
+    fetchAdmin().then((response) => {
+      setadminName(response.username);
+      SetprofilePicture(response.image);
+    });
   };
 
   // Fetching Delivery boy--------------------------------------------------
   const [deliveryBoy, setdeliveryBoy] = useState([]);
-  const getDeliveryBoy = async () => {
-    try {
-      let response = await axios.get(
-        "http://localhost:8000/admins/getdeliveryboy",
-        { withCredentials: true }
-      );
-      setdeliveryBoy(response.data);
-    } catch (err) {
-      console.log(err.message);
-    }
+  const getDeliveryBoy = () => {
+    fetchAllDeliveryBoy().then((response) => {
+      setdeliveryBoy(response);
+    });
   };
 
   // Fetching All Users--------------------------------------------------
   const [users, setusers] = useState([]);
-  const getAllUsers = async () => {
-    try {
-      let response = await axios.get(
-        "http://localhost:8000/admins/getallusers",
-        { withCredentials: true }
-      );
-      setusers(response.data);
-    } catch (err) {
-      console.log(err.message);
-    }
+  const getAllUsers = () => {
+    fetchAllUsers().then((response) => {
+      setusers(response);
+    });
   };
 
   const fileInputRef = useRef(null);
@@ -449,25 +399,30 @@ const Admin_control_panel = () => {
         }
       );
       alert(response.data);
-      fetchAdmin();
+      getAdmin();
     } catch (err) {
       console.log(err.message);
     }
   };
 
+  const [newDeliveryBoyName, setnewDeliveryBoyName] = useState();
+  const [newDeliveryBoyPhone, setnewDeliveryBoyPhone] = useState();
+  const [newDeliveryBoyAddress, setnewDeliveryBoyAddress] = useState();
   // Add Delivery boy
-  function handleSubmit_deliveryBoy() {
-    setUpdate_delivery_boy(false);
-  }
-
-  // Delete delivery Boy
-  // const deleteDeliveryBoy=()=>{
-  //   const response=axios.delete('http://localhost:8000/admins/deletedeliveryboy',{})
-  // }
+  const handleSubmit_deliveryBoy = () => {
+    addDeliveryBoy(
+      newDeliveryBoyName,
+      newDeliveryBoyPhone,
+      newDeliveryBoyAddress
+    ).then((response) => {
+      alert(response);
+      setUpdate_delivery_boy(false);
+    });
+  };
 
   useEffect(() => {
-    fetchCompanyDetails();
-    fetchAdmin();
+    getCompanyDetails();
+    getAdmin();
     getDeliveryBoy();
     getAllUsers();
   }, []);
@@ -620,7 +575,20 @@ const Admin_control_panel = () => {
                 <div
                   className="col-7 m-0 p-0"
                   style={{ cursor: "-webkit-grab", cursor: "grab" }}
-                  onClick={logoutAdmin}
+                  onClick={() => {
+                    logoutAdmin().then((response) => {
+                      if (response === "Logout successfully") {
+                        setLoading(true);
+
+                        setTimeout(() => {
+                          setLoading(false);
+                          navigate("/Login");
+                        }, 3000);
+                      } else {
+                        alert(response);
+                      }
+                    });
+                  }}
                 >
                   Log Out&ensp;&emsp;&emsp;&emsp;
                 </div>
@@ -894,7 +862,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {deliveryBoy.map((elem) => {
-                const { username, contact, address,id=elem._id } = elem;
+                const { username, contact, address, id = elem._id } = elem;
                 return (
                   <>
                     <div
@@ -949,18 +917,11 @@ const Admin_control_panel = () => {
                             color: "black",
                             cursor: "pointer",
                           }}
-                          onClick={async (elem) => {
-                            let response = await axios.delete(
-                              "http://localhost:8000/admins/deletedeliveryboy",
-                              {
-                                params: {
-                                  deliveryBoyId: id,
-                                },
-                                withCredentials: true,
-                              }
-                            );
-                            alert(response.data);
-                            getDeliveryBoy();
+                          onClick={() => {
+                            deleteDeliveryBoy(id).then((response) => {
+                              alert(response);
+                              getDeliveryBoy();
+                            });
                           }}
                         />
                       </div>
@@ -1336,19 +1297,13 @@ const Admin_control_panel = () => {
                     Serial no
                   </div>
                   <div
-                    className="head col-3 pt-2 pb-2"
+                    className="head col-4 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Category Name
                   </div>
                   <div
-                    className="head col-2 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
-                  >
-                    Change Name
-                  </div>
-                  <div
-                    className="head col-3 pt-2 pb-2"
+                    className="head col-4 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Category Image
@@ -1357,7 +1312,7 @@ const Admin_control_panel = () => {
                     className="head col-2 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
-                    Update Image
+                    Update Details
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
@@ -1462,29 +1417,19 @@ const Admin_control_panel = () => {
                     Serial no
                   </div>
                   <div
-                    className="head col-2 pt-2 pb-2"
+                    className="head col-3 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Food Name
                   </div>
-                  <div
-                    className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
-                  >
-                    Change Name
-                  </div>
+
                   <div
                     className="head col-1 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Food Image
                   </div>
-                  <div
-                    className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
-                  >
-                    Update Image
-                  </div>
+
                   <div
                     className="head col-1 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
@@ -1503,17 +1448,18 @@ const Admin_control_panel = () => {
                   >
                     Quantity
                   </div>
+
                   <div
-                    className="head col-1 pt-2 pb-2"
+                    className="head col-2 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
-                    Update Price
+                    Restaurent Name
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
                     style={{ border: "1px solid black" }}
                   >
-                    Restaurent Name
+                    Update Details
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
@@ -1569,7 +1515,7 @@ const Admin_control_panel = () => {
                           <div className="col-6 m-0 p-0">
                             <input
                               type="text"
-                              placeholder="Enter Restaurent Name..."
+                              placeholder="Enter Item Name..."
                             ></input>
                           </div>
                         </div>
@@ -1586,6 +1532,9 @@ const Admin_control_panel = () => {
                             <b>Select Item Category:</b>
                           </div>
                           <select className="form-select ml-3">
+                            <option value="" disabled selected>
+                              Select Item Category...
+                            </option>
                             {Category_array.map((option) => (
                               <option value={option.value}>
                                 {option.name}
@@ -1598,6 +1547,9 @@ const Admin_control_panel = () => {
                             <b>Select Restaurent Name:</b>
                           </div>
                           <select className="form-select ml-3">
+                            <option value="" disabled selected>
+                              Select Restaurent Name...
+                            </option>
                             {Restaurent_list_array.map((option) => (
                               <option value={option.value}>
                                 {option.name}
@@ -1629,12 +1581,12 @@ const Admin_control_panel = () => {
                 className="col-lg-6 pt-5 pb-3 d-lg-block d-xl-block"
                 style={{
                   width: "60%",
-                  height: "50%",
                   boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
                   border: "2px solid black",
                   borderRadius: "50px",
                   marginLeft: "25%",
                   marginTop: "12%",
+                  paddingBottom: "10rem",
                 }}
               >
                 <div className="col-12" style={{ display: "flex" }}>
@@ -1648,6 +1600,9 @@ const Admin_control_panel = () => {
                       borderStyle: "solid",
                       borderRadius: "5px",
                       height: "50px",
+                    }}
+                    onChange={(e) => {
+                      setnewDeliveryBoyName(e.target.value);
                     }}
                   ></input>
                 </div>
@@ -1663,6 +1618,9 @@ const Admin_control_panel = () => {
                       borderRadius: "5px",
                       height: "50px",
                     }}
+                    onChange={(e) => {
+                      setnewDeliveryBoyPhone(e.target.value);
+                    }}
                   ></input>
                 </div>
                 <div className="col-12 pt-3" style={{ display: "flex" }}>
@@ -1676,6 +1634,9 @@ const Admin_control_panel = () => {
                       borderStyle: "solid",
                       borderRadius: "5px",
                       height: "50px",
+                    }}
+                    onChange={(e) => {
+                      setnewDeliveryBoyAddress(e.target.value);
                     }}
                   ></input>
                 </div>

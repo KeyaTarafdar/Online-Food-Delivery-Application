@@ -115,7 +115,7 @@ module.exports.updateCompanyName = async (req, res) => {
     let { name } = req.body;
     if (name) {
       await companyDetailModel.updateMany({}, { $set: { name } });
-      res.send("Name updated successfully");
+      res.send("Company Name updated successfully");
     } else {
       res.send("You have to give a New Name");
     }
@@ -145,7 +145,7 @@ module.exports.updateCompanyEmail = async (req, res) => {
     let { email } = req.body;
     if (email) {
       await companyDetailModel.updateMany({}, { $set: { email } });
-      res.send("Email updated successfully");
+      res.send("Company Email updated successfully");
     } else {
       res.send("You have to give a New Email Id");
     }
@@ -229,11 +229,14 @@ module.exports.uploadProfilePicture = async (req, res) => {
       { $set: { image: req.file.filename } }
     );
     if (oldImage)
-      fs.unlink(`../Frontend/public/adminProfilePictures/${oldImage}`, (err) => {
-        if (err) {
-          console.log(err.message);
+      fs.unlink(
+        `../Frontend/public/adminProfilePictures/${oldImage}`,
+        (err) => {
+          if (err) {
+            console.log(err.message);
+          }
         }
-      });
+      );
     res.send("File uploaded successfully.");
   } catch (err) {
     res.send(err.message);

@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// USER FUNCTIONS-------------------------------------------------------------------------------
 // Logout user
 export const logout = async () => {
   try {
@@ -70,10 +71,11 @@ export const loginUser = async (email, password) => {
     return response.data;
   } catch (err) {
     console.log(err.message);
-    alert("An error occured during login")
+    alert("An error occured during login");
   }
 };
 
+// ADMIN FUNCTIONS-------------------------------------------------------------------------------
 // Admin login
 export const loginAdmin = async (email, password) => {
   try {
@@ -85,6 +87,128 @@ export const loginAdmin = async (email, password) => {
     return response.data;
   } catch (err) {
     console.log(err.message);
-    alert("An error occured during login")
+    alert("An error occured during login");
+  }
+};
+
+// Admin logout
+export const logoutAdmin = async () => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/admins/logout",
+      {},
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch Admin
+export const fetchAdmin = async () => {
+  try {
+    let response = await axios.get("http://localhost:8000/admins/getadmin", {
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update company name
+export const updateCompanyName = async (name) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/updatecompanyname",
+      { name },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message)
+  }
+};
+
+// Update company email
+export const updateCompanyEmail = async (email) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/updatecompanyemail",
+      { email },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update company phone
+export const updateCompanyPhone = async (phone) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/updatecompanyphone",
+      { phone },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Add delivery boy
+export const addDeliveryBoy = async (username, contact, address) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/admins/createdeliveryboy",
+      { username, contact, address },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch all delivery boy
+export const fetchAllDeliveryBoy = async () => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/admins/getdeliveryboy",
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Delete delivery boy
+export const deleteDeliveryBoy = async (id) => {
+  let response = await axios.delete(
+    "http://localhost:8000/admins/deletedeliveryboy",
+    {
+      params: {
+        deliveryBoyId: id,
+      },
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+// Fetch all users
+export const fetchAllUsers = async () => {
+  try {
+    let response = await axios.get("http://localhost:8000/admins/getallusers", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
   }
 };
