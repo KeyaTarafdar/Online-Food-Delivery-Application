@@ -128,7 +128,7 @@ export const updateCompanyName = async (name) => {
     );
     return response.data;
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
   }
 };
 
@@ -207,6 +207,25 @@ export const fetchAllUsers = async () => {
     let response = await axios.get("http://localhost:8000/admins/getallusers", {
       withCredentials: true,
     });
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Add new food item
+export const addNewFoodItem = async (formData) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/foods/createfooditem",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
     return response.data;
   } catch (err) {
     console.log(err.message);

@@ -28,6 +28,7 @@ import {
   updateCompanyName,
   updateCompanyEmail,
   updateCompanyPhone,
+  addNewFoodItem,
 } from "../utils/utils";
 
 const Admin_control_panel = () => {
@@ -376,7 +377,6 @@ const Admin_control_panel = () => {
   // Upload profile image
   const handleProfileImage = async (e) => {
     const file = e.target.files[0];
-    console.log(file);
     if (!file) {
       alert("Please Upload an Image");
       return;
@@ -417,6 +417,28 @@ const Admin_control_panel = () => {
     ).then((response) => {
       alert(response);
       setUpdate_delivery_boy(false);
+    });
+  };
+
+  const [foodname, setfoodName] = useState();
+  const [foodCategory, setfoodCategory] = useState();
+  const [foodPrice, setfoodPrice] = useState();
+  const [foodQuantity, setfoodQuantity] = useState();
+  const [restaurentName, setrestaurentName] = useState();
+
+  // Add new food item
+  const handleAddNewFoodItem = async () => {
+    const formData = new FormData();
+    
+    formData.append("image", image);
+    formData.append("name", foodname);
+    formData.append("price", foodPrice);
+    formData.append("category", foodCategory);
+    formData.append("quantity", foodQuantity);
+    formData.append("restaurent", restaurentName);
+
+    addNewFoodItem(formData).then((response) => {
+      alert(response);
     });
   };
 
@@ -1127,49 +1149,44 @@ const Admin_control_panel = () => {
               >
                 <div className="col-12 m-0 p-0 d-flex">
                   <div
-                    className="head col-1 pt-2 pb-2"
+                    className="head col-1 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Serial no
                   </div>
                   <div
-                    className="head col-2 pt-2 pb-2"
+                    className="head col-2 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Restaurent Name
                   </div>
+
                   <div
-                    className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
-                  >
-                    Update Name
-                  </div>
-                  <div
-                    className="head col-2 pt-2 pb-2"
+                    className="head col-2 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Restaurent Image
                   </div>
                   <div
-                    className="head col-1 pt-2 pb-2"
-                    style={{ border: "1px solid black" }}
-                  >
-                    Update Image
-                  </div>
-                  <div
-                    className="head col-2 pt-2 pb-2"
+                    className="head col-2 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Id
                   </div>
                   <div
-                    className="head col-2 pt-2 pb-2"
+                    className="head col-3 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Address
                   </div>
                   <div
                     className="head col-1 pt-2 pb-2"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Update Details
+                  </div>
+                  <div
+                    className="head col-1 pt-3 pb-2"
                     style={{ border: "1px solid black" }}
                   >
                     Delete
@@ -1496,7 +1513,7 @@ const Admin_control_panel = () => {
                     <div className="modal-content">
                       <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">
-                          Add New Item Details
+                          Add New Food Item Details
                         </h5>
                         <button
                           type="button"
@@ -1516,6 +1533,37 @@ const Admin_control_panel = () => {
                             <input
                               type="text"
                               placeholder="Enter Item Name..."
+                              onChange={(e) => {
+                                setfoodName(e.target.value);
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Enter Item Price:</b>
+                          </div>
+                          <div className="col-6 m-0 p-0">
+                            <input
+                              type="number"
+                              placeholder="Enter Item Price..."
+                              onChange={(e) => {
+                                setfoodPrice(e.target.value);
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Enter Item Quantity:</b>
+                          </div>
+                          <div className="col-6 m-0 p-0">
+                            <input
+                              type="text"
+                              placeholder="Enter Item Quantity/Size..."
+                              onChange={(e) => {
+                                setfoodQuantity(e.target.value);
+                              }}
                             ></input>
                           </div>
                         </div>
@@ -1524,14 +1572,24 @@ const Admin_control_panel = () => {
                             <b>Upload Item Image:</b>
                           </div>
                           <div className="col-6 m-0 p-0">
-                            <input type="file"></input>
+                            <input
+                              type="file"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
+                            ></input>
                           </div>
                         </div>
                         <div className="d-flex mt-3 p-0">
                           <div className="col-5 m-0 p-0">
                             <b>Select Item Category:</b>
                           </div>
-                          <select className="form-select ml-3">
+                          <select
+                            className="form-select ml-3"
+                            onChange={(e) => {
+                              setfoodCategory(e.target.value);
+                            }}
+                          >
                             <option value="" disabled selected>
                               Select Item Category...
                             </option>
@@ -1546,7 +1604,12 @@ const Admin_control_panel = () => {
                           <div className="col-5 m-0 p-0">
                             <b>Select Restaurent Name:</b>
                           </div>
-                          <select className="form-select ml-3">
+                          <select
+                            className="form-select ml-3"
+                            onChange={(e) => {
+                              setrestaurentName(e.target.value);
+                            }}
+                          >
                             <option value="" disabled selected>
                               Select Restaurent Name...
                             </option>
@@ -1563,6 +1626,7 @@ const Admin_control_panel = () => {
                           type="button"
                           className="btn btn-success"
                           data-dismiss="modal"
+                          onClick={handleAddNewFoodItem}
                         >
                           Save
                         </button>

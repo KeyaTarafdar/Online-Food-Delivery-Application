@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 
-// User Profile Picture Upload
+// User Profile Picture Upload----------------------------------------------------------------------------
 const storageUserProfile = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "../Frontend/public/userProfilePictures");
@@ -13,7 +13,7 @@ const storageUserProfile = multer.diskStorage({
 });
 module.exports.uploadUserProfile = multer({ storage: storageUserProfile });
 
-// Admin Profile Picture Upload
+// Admin Profile Picture Upload----------------------------------------------------------------------------
 const storageAdminProfile = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "../Frontend/public/adminProfilePictures");
@@ -24,3 +24,15 @@ const storageAdminProfile = multer.diskStorage({
   },
 });
 module.exports.uploadAdminProfile = multer({ storage: storageAdminProfile });
+
+// Food Item Picture Upload----------------------------------------------------------------------------
+const storageFoodItem = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../Frontend/public/foodItemsPictures");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueSuffix);
+  },
+});
+module.exports.uploadFoodItem = multer({ storage: storageFoodItem });

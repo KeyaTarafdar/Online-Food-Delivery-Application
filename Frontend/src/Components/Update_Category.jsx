@@ -116,14 +116,15 @@ const Update_Category = ({ serial, name, img }) => {
                 </label>
               </form>
             </div>
-            <div className="mt-4 pb-2">
+            <div className="mt-4 pb-4">
               <button
+                style={{ width: "6rem" }}
                 type="button"
                 class="btn btn-success"
                 data-dismiss="modal"
                 onClick={handleClick_update}
               >
-                Ok
+                OK
               </button>
             </div>
           </div>

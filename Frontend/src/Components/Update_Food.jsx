@@ -5,10 +5,6 @@ import Category_array from "./Array/Category_array";
 import Restaurant_list_array from "./Array/Restaurent_list_array";
 
 const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
-  const [clicked_name, setClicked_name] = useState(false);
-
-  const [clicked_img, setClicked_img] = useState(false);
-
   const [clicked_update, setClicked_update] = useState(false);
 
   const handleClick_Update = () => {
@@ -112,6 +108,40 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                 placeholder="Enter Quantity..."
               ></input>
             </div>
+            <div className="d-flex mt-3 p-0">
+              <select
+                className="form-select ml-1"
+                style={{
+                  width: "35rem",
+                  height: "2.2rem",
+                  borderRadius: "4px",
+                }}
+              >
+                <option value="" disabled selected>
+                  Select Item Category...
+                </option>
+                {Category_array.map((option) => (
+                  <option value={option.value}>{option.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="d-flex mt-3 p-0">
+              <select
+                className="form-select ml-1"
+                style={{
+                  width: "35rem",
+                  height: "2.2rem",
+                  borderRadius: "4px",
+                }}
+              >
+                <option value="" disabled selected>
+                  Select Restaurent Name...
+                </option>
+                {Restaurant_list_array.map((option) => (
+                  <option value={option.value}>{option.name}</option>
+                ))}
+              </select>
+            </div>
             <div>
               <form class="form">
                 <span class="form-title">Upload Your Food Image</span>
@@ -128,34 +158,16 @@ const Update_Food = ({ serial, name, categori, img, price, res, qty }) => {
                 </label>
               </form>
             </div>
-            <div className="d-flex mt-3 p-0">
-              <div className="col-5 m-0 p-0">
-                <b>Select Item Category:</b>
-              </div>
-              <select className="form-select ml-3">
-                {Category_array.map((option) => (
-                  <option value={option.value}>{option.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="d-flex mt-3 p-0">
-              <div className="col-5 m-0 p-0">
-                <b>Select Restaurent Name:</b>
-              </div>
-              <select className="form-select ml-3">
-                {Restaurant_list_array.map((option) => (
-                  <option value={option.value}>{option.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="mt-4 pb-2">
+
+            <div className="mt-4 pb-4">
               <button
+                style={{ width: "6rem" }}
                 type="button"
                 class="btn btn-success"
                 data-dismiss="modal"
                 onClick={handleClick_Update}
               >
-                Ok
+                OK
               </button>
             </div>
           </div>
