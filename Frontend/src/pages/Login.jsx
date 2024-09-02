@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Loader from "../Components/Loader"; // Importing the Loader component
+import Loader from "../Components/Loader";
+import { loginUser, loginAdmin, fetchCompanyDetails } from "../utils/utils";
 
 const Login = () => {
   const [companyName, setcompanyName] = useState();
@@ -14,7 +14,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (email.length === 0 || password.length === 0) {
@@ -24,48 +24,35 @@ const Login = () => {
       setError(false);
     }
 
-    setLoading(true); // Show loader when login process starts
-
     // Login API
-    try {
-      let response_user = await axios.post(
-        "http://localhost:8000/users/login",
-        { email, password },
-        { withCredentials: true }
-      );
-
-      let response_admin = await axios.post(
-        "http://localhost:8000/admins/login",
-        { email, password },
-        { withCredentials: true }
-      );
-      console.log(response_admin.data || response_user.data);
-
-      setTimeout(() => {
-        setLoading(false);
-
-        if (response_user.data === "Login successfully") {
+    loginUser(email, password).then((userResponse) => {
+      if (userResponse === "Login successfully") {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
           navigate("/Home2");
-        } else if (response_admin.data === "Login successfully") {
-          navigate("/Admin");
-        } else {
-          alert(response_user.data || response_admin);
-        }
-      }, 2000);
-    } catch (err) {
-      setLoading(false);
-      console.log("Error");
-      alert("An error occurred during login.");
-    }
-  };
-
-  const fetchCompanyDetails = async () => {
-    let response = await axios.get("http://localhost:8000/companyDetails");
-    setcompanyName(response.data[0].name.toUpperCase());
+        }, 3000);
+      } else {
+        loginAdmin(email, password).then((adminResponse) => {
+          if (adminResponse === "Login successfully") {
+            setLoading(true);
+            setTimeout(() => {
+              setLoading(false);
+              navigate("/Admin");
+            }, 3000);
+          } else {
+            alert(adminResponse);
+          }
+        });
+      }
+    });
   };
 
   useEffect(() => {
-    fetchCompanyDetails();
+    // Fetch company details
+    fetchCompanyDetails().then((company) => {
+      setcompanyName(company.name.toUpperCase());
+    });
   }, []);
 
   return (

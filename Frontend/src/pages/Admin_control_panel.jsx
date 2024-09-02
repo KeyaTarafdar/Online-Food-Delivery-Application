@@ -460,6 +460,11 @@ const Admin_control_panel = () => {
     setUpdate_delivery_boy(false);
   }
 
+  // Delete delivery Boy
+  // const deleteDeliveryBoy=()=>{
+  //   const response=axios.delete('http://localhost:8000/admins/deletedeliveryboy',{})
+  // }
+
   useEffect(() => {
     fetchCompanyDetails();
     fetchAdmin();
@@ -889,7 +894,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {deliveryBoy.map((elem) => {
-                const { username, contact, address } = elem;
+                const { username, contact, address,id=elem._id } = elem;
                 return (
                   <>
                     <div
@@ -939,7 +944,24 @@ const Admin_control_panel = () => {
                         }}
                       >
                         <MdDelete
-                          style={{ fontSize: "24px", color: "black" }}
+                          style={{
+                            fontSize: "24px",
+                            color: "black",
+                            cursor: "pointer",
+                          }}
+                          onClick={async (elem) => {
+                            let response = await axios.delete(
+                              "http://localhost:8000/admins/deletedeliveryboy",
+                              {
+                                params: {
+                                  deliveryBoyId: id,
+                                },
+                                withCredentials: true,
+                              }
+                            );
+                            alert(response.data);
+                            getDeliveryBoy();
+                          }}
                         />
                       </div>
                     </div>

@@ -1,10 +1,8 @@
-// SIGN  UP
-
 import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
+import { fetchCompanyDetails, signUp } from "../utils/utils";
 
 const Sign_up = () => {
   const [companyName, setcompanyName] = useState();
@@ -23,6 +21,7 @@ const Sign_up = () => {
   const [wrongcontact, setwrongcontact] = useState(false);
   const [wrongpasswordlength, setwrongpasswordlength] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = async (e) => {
@@ -57,9 +56,7 @@ const Sign_up = () => {
       setwrongpasswordlength(true);
     else setwrongpasswordlength(false);
 
-    setLoading(true);
-
-    //   Sign up API
+    // Sign up API
     if (
       username.length > 0 &&
       password.length >= 6 &&
@@ -67,41 +64,26 @@ const Sign_up = () => {
       contact.length == 10 &&
       email.length > 0
     ) {
-      try {
-        let response = await axios.post(
-          "http://localhost:8000/users/register",
-          {
-            email,
-            password,
-            username,
-            contact,
-          },
-          {
-            withCredentials: true, // Ensure cookies are sent and received
-          }
-        );
-        setTimeout(() => {
-          setLoading(false);
-
-          if (response.data !== "User created successfully") {
-            alert(response.data);
-          } else {
+      signUp(email, password, username, contact).then((response) => {
+        if (response !== "User created successfully") {
+          alert(response);
+        } else {
+          setLoading(true);
+          
+          setTimeout(() => {
+            setLoading(false);
             navigate("/Home2");
-          }
-        },3000);
-      } catch (err) {
-        console.log(err);
-      }
+          }, 3000);
+        }
+      });
     }
   };
 
-  const fetchCompanyDetails = async () => {
-    let response = await axios.get("http://localhost:8000/companyDetails");
-    setcompanyName(response.data[0].name.toUpperCase());
-  };
-
   useEffect(() => {
-    fetchCompanyDetails();
+    // Fetch company details
+    fetchCompanyDetails().then((company) => {
+      setcompanyName(company.name.toUpperCase());
+    });
   }, []);
 
   return (

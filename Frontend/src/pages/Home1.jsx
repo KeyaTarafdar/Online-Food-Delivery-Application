@@ -9,9 +9,8 @@ import { Link, Element } from "react-scroll";
 import Services from "../Components/Services";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
-import { findUser } from "../utils/findUser";
+import { findUser, fetchCompanyDetails } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Home1 = () => {
   const [companyName, setcompanyName] = useState();
@@ -19,6 +18,8 @@ const Home1 = () => {
   const [companyPhone, setcompanyPhone] = useState();
   const [companyFB, setcompanyFB] = useState();
   const [companyInsta, setcompanyInsta] = useState();
+
+  const navigate = useNavigate();
 
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
@@ -33,15 +34,15 @@ const Home1 = () => {
 
   //Email Link-----------
   const EmailClick = () => {
-    const email = "keya.tarafdar2003@gmail.com";
-    const mailtoLink = "mailto:${email}";
+    const email = { companyEmail };
+    const mailtoLink = `mailto:${email}`;
     window.location.href = mailtoLink;
   };
 
   //Phone Link----------------
   const PhoneClick = () => {
-    const phoneNumber = "9647336816";
-    const telLink = "tel:${phoneNumber}";
+    const phoneNumber = { companyPhone };
+    const telLink = `tel:${phoneNumber}`;
     window.location.href = telLink;
   };
 
@@ -51,28 +52,22 @@ const Home1 = () => {
     setIsBlockClicked(true);
   };
 
-  const navigate = useNavigate();
-
-  const fetchUser = async () => {
-    let user = await findUser();
-    console.log(user);
-    if (user.username) {
-      navigate("/Home2");
-    }
-  };
-
-  const fetchCompanyDetails = async () => {
-    let response = await axios.get("http://localhost:8000/companyDetails");
-    setcompanyName(response.data[0].name.toUpperCase());
-    setcompanyEmail(response.data[0].email);
-    setcompanyPhone(response.data[0].phone);
-    setcompanyFB(response.data[0].fbLink);
-    setcompanyInsta(response.data[0].instaLink);
-  };
-
   useEffect(() => {
-    fetchCompanyDetails();
-    fetchUser();
+    // Fetching company details
+    fetchCompanyDetails().then((company) => {
+      setcompanyName(company.name.toUpperCase());
+      setcompanyEmail(company.email);
+      setcompanyPhone(company.phone);
+      setcompanyFB(company.fbLink);
+      setcompanyInsta(company.instaLink);
+    });
+
+    // Find user
+    findUser().then((user) => {
+      if (user.name) {
+        navigate("/Home2");
+      }
+    });
   }, []);
 
   return (

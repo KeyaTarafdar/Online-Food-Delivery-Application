@@ -14,9 +14,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
-import { findUser } from "../utils/findUser";
-import { logout } from "../utils/logout";
-import axios from "axios";
+import { logout, findUser, fetchCompanyDetails } from "../utils/utils";
 
 const Home2 = () => {
   const [companyName, setcompanyName] = useState();
@@ -89,35 +87,31 @@ const Home2 = () => {
   };
 
   const myAccount = async () => {
-    const user = await findUser();
-    if (user.username) {
+    findUser().then((user)=>{if (user.username) {
       navigate("/My_account");
     } else {
       alert("You have to Login first!");
-    }
-  };
-
-  const fetchUser = async () => {
-    const user = await findUser();
-    if (user.username) {
-      setAccount(user.username.split(" ")[0]);
-    } else {
-      setAccount("My Account");
-    }
-  };
-
-  const fetchCompanyDetails = async () => {
-    let response = await axios.get("http://localhost:8000/companyDetails");
-    setcompanyName(response.data[0].name.toUpperCase());
-    setcompanyEmail(response.data[0].email);
-    setcompanyPhone(response.data[0].phone);
-    setcompanyFB(response.data[0].fbLink);
-    setcompanyInsta(response.data[0].instaLink);
+    }})
   };
 
   useEffect(() => {
-    fetchCompanyDetails();
-    fetchUser();
+    // Fetch company details
+    fetchCompanyDetails().then((company) => {
+      setcompanyName(company.name.toUpperCase());
+      setcompanyEmail(company.email);
+      setcompanyPhone(company.phone);
+      setcompanyFB(company.fbLink);
+      setcompanyInsta(company.instaLink);
+    });
+    
+    // Find user
+    findUser().then((user) => {
+      if (user.username) {
+        setAccount(user.username.split(" ")[0]);
+      } else {
+        setAccount("My Account");
+      }
+    });
   }, []);
 
   return (

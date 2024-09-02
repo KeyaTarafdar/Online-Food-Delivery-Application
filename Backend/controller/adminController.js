@@ -195,9 +195,9 @@ module.exports.getDeliveryBoy = async (req, res) => {
 // Delete Delivery Boy
 module.exports.deleteDeliveryBoy = async (req, res) => {
   try {
-    let deliveryBoy = req.body;
-    if (deliveryBoy) {
-      await deliveryBoyModel.findOneAndDelete({ _id: deliveryBoy.id });
+    let deliveryBoyId = req.query.deliveryBoyId;
+    if (deliveryBoyId) {
+      await deliveryBoyModel.findOneAndDelete({ _id: deliveryBoyId });
       res.send("Deivery boy deleted successfully");
     } else {
       res.send("Something is missing");

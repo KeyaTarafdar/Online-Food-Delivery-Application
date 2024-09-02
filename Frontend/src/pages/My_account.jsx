@@ -3,8 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { MdOutlineLogout } from "react-icons/md";
 import { PiPencilSimpleLineBold } from "react-icons/pi";
 import { MdAccountCircle } from "react-icons/md";
-import { findUser } from "../utils/findUser";
-import { logout } from "../utils/logout";
+import { logout, findUser, fetchCompanyDetails } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Components/Loader";
@@ -25,13 +24,14 @@ const My_account = () => {
   const [profilePicture, SetprofilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchUser = async () => {
-    const user = await findUser();
-    setname(user.username);
-    setemail(user.email);
-    setphone(user.contact);
-    setaddress(user.address);
-    SetprofilePicture(user.image);
+  const fetchUser = () => {
+    findUser().then((user) => {
+      setname(user.username);
+      setemail(user.email);
+      setphone(user.contact);
+      setaddress(user.address);
+      SetprofilePicture(user.image);
+    });
   };
 
   const update_username = () => {
@@ -51,7 +51,7 @@ const My_account = () => {
         },
         { withCredentials: true }
       );
-      await fetchUser();
+      fetchUser();
       alert(response.data);
     } catch (err) {
       console.log(err.message);
@@ -110,7 +110,12 @@ const My_account = () => {
     }
   };
 
+  const [companyName, setcompanyName] = useState();
+
   useEffect(() => {
+    fetchCompanyDetails().then((company) => {
+      setcompanyName(company.name.toUpperCase());
+    });
     fetchUser();
   }, []);
 
@@ -139,7 +144,7 @@ const My_account = () => {
               className="col-lg-3 col-md-6 col-sm-5 col-xs-5"
               style={{ paddingTop: "0.5%", fontFamily: "brittany" }}
             >
-              <h4>BON&nbsp;&nbsp;APETITE</h4>
+              <h4>{companyName}</h4>
             </div>
             <div className="col-lg-7 col-md-4"></div>
           </div>
