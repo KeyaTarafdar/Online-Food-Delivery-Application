@@ -9,7 +9,6 @@ import { BiSolidOffer } from "react-icons/bi";
 import Navbar from "react-bootstrap/Navbar";
 import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
-import Restaurent_list_array from "../Components/Array/Restaurent_list_array";
 import Update_Res from "../Components/Update_Res";
 import Category_array from "../Components/Array/Category_array";
 import Update_Category from "../Components/Update_Category";
@@ -230,7 +229,7 @@ const Admin_control_panel = () => {
 
   const [add_res, setAdd_res] = useState(false);
   const AddRes = () => {
-    setData(Restaurent_list_array);
+    setData(restaurentList);
     setOrder_info(false);
     setUser_info(false);
     setUpdate(false);
@@ -317,7 +316,7 @@ const Admin_control_panel = () => {
     //For Restaurent search
     if (add_res === true) {
       serial_res = 1;
-      const updateItem3 = Restaurent_list_array.filter((currEle) => {
+      const updateItem3 = restaurentList.filter((currEle) => {
         return (
           currEle.name.toLowerCase() === search_item.toLowerCase() ||
           currEle.id === search_item ||
@@ -487,6 +486,8 @@ const Admin_control_panel = () => {
   // Fetch all restaurent
   const [restaurents, setrestaurents] = useState([]);
 
+  const [restaurentList, setrestaurentList] = useState();
+
   useEffect(() => {
     getCompanyDetails();
     getAdmin();
@@ -499,6 +500,10 @@ const Admin_control_panel = () => {
 
     fetchAllRestaurent().then((response) => {
       setrestaurents(response);
+    });
+
+    fetchAllRestaurent().then((response) => {
+      setrestaurentList(response);
     });
   }, []);
 
@@ -1332,7 +1337,7 @@ const Admin_control_panel = () => {
                             handleAddNewRestaurent();
                           }}
                         >
-                          Save
+                          Add
                         </button>
                       </div>
                     </div>
@@ -1719,9 +1724,9 @@ const Admin_control_panel = () => {
                             <option value="" disabled selected>
                               Select Restaurent Name...
                             </option>
-                            {Restaurent_list_array.map((option) => (
+                            {restaurentList.map((option) => (
                               <option value={option.value}>
-                                {option.name}
+                                {option.name}-{option.address}
                               </option>
                             ))}
                           </select>

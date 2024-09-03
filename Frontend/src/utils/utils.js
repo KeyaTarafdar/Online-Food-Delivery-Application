@@ -316,6 +316,7 @@ export const fetchAllRestaurent = async () => {
 
 // Fetch a particular restaurent(extra)
 export const fetchSingleRestaurent = async (id) => {
+  console.log(id)
   try {
     let response = await axios.get(
       "http://localhost:8000/admins/fetchsinglerestaurent",

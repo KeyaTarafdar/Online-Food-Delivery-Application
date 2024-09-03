@@ -1,6 +1,7 @@
 const foodModel = require("../models/food-model");
 const dbgr = require("debug")("development:usercheck");
 const fs = require("fs");
+const restaurentModel = require("../models/restaurent-model");
 
 // Create Food Item
 module.exports.createFoodItems = async (req, res) => {
@@ -9,16 +10,26 @@ module.exports.createFoodItems = async (req, res) => {
   }
   try {
     let { name, price, category, quantity, restaurent } = req.body;
+    let res_details = restaurent.split("-");
+
     if (name && category && restaurent && price) {
-      await foodModel.create({
+      let food = await foodModel.create({
         name,
         price,
         category,
         quantity,
-        restaurent,
+        restaurent: res_details[0],
         image: req.file.filename,
       });
-      res.send("Food item added successfully");
+
+      await restaurentModel.findOneAndUpdate(
+        {
+          name: res_details[0],
+          address: res_details[1],
+        },
+        { $push: { food: food._id } }
+      );
+      res.send(`${name} item added successfully`);
     } else {
       res.send("Something is missing");
     }
@@ -43,6 +54,14 @@ module.exports.deleteFoodItem = async (req, res) => {
     let id = req.query.id;
     if (id) {
       let food = await foodModel.findOne({ _id: id });
+      let restaurent_id = food.restaurent;
+      await restaurentModel.findOneAndUpdate(
+        {
+          _id: restaurent_id,
+        },
+        { $pull: { food: id } }
+      );
+
       const oldImage = food.image;
       if (oldImage)
         fs.unlink(`../Frontend/public/foodItemsPictures/${oldImage}`, (err) => {
@@ -50,9 +69,9 @@ module.exports.deleteFoodItem = async (req, res) => {
             console.log(err.message);
           }
         });
-        
+
       await foodModel.findOneAndDelete({ _id: id });
-      res.send("Item deleted successfully");
+      res.send(`${food.name} deleted successfully`);
     }
   } catch (err) {
     res.send("Something went wrong");
@@ -63,7 +82,6 @@ module.exports.deleteFoodItem = async (req, res) => {
 module.exports.updateFoodItem = async (req, res) => {
   try {
     let { id, name, price, category, quantity, restaurent } = req.body;
-    console.log(req.body);
     let image = req.file;
 
     if (name !== "undefined") {

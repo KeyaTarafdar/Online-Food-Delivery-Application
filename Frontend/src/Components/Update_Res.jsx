@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { deleteRestaurent, fetchSingleRestaurent } from "../utils/utils";
+import { deleteRestaurent } from "../utils/utils";
 
 const Update_Res = ({ serial, name, image, address, id }) => {
   const [clicked_update, setClicked_update] = useState(false);

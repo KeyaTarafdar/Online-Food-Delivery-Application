@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Category_array from "./Array/Category_array";
@@ -24,6 +24,7 @@ const Update_Food = ({
   const [updatedItemCategory, setupdatedItemCategory] = useState();
 
   const [foodImage, setfoodImage] = useState();
+  const [display, setdisplay] = useState("block");
 
   const handleUpdateFood = () => {
     setClicked_update(!clicked_update);
@@ -43,8 +44,12 @@ const Update_Food = ({
     });
   };
 
+  useEffect(() => {
+    setdisplay("block");
+  }, [id]);
+
   return (
-    <>
+    <div style={{ display: `${display}` }}>
       <div
         className="col-12 m-0 p-0 d-flex pt-1 pb-1"
         style={{
@@ -167,11 +172,12 @@ const Update_Food = ({
         >
           <RiDeleteBin6Line
             style={{
-              cursor: "pointer"
+              cursor: "pointer",
             }}
             onClick={() => {
               deleteFoodItem(id).then((response) => {
                 alert(response);
+                setdisplay("none");
               });
             }}
           />
@@ -294,7 +300,7 @@ const Update_Food = ({
           </div>
         </div>
       ) : null}
-    </>
+    </div>
   );
 };
 
