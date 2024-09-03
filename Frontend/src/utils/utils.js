@@ -281,3 +281,67 @@ export const updateFoodItem = async (formData) => {
     console.log(err.message);
   }
 };
+
+// Add new restaurent
+export const addNewRestaurent = async (formData) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/admins/addnewrestaurent",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch all restaurents
+export const fetchAllRestaurent = async () => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/admins/fetchallrestaurent",
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch a particular restaurent(extra)
+export const fetchSingleRestaurent = async (id) => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/admins/fetchsinglerestaurent",
+      { id },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Delete restaurent
+export const deleteRestaurent = async (id) => {
+  try {
+    let response = await axios.delete(
+      "http://localhost:8000/admins/deleterestaurent",
+      {
+        params: {
+          id,
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};

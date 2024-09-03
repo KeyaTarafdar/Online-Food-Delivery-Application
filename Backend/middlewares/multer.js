@@ -36,3 +36,15 @@ const storageFoodItem = multer.diskStorage({
   },
 });
 module.exports.uploadFoodItem = multer({ storage: storageFoodItem });
+
+// Restaurent Picture Upload----------------------------------------------------------------------------
+const storageRestaurent = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../Frontend/public/restaurentPictures");
+  },
+  filename: function (req, file, cb) {
+    {const uniqueSuffix = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueSuffix);}
+  },
+});
+module.exports.uploadRestaurent = multer({ storage: storageRestaurent });

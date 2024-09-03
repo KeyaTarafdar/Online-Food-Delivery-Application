@@ -5,6 +5,7 @@ const adminModel = require("../models/admin-model");
 const companyDetailModel = require("../models/companyDetails-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const userModel = require("../models/user-model");
+const restaurentModel = require("../models/restaurent-model");
 const fs = require("fs");
 
 // Create Admin
@@ -240,5 +241,76 @@ module.exports.uploadProfilePicture = async (req, res) => {
     res.send("File uploaded successfully.");
   } catch (err) {
     res.send(err.message);
+  }
+};
+
+// Add new restaurent
+module.exports.addNewRestaurent = async (req, res) => {
+  if (!req.file) {
+    return res.send("No file uploaded.");
+  }
+  try {
+    let { name, address } = req.body;
+    if (name && address) {
+      let restaurent = await restaurentModel.findOne({ name, address });
+      if (restaurent) {
+        res.send("Restaurent already exists");
+      } else {
+        await restaurentModel.create({
+          name,
+          address,
+          image: req.file.filename,
+        });
+        res.send(`${name} added successfully`);
+      }
+    } else {
+      res.send("Something is missing");
+    }
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch all restaurent
+module.exports.fetchAllRestaurent = async (req, res) => {
+  try {
+    let restaurents = await restaurentModel.find({});
+    res.send(restaurents);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch a single restaurent
+module.exports.fetchSingleRestaurent = async (req, res) => {
+  try {
+    let { id } = req.body;
+    const restaurent = await restaurentModel.findOne({ _id: id });
+    res.send(restaurent);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Delete restaurent
+module.exports.deleteRestaurent = async (req, res) => {
+  try {
+    let id = req.query.id;
+    let restaurent = await restaurentModel.findOne({ _id: id });
+    let oldImage = restaurent.image;
+    if (oldImage)
+      fs.unlink(`../Frontend/public/restaurentPictures/${oldImage}`, (err) => {
+        if (err) {
+          console.log(err.message);
+        }
+      });
+    await restaurentModel.findOneAndDelete({ _id: id });
+    if (restaurent) {
+      res.send(`${restaurent.name} Restaurent deleted successfully`);
+    } else {
+      res.send("Restaurent not found");
+    }
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };

@@ -10,9 +10,7 @@ module.exports.registerUser = async (req, res) => {
     let { email, password, username, contact } = req.body;
 
     if (email && password && username && contact) {
-      // Checks all fielda are given or not
       if (await userModel.findOne({ email })) {
-        // Checks the user is already exists or not
         return res.send("User already exists. Please Login");
       }
 

@@ -5,6 +5,7 @@ import { MdDeliveryDining, MdDelete } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
+import { BiSolidOffer } from "react-icons/bi";
 import Navbar from "react-bootstrap/Navbar";
 import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
@@ -30,6 +31,8 @@ import {
   updateCompanyPhone,
   addNewFoodItem,
   fetchAllFoods,
+  addNewRestaurent,
+  fetchAllRestaurent,
 } from "../utils/utils";
 
 const Admin_control_panel = () => {
@@ -112,6 +115,10 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setUpdate_delivery_boy(false);
+
+    fetchAllRestaurent().then((response) => {
+      setrestaurents(response);
+    });
   };
 
   const [update_web_details, setUpdate_web_details] = useState(false);
@@ -433,7 +440,7 @@ const Admin_control_panel = () => {
   const [restaurentName, setrestaurentName] = useState();
 
   // Add new food item
-  const handleAddNewFoodItem = async () => {
+  const handleAddNewFoodItem = () => {
     const formData = new FormData();
 
     formData.append("image", image);
@@ -447,23 +454,52 @@ const Admin_control_panel = () => {
 
     addNewFoodItem(formData).then((response) => {
       alert(response);
+      fetchAllFoods().then((response) => {
+        setfoods(response);
+      });
     });
-    fetchAllFoods();
+  };
+
+  const [newRestaurentName, setnewRestaurentName] = useState();
+  const [newRestaurentAddress, setnewRestaurentAddress] = useState();
+
+  // Add new restaurent
+  const handleAddNewRestaurent = () => {
+    const formData = new FormData();
+
+    formData.append("image", image);
+    formData.append("name", newRestaurentName);
+    formData.append("address", newRestaurentAddress);
+
+    setAdd_res(true);
+
+    addNewRestaurent(formData).then((response) => {
+      alert(response);
+      fetchAllRestaurent().then((response) => {
+        setrestaurents(response);
+      });
+    });
   };
 
   // Fetch all foods
   const [foods, setfoods] = useState([]);
+
+  // Fetch all restaurent
+  const [restaurents, setrestaurents] = useState([]);
 
   useEffect(() => {
     getCompanyDetails();
     getAdmin();
     getDeliveryBoy();
     getAllUsers();
-    setInterval(() => {
-      fetchAllFoods().then((response) => {
-        setfoods(response);
-      });
-    }, 5000);
+
+    fetchAllFoods().then((response) => {
+      setfoods(response);
+    });
+
+    fetchAllRestaurent().then((response) => {
+      setrestaurents(response);
+    });
   }, []);
 
   return (
@@ -1204,16 +1240,16 @@ const Admin_control_panel = () => {
                     Delete
                   </div>
                 </div>
-                {data.map((elem) => {
-                  const { id, name, img, address } = elem;
+                {restaurents.map((elem) => {
+                  const { _id, name, image, address } = elem;
                   return (
                     <>
                       <Update_Res
                         serial={serial_res++}
-                        id={elem.id}
-                        name={elem.name}
-                        img={elem.img}
-                        address={elem.address}
+                        name={name}
+                        image={image}
+                        address={address}
+                        id={_id}
                       />
                     </>
                   );
@@ -1252,6 +1288,9 @@ const Admin_control_panel = () => {
                             <input
                               type="text"
                               placeholder="Enter Restaurent Name..."
+                              onChange={(e) => {
+                                setnewRestaurentName(e.target.value);
+                              }}
                             ></input>
                           </div>
                         </div>
@@ -1263,6 +1302,9 @@ const Admin_control_panel = () => {
                             <input
                               type="text"
                               placeholder="Enter Restaurent Address..."
+                              onChange={(e) => {
+                                setnewRestaurentAddress(e.target.value);
+                              }}
                             ></input>
                           </div>
                         </div>
@@ -1271,7 +1313,12 @@ const Admin_control_panel = () => {
                             <b>Upload Restaurent Image:</b>
                           </div>
                           <div className="col-7 m-0 p-0">
-                            <input type="file"></input>
+                            <input
+                              type="file"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
+                            ></input>
                           </div>
                         </div>
                       </div>
@@ -1280,6 +1327,10 @@ const Admin_control_panel = () => {
                           type="button"
                           className="btn btn-success"
                           data-dismiss="modal"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAddNewRestaurent();
+                          }}
                         >
                           Save
                         </button>

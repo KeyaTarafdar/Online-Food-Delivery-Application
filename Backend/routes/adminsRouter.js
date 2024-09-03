@@ -15,8 +15,15 @@ const {
   getAllUsers,
   deleteDeliveryBoy,
   uploadProfilePicture,
+  addNewRestaurent,
+  fetchAllRestaurent,
+  deleteRestaurent,
+  fetchSingleRestaurent,
 } = require("../controller/adminController");
-const { uploadAdminProfile } = require("../middlewares/multer");
+const {
+  uploadAdminProfile,
+  uploadRestaurent,
+} = require("../middlewares/multer");
 
 // ADMIN REGISTER
 if (process.env.NODE_ENV === "development") {
@@ -61,6 +68,28 @@ router.delete("/deletedeliveryboy", isLoggedIn, deleteDeliveryBoy);
 router.get("/getallusers", isLoggedIn, getAllUsers);
 
 // UPLOAD PROFILE PICTURE
-router.post("/uploadprofilepicture", isLoggedIn, uploadAdminProfile.single("image"), uploadProfilePicture);
+router.post(
+  "/uploadprofilepicture",
+  isLoggedIn,
+  uploadAdminProfile.single("image"),
+  uploadProfilePicture
+);
+
+// ADD NEW RESTAURENT
+router.post(
+  "/addnewrestaurent",
+  isLoggedIn,
+  uploadRestaurent.single("image"),
+  addNewRestaurent
+);
+
+// FETCH ALL RESTAURENT
+router.get("/fetchallrestaurent", isLoggedIn, fetchAllRestaurent);
+
+// FETCH A PARTICULAR RESTAURENT
+router.get("/fetchsinglerestaurent", isLoggedIn, fetchSingleRestaurent);
+
+// DELETE SINGLE RESTAURENT
+router.delete("/deleterestaurent", isLoggedIn, deleteRestaurent);
 
 module.exports = router;
