@@ -15,6 +15,7 @@ import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import { logout, findUser, fetchCompanyDetails } from "../utils/utils";
+import Loader from "../Components/Loader";
 
 const Home2 = () => {
   const [companyName, setcompanyName] = useState();
@@ -22,6 +23,7 @@ const Home2 = () => {
   const [companyPhone, setcompanyPhone] = useState();
   const [companyFB, setcompanyFB] = useState();
   const [companyInsta, setcompanyInsta] = useState();
+  const [loader,setLoader]=useState(false);
 
   const navigate = useNavigate();
   //Hamburger Menu-------------
@@ -80,9 +82,15 @@ const Home2 = () => {
 
   // Logout API
   const handleLogout = async () => {
+    setLoader(true)
     if ((await logout()) === "Logout successfully") {
-      navigate("/Home2");
-      setAccount("My Account");
+      setTimeout(()=>{
+        setLoader(false)
+        navigate("/Home2");
+        setAccount("My Account");
+      },3000);
+    }else{
+      setLoader(false);
     }
   };
 
@@ -555,6 +563,23 @@ const Home2 = () => {
           instaLink={companyInsta}
         />
       </Element>
+
+      {loader && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 999,
+            }}
+          ></div>
+          <Loader />
+        </>
+      )}
     </div>
   );
 };

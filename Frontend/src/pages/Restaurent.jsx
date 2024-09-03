@@ -14,15 +14,20 @@ import { useTypewriter, Cursor } from "react-simple-typewriter";
 import { NavLink } from "react-router-dom";
 import Card from "../Components/Card";
 import Footer from "../Components/Footer";
+import Loader from "../Components/Loader";
+import { useNavigate } from "react-router-dom";
 import {
   fetchCompanyDetails,
   fetchAllFoods,
   fetchAllRestaurent,
+  logout,
 } from "../utils/utils";
 
 const Restaurent = () => {
+  const navigate = useNavigate();
   const [allFood, setallFood] = useState([]);
   const [allRestaurent, setallRestaurent] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
@@ -59,12 +64,28 @@ const Restaurent = () => {
     setData(updateItem);
   }
 
-  const restaurantNames = allRestaurent.map(restaurant => restaurant.name);
+  const restaurantNames = allRestaurent.map((restaurant) => restaurant.name);
 
   const [text] = useTypewriter({
     words: restaurantNames,
     loop: {},
   });
+
+  // Logout API
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      if ((await logout()) === "Logout successfully") {
+        setTimeout(() => {
+          setLoading(false);
+          navigate("/Home2");
+        }, 3000);
+      }
+    } catch (err) {
+      setLoading(false);
+      console.log(err.message);
+    }
+  };
 
   const [companyName, setcompanyName] = useState();
   const [companyEmail, setcompanyEmail] = useState();
@@ -213,7 +234,11 @@ const Restaurent = () => {
                     className="header_menu"
                     style={{ height: "25px", width: "25px" }}
                   />
-                  <span className="header_menu" style={{ fontSize: "15px" }}>
+                  <span
+                    className="header_menu"
+                    style={{ fontSize: "15px" }}
+                    onClick={handleLogout}
+                  >
                     &nbsp;&nbsp;Log&nbsp;out
                   </span>
                 </div>
@@ -450,15 +475,14 @@ const Restaurent = () => {
                 <div
                   className="drop_down_menu"
                   style={{ paddingBottom: "10px" }}
+                  onClick={handleLogout}
                 >
-                  <Link to="section" spy={true} smooth={true} duration={500}>
-                    Log out
-                  </Link>
+                  Log out
                 </div>
               </div>
             )}
           </div>
-          {/* <Restaurentcategory/> */}
+
           <h4 className="text-center pt-2">Restaurent Names</h4>
           <hr></hr>
 
@@ -548,6 +572,22 @@ const Restaurent = () => {
           </Element>
         </div>
       </div>
+      {loading && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 999,
+            }}
+          ></div>
+          <Loader />
+        </>
+      )}
     </div>
   );
 };

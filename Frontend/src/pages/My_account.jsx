@@ -60,7 +60,7 @@ const My_account = () => {
     }
   };
 
-  // Update API
+  // Logout API
   const handleLogout = async () => {
     setLoading(true);
     try {
