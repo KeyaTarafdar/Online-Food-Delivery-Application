@@ -4,14 +4,14 @@ import Home1 from './pages/Home1';
 import Login from './pages/Login';
 import Sign_up from './pages/Sign_up';
 import Home2 from './pages/Home2';
-import Menu from './Components/Menu';
+import Menu from './pages/Menu';
 import My_cart from './Components/My_cart';
 import My_order from './Components/My_order';
 import My_account from './pages/My_account';
 import Cart_table from './Components/Cart_table';
 import Order_table from './Components/Order_table';
 import Services from './Components/Services';
-import Restaurent from './Components/Restaurent';
+import Restaurent from './pages/Restaurent';
 import Admin_control_panel from './pages/Admin_control_panel';
 
 function App() {

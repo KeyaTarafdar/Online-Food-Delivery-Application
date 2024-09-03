@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-const Card = ({ name, img, price, res }) => {
+const Card = ({ name, image, price, restaurent }) => {
 
     const options = [
         {
@@ -33,12 +33,12 @@ const Card = ({ name, img, price, res }) => {
                 <div className="card m-2">
                     <div className="m-0 p-0" style={{ height: '340px', color: 'black', borderRadius: '0.75rem' }}>
                         <div className="justify-center items-center" style={{ borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem', backgroundColor: 'indigo', height: '60%' }}>
-                            <img src={img} alt='' className="" style={{ borderTopLeftRadius: '0.20rem', borderTopRightRadius: '0.20rem', height: '100%', width: '100%', margin: 'auto' }}></img>
+                            <img src={`/foodItemsPictures/${image}`} alt='' className="" style={{ borderTopLeftRadius: '0.20rem', borderTopRightRadius: '0.20rem', height: '100%', width: '100%', margin: 'auto' }}></img>
                         </div>
 
                         <div className='flex flex-col justify-center items-center m-0 p-0' style={{ height: '20%' }}>
-                            <h5 className="mt-1">{res}</h5>
-                            <h6 className='mt-1'>{name}</h6>
+                            <h5 className="mt-1">{name}</h5>
+                            <h6 className='mt-1'>{restaurent}</h6>
                             <span className=''>Price: {price}/-</span>
                             <select className='form-select ml-3'>
                                 {options.map(option => (
