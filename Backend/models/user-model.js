@@ -1,19 +1,14 @@
+// *user-model.js*
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  cart: {
-    type: Array,
-    default: [],
-  },
-  orders: {
-    type: Array,
-    default: [],
-  },
+  cart: [{ type: mongoose.Schema.Types.ObjectId, ref: "food" }],
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
   contact: Number,
-  address:String,
+  address: String,
   image: String,
 });
 
