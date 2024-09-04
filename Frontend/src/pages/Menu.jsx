@@ -8,10 +8,8 @@ import { Link, Element } from "react-scroll";
 import { MdOutlineLogout, MdAccountCircle } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaBagShopping } from "react-icons/fa6";
-import { CgLogIn } from "react-icons/cg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Category_array from "../Components/Array/Category_array";
 import { BsEmojiFrown } from "react-icons/bs";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 import { NavLink } from "react-router-dom";
@@ -19,7 +17,13 @@ import Card from "../Components/Card";
 import Footer from "../Components/Footer";
 import Loader from "../Components/Loader";
 import { useNavigate } from "react-router-dom";
-import { fetchCompanyDetails, fetchAllFoods, logout,findUser } from "../utils/utils";
+import {
+  fetchCompanyDetails,
+  fetchAllFoods,
+  logout,
+  findUser,
+  fetchAllCategory,
+} from "../utils/utils";
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -27,7 +31,6 @@ const Menu = () => {
   const [c, setc] = useState(false);
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState("My Account");
-
 
   const filterItem = (cateItem) => {
     setc(false);
@@ -80,41 +83,7 @@ const Menu = () => {
       } else {
         alert("You have to Login first!");
       }
-    })
-  };
-
-  useEffect(() => {
-    // Find user
-    findUser().then((user) => {
-      if (user.username) {
-        setAccount(user.username.split(" ")[0]);
-      } else {
-        setAccount("My Account");
-      }
     });
-  }, []);
-
-
-
-  const [text] = useTypewriter({
-    words: [
-      "Veg dish",
-      "Non-veg dish",
-      "Biriyani",
-      "Burger",
-      "Pizza",
-      "Dessert",
-      "Drinks",
-      "Healthy food",
-      "Bengali dish",
-      "South Indian dish",
-    ],
-    loop: {},
-  });
-
-  const AllFood = () => {
-    setData(allFood);
-    setc(false);
   };
 
   // Logout API
@@ -141,8 +110,18 @@ const Menu = () => {
   const [companyInsta, setcompanyInsta] = useState();
 
   const [allFood, setallFood] = useState([]);
+  const [allCategory, setallCategory] = useState([]);
 
   useEffect(() => {
+    // Find user
+    findUser().then((user) => {
+      if (user.username) {
+        setAccount(user.username.split(" ")[0]);
+      } else {
+        setAccount("My Account");
+      }
+    });
+
     fetchCompanyDetails().then((company) => {
       setcompanyName(company.name.toUpperCase());
       setcompanyEmail(company.email);
@@ -155,7 +134,26 @@ const Menu = () => {
       setallFood(response);
       setData(response);
     });
+
+    fetchAllCategory().then((response) => {
+      setallCategory(response);
+      setIsCategoryLoaded(true);
+    });
   }, []);
+
+  const [isCategoryLoaded, setIsCategoryLoaded] = useState(false);
+
+  const [text] = useTypewriter({
+    words: isCategoryLoaded
+      ? allCategory.map((category) => category.name)
+      : [""],
+    loop: {},
+  });
+
+  const AllFood = () => {
+    setData(allFood);
+    setc(false);
+  };
 
   return (
     <>
@@ -279,13 +277,13 @@ const Menu = () => {
                         style={{ fontSize: "15px" }}
                         onClick={myAccount}
                       >
-                         &nbsp;&nbsp;{account}
+                        &nbsp;&nbsp;{account}
                       </span>
                     </NavLink>
                   </div>
                   <div
                     className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
-                    style={{ float: "left"}}
+                    style={{ float: "left" }}
                   >
                     {account !== "My Account" ? (
                       <>
@@ -583,8 +581,8 @@ const Menu = () => {
                 </div>
               </div>
 
-              {Category_array.map((elem) => {
-                const { img, name } = elem;
+              {allCategory.map((elem) => {
+                const { image, name } = elem;
                 return (
                   <>
                     <div
@@ -592,7 +590,7 @@ const Menu = () => {
                       style={{ height: "50%", width: "9%" }}
                     >
                       <img
-                        src={img}
+                        src={`/categoryPictures/${image}`}
                         style={{
                           boxShadow:
                             "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",

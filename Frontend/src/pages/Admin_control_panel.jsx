@@ -5,15 +5,19 @@ import { MdDeliveryDining, MdDelete } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
+import { BiSolidOffer } from "react-icons/bi";
 import Navbar from "react-bootstrap/Navbar";
 import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
+import Restaurent_list_array from "../Components/Array/Restaurent_list_array";
 import Update_Res from "../Components/Update_Res";
+import Category_array from "../Components/Array/Category_array";
 import Update_Category from "../Components/Update_Category";
 import Update_Food from "../Components/Update_Food";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
+import Offers_array from "../Components/Array/Offers_array";
 import {
   deleteDeliveryBoy,
   fetchAllDeliveryBoy,
@@ -39,7 +43,8 @@ const Admin_control_panel = () => {
     serial_res = 1,
     serial_user = 1,
     serial_order = 1,
-    serial_delivery = 1;
+    serial_delivery = 1,
+    serial_todays_offer = 1;
 
   const navigate = useNavigate();
 
@@ -55,6 +60,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
 
     getAllUsers();
   };
@@ -63,6 +69,21 @@ const Admin_control_panel = () => {
   const OrderInfo = () => {
     setData(Admin_order_array);
     setOrder_info(true);
+    setUser_info(false);
+    setDelivery_boy_info(false);
+    setUpdate(false);
+    setUpdate_web_details(false);
+    setAdd_res(false);
+    setUpdate_food_category(false);
+    setUpdate_food_item(false);
+    setTodays_info(false);
+  };
+
+  const [todays_info, setTodays_info] = useState(false);
+  const TodaysOfferInfo = () => {
+    setData(foods);
+    setTodays_info(true);
+    setOrder_info(false);
     setUser_info(false);
     setDelivery_boy_info(false);
     setUpdate(false);
@@ -82,6 +103,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
 
     getDeliveryBoy();
   };
@@ -100,6 +122,7 @@ const Admin_control_panel = () => {
     setUpdate_web_details_name(false);
     setUpdate_web_details_mail(false);
     setUpdate_web_details_phone(false);
+    setTodays_info(false);
   };
 
   const [update, setUpdate] = useState(false);
@@ -113,6 +136,7 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setUpdate_delivery_boy(false);
+    setTodays_info(false);
 
     fetchAllRestaurent().then((response) => {
       setrestaurents(response);
@@ -133,6 +157,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
   };
 
   const [update_web_details_phone, setUpdate_web_details_phone] =
@@ -148,6 +173,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
   };
 
   const [update_web_details_mail, setUpdate_web_details_mail] = useState(false);
@@ -162,6 +188,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
   };
 
   const [update_web_details_name, setUpdate_web_details_name] = useState(false);
@@ -176,6 +203,7 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
   };
 
   // Update company name---------------------------------------------------
@@ -232,7 +260,7 @@ const Admin_control_panel = () => {
 
   const [add_res, setAdd_res] = useState(false);
   const AddRes = () => {
-    setData(restaurentList);
+    setData(Restaurent_list_array);
     setOrder_info(false);
     setUser_info(false);
     setUpdate(false);
@@ -240,6 +268,7 @@ const Admin_control_panel = () => {
     setAdd_res(true);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
   };
 
   const [update_food_category, setUpdate_food_category] = useState(false);
@@ -252,14 +281,17 @@ const Admin_control_panel = () => {
     setUpdate_web_details(false);
     setUpdate(false);
     setUpdate_food_item(false);
+    setTodays_info(false);
   };
 
   const [update_food_item, setUpdate_food_item] = useState(false);
+
   const UpdateFoodItem = () => {
     setData(foods);
     setUpdate_food_item(true);
     setUser_info(false);
     setOrder_info(false);
+    setTodays_info(false);
     setDelivery_boy_info(false);
     setUpdate(false);
     setUpdate_web_details(false);
@@ -268,9 +300,9 @@ const Admin_control_panel = () => {
     setUpdate_web_details_name(false);
     setUpdate_web_details_mail(false);
     setUpdate_web_details_phone(false);
+    setTodays_info(false);
 
     fetchAllFoods().then((response) => {
-      console.log(response);
       setfoods(response);
     });
   };
@@ -349,6 +381,14 @@ const Admin_control_panel = () => {
         return currEle.name.toLowerCase() === search_item.toLowerCase();
       });
       setData(updateItem5);
+    }
+    //Todays Offer Search
+    if (todays_info === true) {
+      serial_todays_offer = 1;
+      const updateItem6 = data.filter((currEle) => {
+        return currEle.name.toLowerCase().includes(search_item.toLowerCase());
+      });
+      setData(updateItem6);
     }
   }
 
@@ -453,6 +493,7 @@ const Admin_control_panel = () => {
     formData.append("restaurent", restaurentName);
 
     setUpdate_food_item(true);
+    setTodays_info(false);
 
     addNewFoodItem(formData).then((response) => {
       alert(response);
@@ -483,6 +524,14 @@ const Admin_control_panel = () => {
     });
   };
 
+  // Fetch all foods
+  const [foods, setfoods] = useState([]);
+
+  // Fetch all restaurent
+  const [restaurents, setrestaurents] = useState([]);
+
+  const [restaurentList, setrestaurentList] = useState();
+
   const [categoryName, setcategoryName] = useState();
   const [categoryImage, setcategoryImage] = useState();
 
@@ -502,14 +551,6 @@ const Admin_control_panel = () => {
       });
     });
   };
-
-  // Fetch all foods
-  const [foods, setfoods] = useState([]);
-
-  // Fetch all restaurent
-  const [restaurents, setrestaurents] = useState([]);
-
-  const [restaurentList, setrestaurentList] = useState();
 
   useEffect(() => {
     getCompanyDetails();
@@ -533,7 +574,7 @@ const Admin_control_panel = () => {
       setallCategory(response);
     });
   }, []);
-
+  
   return (
     <>
       <div className="Admin_control" style={{ height: "97vh" }}>
@@ -651,6 +692,21 @@ const Admin_control_panel = () => {
                   Order DB&emsp;&emsp;&emsp;
                 </div>
               </div>
+
+              {/* Todays Offer */}
+              <div className="admin_menu">
+                <div className="col-2 pt-0 ">
+                  <BiSolidOffer className="admin_icon" />
+                </div>
+                <div
+                  className="col-8 m-0 p-0"
+                  style={{ cursor: "-webkit-grab", cursor: "grab" }}
+                  onClick={TodaysOfferInfo}
+                >
+                  Today's Offers&emsp;&emsp;&emsp;
+                </div>
+              </div>
+
               <div className="admin_menu">
                 <div className="col-2 pt-0">
                   <MdDeliveryDining className="admin_icon" />
@@ -706,6 +762,7 @@ const Admin_control_panel = () => {
           {/* Default page--------------------------------------------------------------------------------------------------------- */}
           {!user_info &&
           !order_info &&
+          !todays_info &&
           !deliver_boy_info &&
           !update &&
           !update_web_details &&
@@ -908,28 +965,313 @@ const Admin_control_panel = () => {
                   food,
                   qty,
                   res,
+                  price,
                 } = elem;
                 return (
                   <>
                     <Table_row
                       serial={serial_order++}
-                      name={elem.name}
-                      phone={elem.phone}
-                      address={elem.address}
-                      time={elem.time}
-                      id={elem.id}
-                      delivery_sts={elem.delivery_sts}
-                      payment_sts={elem.payment_sts}
-                      payment_mode={elem.payment_mode}
-                      payment_id={elem.payment_id}
-                      food={elem.food}
-                      qty={elem.qty}
-                      res={elem.res}
-                      price={elem.price}
+                      name={name}
+                      phone={phone}
+                      address={address}
+                      time={time}
+                      id={id}
+                      delivery_sts={delivery_sts}
+                      payment_sts={payment_sts}
+                      payment_mode={payment_mode}
+                      payment_id={payment_id}
+                      food={food}
+                      qty={qty}
+                      res={res}
+                      price={price}
                     />
                   </>
                 );
               })}
+            </div>
+          ) : null}
+
+          {/* Todays Info------------------------------------------------------------------------------------------------------------------------ */}
+          {todays_info ? (
+            <div className="container-fluid m-0 p-0">
+              <div className="mt-4">
+                <button
+                  className="btn btn-success"
+                  data-toggle="modal"
+                  data-target="#add_new_cat"
+                >
+                  Add Today's Offer
+                </button>
+              </div>
+              <div
+                className="mt-4 pl-3 pr-3"
+                style={{ overflow: "auto", height: "83vh" }}
+              >
+                <div className="col-12 m-0 p-0 d-flex">
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Serial no
+                  </div>
+                  <div
+                    className="head col-2 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Food Name
+                  </div>
+
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Food Image
+                  </div>
+
+                  <div
+                    className="head col-2 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Category
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Price
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Quantity
+                  </div>
+
+                  <div
+                    className="head col-2 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Restaurent Name
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Update Details
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Delete
+                  </div>
+                </div>
+                {Offers_array.map((elem) => {
+                  const {
+                    _id,
+                    name,
+                    image,
+                    restaurent,
+                    category,
+                    quantity,
+                    price,
+                  } = elem;
+                  return (
+                    <>
+                      <Update_Food
+                        id={_id}
+                        serial={serial_food_item++}
+                        name={name}
+                        image={image}
+                        category={category}
+                        price={price}
+                        restaurent={restaurent}
+                        quantity={quantity}
+                      />
+                    </>
+                  );
+                })}
+                <div
+                  className="modal fade"
+                  id="add_new_cat"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          Add New Food Item Details
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Enter Item Name:</b>
+                          </div>
+                          <div className="col-6 m-0 p-0">
+                            <input
+                              type="text"
+                              placeholder="Enter Item Name..."
+                              onChange={(e) => {
+                                setfoodName(e.target.value);
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Enter Item Price:</b>
+                          </div>
+                          <div className="col-6 m-0 p-0">
+                            <input
+                              type="number"
+                              placeholder="Enter Item Price..."
+                              onChange={(e) => {
+                                setfoodPrice(e.target.value);
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Enter Item Quantity:</b>
+                          </div>
+                          <div className="col-6 m-0 p-0">
+                            <input
+                              type="text"
+                              placeholder="Enter Item Quantity/Size..."
+                              onChange={(e) => {
+                                setfoodQuantity(e.target.value);
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Upload Item Image:</b>
+                          </div>
+                          <div className="col-6 m-0 p-0">
+                            <input
+                              type="file"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Select Item Category:</b>
+                          </div>
+                          <select
+                            className="form-select ml-3"
+                            onChange={(e) => {
+                              setfoodCategory(e.target.value);
+                            }}
+                          >
+                            <option value="" disabled selected>
+                              Select Item Category...
+                            </option>
+                            {Category_array.map((option) => (
+                              <option value={option.value}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="d-flex mt-3 p-0">
+                          <div className="col-5 m-0 p-0">
+                            <b>Select Restaurent Name:</b>
+                          </div>
+                          <select
+                            className="form-select ml-3"
+                            onChange={(e) => {
+                              setrestaurentName(e.target.value);
+                            }}
+                          >
+                            <option value="" disabled selected>
+                              Select Restaurent Name...
+                            </option>
+                            {Restaurent_list_array.map((option) => (
+                              <option value={option.value}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          className="btn btn-success"
+                          data-dismiss="modal"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAddNewFoodItem();
+                          }}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : null}
 
@@ -1364,7 +1706,7 @@ const Admin_control_panel = () => {
                             handleAddNewRestaurent();
                           }}
                         >
-                          Add
+                          Save
                         </button>
                       </div>
                     </div>
@@ -1654,8 +1996,6 @@ const Admin_control_panel = () => {
                     </>
                   );
                 })}
-
-                {/* Add new Food Modal */}
                 <div
                   className="modal fade"
                   id="add_new_cat"
@@ -1748,7 +2088,7 @@ const Admin_control_panel = () => {
                             <option value="" disabled selected>
                               Select Item Category...
                             </option>
-                            {allCategory.map((option) => (
+                            {Category_array.map((option) => (
                               <option value={option.value}>
                                 {option.name}
                               </option>

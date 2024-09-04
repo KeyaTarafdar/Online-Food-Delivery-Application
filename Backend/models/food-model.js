@@ -8,7 +8,6 @@ const foodSchema = mongoose.Schema({
   category: String,
   quantity: String,
   restaurent: String,
-  isInCart: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("food", foodSchema);
