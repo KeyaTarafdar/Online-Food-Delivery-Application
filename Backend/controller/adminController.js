@@ -7,7 +7,7 @@ const companyDetailModel = require("../models/companyDetails-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const userModel = require("../models/user-model");
 const restaurentModel = require("../models/restaurent-model");
-const categoryModel = require("../models/category-modal");
+const categoryModel = require("../models/category-model");
 const fs = require("fs");
 
 // Create Admin
