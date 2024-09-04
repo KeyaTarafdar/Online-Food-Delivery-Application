@@ -1,3 +1,4 @@
+// *utils.js*
 import axios from "axios";
 
 // USER FUNCTIONS-------------------------------------------------------------------------------
@@ -316,7 +317,7 @@ export const fetchAllRestaurent = async () => {
 
 // Fetch a particular restaurent(extra)
 export const fetchSingleRestaurent = async (id) => {
-  console.log(id)
+  console.log(id);
   try {
     let response = await axios.get(
       "http://localhost:8000/admins/fetchsinglerestaurent",
@@ -337,6 +338,94 @@ export const deleteRestaurent = async (id) => {
       {
         params: {
           id,
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Update Restautrent
+export const updateRestaurent = async (formData) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/updaterestaurent",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Add new category
+export const addNewCategory = async (formData) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/admins/addnewcategory",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch all categories
+export const fetchAllCategory = async () => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/admins/getallcategory",
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Delete category
+export const deleteCategory=async(id)=>{
+  try {
+    let response = await axios.delete(
+      "http://localhost:8000/admins/deletecategory",
+      {
+        params: {
+          id,
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+// Update Category
+export const updateCategory = async (formData) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/updatecategory",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
       }

@@ -1,9 +1,13 @@
+// *Update_Food.jsx*
 import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Category_array from "./Array/Category_array";
-import Restaurant_list_array from "./Array/Restaurent_list_array";
-import { deleteFoodItem, updateFoodItem } from "../utils/utils";
+import {
+  deleteFoodItem,
+  updateFoodItem,
+  fetchAllCategory,
+  fetchAllRestaurent,
+} from "../utils/utils";
 
 const Update_Food = ({
   id,
@@ -19,7 +23,7 @@ const Update_Food = ({
 
   const [updatedItemName, setupdatedItemName] = useState();
   const [updatedItemQuantity, setupdatedItemQuantity] = useState();
-  const [updatedItemPrice, setupdatedItemPrice] = useState(0);
+  const [updatedItemPrice, setupdatedItemPrice] = useState();
   const [updatedItemRestaurent, setupdatedItemRestaurent] = useState();
   const [updatedItemCategory, setupdatedItemCategory] = useState();
 
@@ -43,6 +47,18 @@ const Update_Food = ({
       alert(response);
     });
   };
+  const [allCategory, setallCategory] = useState([]);
+  const [allRestaurent, setallRestaurent] = useState([]);
+
+  useEffect(() => {
+    fetchAllCategory().then((response) => {
+      setallCategory(response);
+    });
+
+    fetchAllRestaurent().then((response) => {
+      setallRestaurent(response);
+    });
+  }, []);
 
   useEffect(() => {
     setdisplay("block");
@@ -241,7 +257,7 @@ const Update_Food = ({
                 <option value="" disabled selected>
                   Select Item Category...
                 </option>
-                {Category_array.map((option) => (
+                {allCategory.map((option) => (
                   <option value={option.value}>{option.name}</option>
                 ))}
               </select>
@@ -261,7 +277,7 @@ const Update_Food = ({
                 <option value="" disabled selected>
                   Select Restaurent Name...
                 </option>
-                {Restaurant_list_array.map((option) => (
+                {allRestaurent.map((option) => (
                   <option value={option.value}>{option.name}</option>
                 ))}
               </select>
@@ -294,7 +310,7 @@ const Update_Food = ({
                 data-dismiss="modal"
                 onClick={handleUpdateFood}
               >
-                OK
+                Update
               </button>
             </div>
           </div>

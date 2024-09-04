@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+// *My_order.jsx*
+import React, { useState,useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Orderitem_array from "./Array/Orderitem_array";
+import { fetchCompanyDetails } from "../utils/utils";
 
 const My_order = () => {
+  const [companyName, setcompanyName] = useState();
+
   const [cancelOrder, setCancelOrder] = useState(false);
 
   const handleCancelOrder = () => {
@@ -12,6 +16,13 @@ const My_order = () => {
   const handleCloseModal = () => {
     setCancelOrder(false);
   };
+
+  useEffect(() => {
+    // Fetch company details
+    fetchCompanyDetails().then((company) => {
+      setcompanyName(company.name.toUpperCase());
+    });
+  }, []);
 
   return (
     <>
@@ -34,7 +45,7 @@ const My_order = () => {
               className="col-lg-3 col-md-6 col-sm-5 col-xs-5"
               style={{ paddingTop: "0.5%", fontFamily: "brittany" }}
             >
-              <h4>BON&nbsp;&nbsp;APETITE</h4>
+              <h4>{companyName}</h4>
             </div>
             <div className="col-lg-7 col-md-4"></div>
           </div>

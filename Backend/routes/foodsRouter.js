@@ -1,3 +1,4 @@
+// *foodsRouter.js*
 const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middlewares/isLoggedIn");
@@ -28,6 +29,11 @@ router.get("/getallfooditems", isLoggedIn, fetchAllFoodItems);
 router.delete("/deletefooditem", isLoggedIn, deleteFoodItem);
 
 //  UPDATE FOOD ITEM
-router.put("/updatefooditem",isLoggedIn, uploadFoodItem.single("image"), updateFoodItem);
+router.put(
+  "/updatefooditem",
+  isLoggedIn,
+  uploadFoodItem.single("image"),
+  updateFoodItem
+);
 
 module.exports = router;

@@ -1,18 +1,33 @@
+// *Update_Res.jsx*
 import React, { useEffect, useState } from "react";
 import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { deleteRestaurent } from "../utils/utils";
+import { deleteRestaurent, updateRestaurent } from "../utils/utils";
 
 const Update_Res = ({ serial, name, image, address, id }) => {
   const [clicked_update, setClicked_update] = useState(false);
   const [display, setdisplay] = useState("block");
 
+  const [updatedRestaurentName, setupdatedRestaurentName] = useState();
+  const [updatedRestaurentAddress, setupdatedRestaurentAddress] = useState();
+  const [updatedRestaurentImage, setupdatedRestaurentImage] = useState();
+
   const handleClick_update = () => {
     setClicked_update(!clicked_update);
+    const formData = new FormData();
+
+    formData.append("id", id);
+    formData.append("image", updatedRestaurentImage);
+    formData.append("name", updatedRestaurentName);
+    formData.append("address", updatedRestaurentAddress);
+
+    updateRestaurent(formData).then((response) => {
+      alert(response);
+    });
   };
 
   const handleClick_delete = () => {
-    deleteRestaurent(id).then((response) => {
+    deleteRestaurent(id).then(() => {
       setdisplay("none");
     });
   };
@@ -94,7 +109,9 @@ const Update_Res = ({ serial, name, image, address, id }) => {
           <HiPencil
             title="Update Restaurent"
             style={{ cursor: "pointer" }}
-            onClick={handleClick_update}
+            onClick={() => {
+              setClicked_update(!clicked_update);
+            }}
           />
         </div>
         <div
@@ -132,6 +149,19 @@ const Update_Res = ({ serial, name, image, address, id }) => {
                 className="mt-3 form-control"
                 type="text"
                 placeholder="Enter New Restaurent Name..."
+                onChange={(e) => {
+                  setupdatedRestaurentName(e.target.value);
+                }}
+              ></input>
+            </div>
+            <div className="pt-2">
+              <input
+                className="mt-3 form-control"
+                type="text"
+                placeholder="Enter New Restaurent Address..."
+                onChange={(e) => {
+                  setupdatedRestaurentAddress(e.target.value);
+                }}
               ></input>
             </div>
             <div>
@@ -146,6 +176,9 @@ const Update_Res = ({ serial, name, image, address, id }) => {
                     accept="image/*"
                     required=""
                     id="file-input"
+                    onChange={(e) => {
+                      if (e) setupdatedRestaurentImage(e.target.files[0]);
+                    }}
                   />
                 </label>
               </form>
@@ -158,7 +191,7 @@ const Update_Res = ({ serial, name, image, address, id }) => {
                 data-dismiss="modal"
                 onClick={handleClick_update}
               >
-                OK
+                Update
               </button>
             </div>
           </div>

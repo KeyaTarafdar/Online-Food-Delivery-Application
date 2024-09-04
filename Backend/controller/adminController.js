@@ -1,3 +1,4 @@
+// *adminController.js*
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
@@ -6,6 +7,7 @@ const companyDetailModel = require("../models/companyDetails-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const userModel = require("../models/user-model");
 const restaurentModel = require("../models/restaurent-model");
+const categoryModel = require("../models/category-modal");
 const fs = require("fs");
 
 // Create Admin
@@ -312,5 +314,126 @@ module.exports.deleteRestaurent = async (req, res) => {
     }
   } catch (err) {
     res.status(500).send(err.message);
+  }
+};
+
+// Update Restaurent
+module.exports.updateRestaurent = async (req, res) => {
+  try {
+    let { id, name, address } = req.body;
+    let image = req.file;
+
+    if (name !== "undefined") {
+      await restaurentModel.findOneAndUpdate({ _id: id }, { $set: { name } });
+    }
+    if (address !== "undefined") {
+      await restaurentModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { address } }
+      );
+    }
+
+    if (image !== undefined) {
+      let restaurent = await restaurentModel.findOne({ _id: id });
+      const oldImage = restaurent.image;
+      if (oldImage)
+        fs.unlink(
+          `../Frontend/public/restaurentPictures/${oldImage}`,
+          (err) => {
+            if (err) {
+              console.log(err.message);
+            }
+          }
+        );
+      await restaurentModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { image: image.filename } }
+      );
+    }
+
+    res.send("Restaurent updated successfully");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Add new category
+module.exports.addNewCategory = async (req, res) => {
+  if (!req.file) {
+    return res.send("No file uploaded.");
+  }
+  try {
+    let { name } = req.body;
+    if (name) {
+      await categoryModel.create({
+        name,
+        image: req.file.filename,
+      });
+    }
+    res.send(`${name} Category is created`);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch all category
+module.exports.fetchAllCategory = async (req, res) => {
+  try {
+    let category = await categoryModel.find({});
+    res.send(category);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Delete category
+module.exports.deleteCategory = async (req, res) => {
+  try {
+    let id = req.query.id;
+    if (id) {
+      let category = await categoryModel.findOne({ _id: id });
+      const oldImage = category.image;
+      if (oldImage)
+        fs.unlink(`../Frontend/public/categoryPictures/${oldImage}`, (err) => {
+          if (err) {
+            console.log(err.message);
+          }
+        });
+
+      await categoryModel.findOneAndDelete({ _id: id });
+      res.send(`${category.name} deleted successfully`);
+    }
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};
+
+// Update Category
+module.exports.updateCategory = async (req, res) => {
+  try {
+    let { id, name } = req.body;
+    let image = req.file;
+    if (name !== "undefined") {
+      await categoryModel.findOneAndUpdate({ _id: id }, { $set: { name } });
+    }
+
+    if (image !== undefined) {
+      let category = await categoryModel.findOne({ _id: id });
+      const oldImage = category.image;
+      if (oldImage)
+        fs.unlink(`../Frontend/public/categoryPictures/${oldImage}`, (err) => {
+          if (err) {
+            console.log(err.message);
+          }
+        });
+      await categoryModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { image: image.filename } }
+      );
+    }
+
+    res.send(`${name} category updated successfully`);
+  } catch (err) {
+    res.send(err.message);
   }
 };

@@ -1,3 +1,4 @@
+// *foodController.js*
 const foodModel = require("../models/food-model");
 const dbgr = require("debug")("development:usercheck");
 const fs = require("fs");
@@ -83,7 +84,6 @@ module.exports.updateFoodItem = async (req, res) => {
   try {
     let { id, name, price, category, quantity, restaurent } = req.body;
     let image = req.file;
-
     if (name !== "undefined") {
       await foodModel.findOneAndUpdate({ _id: id }, { $set: { name } });
     }
@@ -115,7 +115,7 @@ module.exports.updateFoodItem = async (req, res) => {
       );
     }
 
-    res.send("Food item updated successfully");
+    res.send(`${name} updated successfully`);
   } catch (err) {
     res.send(err.message);
   }

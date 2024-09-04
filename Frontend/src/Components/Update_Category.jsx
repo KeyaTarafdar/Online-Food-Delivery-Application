@@ -1,16 +1,37 @@
-import React, { useState } from "react";
+// *Update_Category*
+import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { deleteCategory, updateCategory } from "../utils/utils";
 
-const Update_Category = ({ serial, name, img }) => {
+const Update_Category = ({ serial, name, image, id }) => {
+  const [display, setdisplay] = useState("block");
+
   const [clicked_update, setClicked_update] = useState(false);
+
+  const [updatedCategoryName, setupdatedCategoryName] = useState();
+  const [updatedCategoryImage, setupdatedCategoryImage] = useState();
 
   const handleClick_update = () => {
     setClicked_update(!clicked_update);
+
+    const formData = new FormData();
+
+    formData.append("id", id);
+    formData.append("image", updatedCategoryImage);
+    formData.append("name", updatedCategoryName);
+
+    updateCategory(formData).then((response) => {
+      alert(response);
+    });
   };
 
+  useEffect(() => {
+    setdisplay("block");
+  }, [id]);
+
   return (
-    <>
+    <div style={{ display: `${display}` }}>
       <div
         className="col-12 m-0 p-0 d-flex pt-1 pb-1"
         style={{
@@ -52,7 +73,10 @@ const Update_Category = ({ serial, name, img }) => {
             alignItems: "center",
           }}
         >
-          <img src={img} style={{ height: "100%", width: "30%" }}></img>
+          <img
+            src={`/categoryPictures/${image}`}
+            style={{ height: "100%", width: "30%" }}
+          ></img>
         </div>
         <div
           className="col-2"
@@ -63,9 +87,13 @@ const Update_Category = ({ serial, name, img }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onClick={handleClick_update}
         >
-          <HiPencil />
+          <HiPencil
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setClicked_update(!clicked_update);
+            }}
+          />
         </div>
         <div
           className="col-1"
@@ -77,7 +105,15 @@ const Update_Category = ({ serial, name, img }) => {
             alignItems: "center",
           }}
         >
-          <RiDeleteBin6Line />
+          <RiDeleteBin6Line
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              deleteCategory(id).then((response) => {
+                alert(response);
+                setdisplay("none");
+              });
+            }}
+          />
         </div>
       </div>
 
@@ -98,6 +134,9 @@ const Update_Category = ({ serial, name, img }) => {
                 className="mt-3 form-control"
                 type="text"
                 placeholder="Enter New Category Name..."
+                onChange={(e) => {
+                  setupdatedCategoryName(e.target.value);
+                }}
               ></input>
             </div>
             <div>
@@ -112,6 +151,9 @@ const Update_Category = ({ serial, name, img }) => {
                     accept="image/*"
                     required=""
                     id="file-input"
+                    onChange={(e) => {
+                      setupdatedCategoryImage(e.target.files[0]);
+                    }}
                   />
                 </label>
               </form>
@@ -124,13 +166,13 @@ const Update_Category = ({ serial, name, img }) => {
                 data-dismiss="modal"
                 onClick={handleClick_update}
               >
-                OK
+                Update
               </button>
             </div>
           </div>
         </div>
       ) : null}
-    </>
+    </div>
   );
 };
 

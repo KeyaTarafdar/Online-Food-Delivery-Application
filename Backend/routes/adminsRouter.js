@@ -1,3 +1,4 @@
+// *adminsRouter.js*
 const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middlewares/isLoggedIn");
@@ -19,10 +20,16 @@ const {
   fetchAllRestaurent,
   deleteRestaurent,
   fetchSingleRestaurent,
+  updateRestaurent,
+  addNewCategory,
+  fetchAllCategory,
+  deleteCategory,
+  updateCategory,
 } = require("../controller/adminController");
 const {
   uploadAdminProfile,
   uploadRestaurent,
+  uploadCategory,
 } = require("../middlewares/multer");
 
 // ADMIN REGISTER
@@ -83,6 +90,14 @@ router.post(
   addNewRestaurent
 );
 
+// UPDATE RESTAURENT
+router.put(
+  "/updaterestaurent",
+  isLoggedIn,
+  uploadRestaurent.single("image"),
+  updateRestaurent
+);
+
 // FETCH ALL RESTAURENT
 router.get("/fetchallrestaurent", isLoggedIn, fetchAllRestaurent);
 
@@ -91,5 +106,27 @@ router.get("/fetchsinglerestaurent", isLoggedIn, fetchSingleRestaurent);
 
 // DELETE SINGLE RESTAURENT
 router.delete("/deleterestaurent", isLoggedIn, deleteRestaurent);
+
+// ADD NEW CATEGORY
+router.post(
+  "/addnewcategory",
+  isLoggedIn,
+  uploadCategory.single("image"),
+  addNewCategory
+);
+
+// FETCH ALL CATEGORY
+router.get("/getallcategory", isLoggedIn, fetchAllCategory);
+
+// DELETE CATEGORY
+router.delete("/deletecategory", isLoggedIn, deleteCategory);
+
+// UPDATE CATEGORY
+router.put(
+  "/updatecategory",
+  isLoggedIn,
+  uploadCategory.single("image"),
+  updateCategory
+);
 
 module.exports = router;

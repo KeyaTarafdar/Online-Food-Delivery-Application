@@ -5,14 +5,11 @@ import { MdDeliveryDining, MdDelete } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
-import { BiSolidOffer } from "react-icons/bi";
 import Navbar from "react-bootstrap/Navbar";
 import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
 import Update_Res from "../Components/Update_Res";
-import Category_array from "../Components/Array/Category_array";
 import Update_Category from "../Components/Update_Category";
-import Food_array from "../Components/Array/Food_array";
 import Update_Food from "../Components/Update_Food";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +29,8 @@ import {
   fetchAllFoods,
   addNewRestaurent,
   fetchAllRestaurent,
+  addNewCategory,
+  fetchAllCategory,
 } from "../utils/utils";
 
 const Admin_control_panel = () => {
@@ -117,6 +116,10 @@ const Admin_control_panel = () => {
 
     fetchAllRestaurent().then((response) => {
       setrestaurents(response);
+    });
+
+    fetchAllCategory().then((response) => {
+      setallCategory(response);
     });
   };
 
@@ -241,7 +244,7 @@ const Admin_control_panel = () => {
 
   const [update_food_category, setUpdate_food_category] = useState(false);
   const UpdateFoodCategori = () => {
-    setData(Category_array);
+    setData(allCategory);
     setUpdate_food_category(true);
     setUpdate_web_details_name(false);
     setUpdate_web_details_mail(false);
@@ -253,7 +256,7 @@ const Admin_control_panel = () => {
 
   const [update_food_item, setUpdate_food_item] = useState(false);
   const UpdateFoodItem = () => {
-    setData(Food_array);
+    setData(foods);
     setUpdate_food_item(true);
     setUser_info(false);
     setOrder_info(false);
@@ -329,11 +332,11 @@ const Admin_control_panel = () => {
     //For Food Item search
     if (update_food_item === true) {
       serial_food_item = 1;
-      const updateItem4 = Food_array.filter((currEle) => {
+      const updateItem4 = foods.filter((currEle) => {
         return (
-          currEle.name.toLowerCase() === search_item.toLowerCase() ||
-          currEle.categori.toLowerCase() === search_item.toLowerCase() ||
-          currEle.res.toLowerCase() === search_item.toLowerCase()
+          currEle.name.toLowerCase().includes(search_item.toLowerCase()) ||
+          currEle.categori.toLowerCase().includes(search_item.toLowerCase()) ||
+          currEle.res.toLowerCase().includes(search_item.toLowerCase())
         );
       });
       setData(updateItem4);
@@ -342,7 +345,7 @@ const Admin_control_panel = () => {
     //For Food Category search
     if (update_food_category === true) {
       serial_food_category = 1;
-      const updateItem5 = Category_array.filter((currEle) => {
+      const updateItem5 = allCategory.filter((currEle) => {
         return currEle.name.toLowerCase() === search_item.toLowerCase();
       });
       setData(updateItem5);
@@ -480,6 +483,26 @@ const Admin_control_panel = () => {
     });
   };
 
+  const [categoryName, setcategoryName] = useState();
+  const [categoryImage, setcategoryImage] = useState();
+
+  const [allCategory, setallCategory] = useState([]);
+
+  // Add new category
+  const handleAddNewCategory = () => {
+    const formData = new FormData();
+
+    formData.append("image", categoryImage);
+    formData.append("name", categoryName);
+
+    addNewCategory(formData).then((response) => {
+      alert(response);
+      fetchAllCategory().then((response) => {
+        setallCategory(response);
+      });
+    });
+  };
+
   // Fetch all foods
   const [foods, setfoods] = useState([]);
 
@@ -504,6 +527,10 @@ const Admin_control_panel = () => {
 
     fetchAllRestaurent().then((response) => {
       setrestaurentList(response);
+    });
+
+    fetchAllCategory().then((response) => {
+      setallCategory(response);
     });
   }, []);
 
@@ -1395,18 +1422,21 @@ const Admin_control_panel = () => {
                     Delete
                   </div>
                 </div>
-                {data.map((elem) => {
-                  const { name, img } = elem;
+                {allCategory.map((elem) => {
+                  const { name, image, _id } = elem;
                   return (
                     <>
                       <Update_Category
                         serial={serial_food_category++}
-                        name={elem.name}
-                        img={elem.img}
+                        name={name}
+                        image={image}
+                        id={_id}
                       />
                     </>
                   );
                 })}
+
+                {/* Add new category modal */}
                 <div
                   className="modal fade"
                   id="add_new_cat"
@@ -1438,16 +1468,24 @@ const Admin_control_panel = () => {
                           <div className="col-6 m-0 p-0">
                             <input
                               type="text"
-                              placeholder="Enter Restaurent Name..."
+                              placeholder="Enter Category Name..."
+                              onChange={(e) => {
+                                setcategoryName(e.target.value);
+                              }}
                             ></input>
                           </div>
                         </div>
                         <div className="d-flex mt-3 p-0">
                           <div className="col-5 m-0 p-0">
-                            <b>Upload Restaurent Image:</b>
+                            <b>Upload Category Image:</b>
                           </div>
                           <div className="col-6 m-0 p-0">
-                            <input type="file"></input>
+                            <input
+                              type="file"
+                              onChange={(e) => {
+                                setcategoryImage(e.target.files[0]);
+                              }}
+                            ></input>
                           </div>
                         </div>
                       </div>
@@ -1456,6 +1494,10 @@ const Admin_control_panel = () => {
                           type="button"
                           className="btn btn-success"
                           data-dismiss="modal"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAddNewCategory();
+                          }}
                         >
                           Save
                         </button>
@@ -1612,6 +1654,8 @@ const Admin_control_panel = () => {
                     </>
                   );
                 })}
+
+                {/* Add new Food Modal */}
                 <div
                   className="modal fade"
                   id="add_new_cat"
@@ -1704,7 +1748,7 @@ const Admin_control_panel = () => {
                             <option value="" disabled selected>
                               Select Item Category...
                             </option>
-                            {Category_array.map((option) => (
+                            {allCategory.map((option) => (
                               <option value={option.value}>
                                 {option.name}
                               </option>

@@ -1,3 +1,4 @@
+// *Restaurent.jsx*
 import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -21,6 +22,7 @@ import {
   fetchAllFoods,
   fetchAllRestaurent,
   logout,
+  findUser
 } from "../utils/utils";
 
 const Restaurent = () => {
@@ -28,6 +30,7 @@ const Restaurent = () => {
   const [allFood, setallFood] = useState([]);
   const [allRestaurent, setallRestaurent] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [account,setAccount]=useState("My Account");
 
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
@@ -64,12 +67,25 @@ const Restaurent = () => {
     setData(updateItem);
   }
 
-  const restaurantNames = allRestaurent.map((restaurant) => restaurant.name);
+  const [isRestaurentLoaded, setIsRestaurentLoaded] = useState(false);
 
   const [text] = useTypewriter({
-    words: restaurantNames,
+    words: isRestaurentLoaded
+      ? allRestaurent.map((restaurant) => restaurant.name)
+      : [""],
     loop: {},
   });
+
+
+  const myAccount = async () => {
+    findUser().then((user) => {
+      if (user.username) {
+        navigate("/My_account");
+      } else {
+        alert("You have to Login first!");
+      }
+    })
+  };
 
   // Logout API
   const handleLogout = async () => {
@@ -79,6 +95,7 @@ const Restaurent = () => {
         setTimeout(() => {
           setLoading(false);
           navigate("/Home2");
+          setAccount("My Account");
         }, 3000);
       }
     } catch (err) {
@@ -109,6 +126,16 @@ const Restaurent = () => {
 
     fetchAllRestaurent().then((response) => {
       setallRestaurent(response);
+      setIsRestaurentLoaded(true);
+    });
+
+     // Find user
+    findUser().then((user) => {
+      if (user.username) {
+        setAccount(user.username.split(" ")[0]);
+      } else {
+        setAccount("My Account");
+      }
     });
   }, []);
 
@@ -220,28 +247,30 @@ const Restaurent = () => {
                     <MdAccountCircle
                       className="header_menu"
                       style={{ height: "25px", width: "25px" }}
+                      onClick={myAccount}
                     />
-                    <span className="header_menu" style={{ fontSize: "15px" }}>
-                      &nbsp;&nbsp;My&nbsp;Account
+                    <span className="header_menu" style={{ fontSize: "15px" }}
+                     onClick={myAccount}>
+                      &nbsp;&nbsp;{account}
                     </span>
                   </NavLink>
                 </div>
                 <div
-                  className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
-                  style={{ float: "left", marginLeft: "5px" }}
-                >
-                  <MdOutlineLogout
-                    className="header_menu"
-                    style={{ height: "25px", width: "25px" }}
-                  />
-                  <span
-                    className="header_menu"
-                    style={{ fontSize: "15px" }}
-                    onClick={handleLogout}
+                    className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
+                    style={{ float: "left"}}
                   >
-                    &nbsp;&nbsp;Log&nbsp;out
-                  </span>
-                </div>
+                    {account !== "My Account" ? (
+                      <>
+                        <MdOutlineLogout
+                          className="header_menu"
+                          style={{ height: "25px", width: "25px" }}
+                        />
+                        <span className="header_menu" onClick={handleLogout}>
+                          &nbsp;&nbsp;Log&nbsp;out
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
               </div>
 
               {/*Hamburger Menu--------------------------------------- */}
@@ -487,9 +516,34 @@ const Restaurent = () => {
           <hr></hr>
 
           <div
-            className="row m-0"
+            className="row m-0 d-flex"
             style={{ padding: "10px 0px 20px 0px", justifyContent: "center" }}
           >
+            <div
+              className="mt-0 float-left pb-0"
+              style={{ height: "50%", width: "12%" }}
+            >
+              <button
+                className="flex flex-col justify-center items-center m-0 ml-2 mr-2 mt-2 mb-2 p-0"
+                style={{
+                  height: "20%",
+                  borderRadius: "10px",
+                  borderStyle: "solid",
+                  borderColor: "#16A085",
+                  boxShadow:
+                    "rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset",
+                  height: "5%",
+                  width: "90%",
+                  backgroundColor: "white",
+                }}
+                onClick={() => {
+                  setData(allFood);
+                }}
+              >
+                <h6 className="mt-1">All Restaurents</h6>
+              </button>
+            </div>
+
             {allRestaurent.map((elem) => {
               const { name } = elem;
               return (

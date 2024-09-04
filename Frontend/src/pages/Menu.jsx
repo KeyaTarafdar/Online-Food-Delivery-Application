@@ -1,3 +1,4 @@
+// *Menu.jsx*
 import React, { useEffect, useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -7,6 +8,7 @@ import { Link, Element } from "react-scroll";
 import { MdOutlineLogout, MdAccountCircle } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaBagShopping } from "react-icons/fa6";
+import { CgLogIn } from "react-icons/cg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Category_array from "../Components/Array/Category_array";
@@ -17,18 +19,15 @@ import Card from "../Components/Card";
 import Footer from "../Components/Footer";
 import Loader from "../Components/Loader";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchCompanyDetails,
-  fetchAllFoods,
-  logout,
-  findUser,
-} from "../utils/utils";
+import { fetchCompanyDetails, fetchAllFoods, logout,findUser } from "../utils/utils";
 
 const Menu = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [c, setc] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [account, setAccount] = useState("My Account");
+
 
   const filterItem = (cateItem) => {
     setc(false);
@@ -74,6 +73,29 @@ const Menu = () => {
     setData(updateItem);
   }
 
+  const myAccount = async () => {
+    findUser().then((user) => {
+      if (user.username) {
+        navigate("/My_account");
+      } else {
+        alert("You have to Login first!");
+      }
+    })
+  };
+
+  useEffect(() => {
+    // Find user
+    findUser().then((user) => {
+      if (user.username) {
+        setAccount(user.username.split(" ")[0]);
+      } else {
+        setAccount("My Account");
+      }
+    });
+  }, []);
+
+
+
   const [text] = useTypewriter({
     words: [
       "Veg dish",
@@ -103,6 +125,7 @@ const Menu = () => {
         setTimeout(() => {
           setLoading(false);
           navigate("/Home2");
+          setAccount("My Account");
         }, 3000);
       }
     } catch (err) {
@@ -249,30 +272,32 @@ const Menu = () => {
                       <MdAccountCircle
                         className="header_menu"
                         style={{ height: "25px", width: "25px" }}
+                        onClick={myAccount}
                       />
                       <span
                         className="header_menu"
                         style={{ fontSize: "15px" }}
+                        onClick={myAccount}
                       >
-                        &nbsp;&nbsp;My&nbsp;Account
+                         &nbsp;&nbsp;{account}
                       </span>
                     </NavLink>
                   </div>
                   <div
                     className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
-                    style={{ float: "left", marginLeft: "5px" }}
+                    style={{ float: "left"}}
                   >
-                    <MdOutlineLogout
-                      className="header_menu"
-                      style={{ height: "25px", width: "25px" }}
-                    />
-                    <span
-                      className="header_menu"
-                      style={{ fontSize: "15px" }}
-                      onClick={handleLogout}
-                    >
-                      &nbsp;&nbsp;Log&nbsp;out
-                    </span>
+                    {account !== "My Account" ? (
+                      <>
+                        <MdOutlineLogout
+                          className="header_menu"
+                          style={{ height: "25px", width: "25px" }}
+                        />
+                        <span className="header_menu" onClick={handleLogout}>
+                          &nbsp;&nbsp;Log&nbsp;out
+                        </span>
+                      </>
+                    ) : null}
                   </div>
                 </div>
 

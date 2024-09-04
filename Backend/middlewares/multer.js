@@ -1,3 +1,4 @@
+// *multer.js*
 const multer = require("multer");
 const path = require("path");
 
@@ -48,3 +49,15 @@ const storageRestaurent = multer.diskStorage({
   },
 });
 module.exports.uploadRestaurent = multer({ storage: storageRestaurent });
+
+// Category Picture Upload----------------------------------------------------------------------------
+const storageCategory = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "../Frontend/public/categoryPictures");
+  },
+  filename: function (req, file, cb) {
+    {const uniqueSuffix = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueSuffix);}
+  },
+});
+module.exports.uploadCategory = multer({ storage: storageCategory });
