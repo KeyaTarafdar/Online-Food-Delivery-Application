@@ -1,3 +1,4 @@
+// *food-model.js*
 const mongoose = require("mongoose");
 
 const foodSchema = mongoose.Schema({
@@ -6,7 +7,8 @@ const foodSchema = mongoose.Schema({
   price: Number,
   category: String,
   quantity: String,
-  restaurent: String
+  restaurent: String,
+  isInCart: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("food", foodSchema);
