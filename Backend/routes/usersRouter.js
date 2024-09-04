@@ -8,6 +8,8 @@ const {
   getUser,
   updateUser,
   uploadProfilePicture,
+  addToCart,
+  deleteItemFromCart,
 } = require("../controller/userController");
 const { uploadUserProfile } = require("../middlewares/multer");
 
@@ -31,6 +33,16 @@ router.get("/getuser", isLoggedIn, getUser);
 router.put("/updateuser", isLoggedIn, updateUser);
 
 // UPLOAD PROFILE PICTURE
-router.post("/uploadprofilepicture", isLoggedIn, uploadUserProfile.single("image"), uploadProfilePicture);
+router.post(
+  "/uploadprofilepicture",
+  isLoggedIn,
+  uploadUserProfile.single("image"),
+  uploadProfilePicture
+);
 
+// ADD TO CART
+router.put("/addtocart", isLoggedIn, addToCart);
+
+// DELETE FROM THE CART
+router.put("deleteitemfromcart", isLoggedIn, deleteItemFromCart);
 module.exports = router;

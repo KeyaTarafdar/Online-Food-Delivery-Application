@@ -622,10 +622,12 @@ const Menu = () => {
                 <div className="container-fluid">
                   <div className="col-lg-12 pt-1 pl-5 pr-5 mt-3">
                     {data.map((elem) => {
-                      const { image, name, category, price, restaurent } = elem;
+                      const { _id, image, name, category, price, restaurent } =
+                        elem;
                       return (
                         <>
                           <Card
+                            id={_id}
                             name={name}
                             image={image}
                             price={price}

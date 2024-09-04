@@ -142,3 +142,38 @@ module.exports.uploadProfilePicture = async (req, res) => {
     res.send(err.message);
   }
 };
+
+// Add to acrt
+module.exports.addToCart = async (req, res) => {
+  try {
+    let user = req.user;
+    let { foodId } = req.body;
+    if (user.cart.includes(foodId)) {
+      res.send("Item already present in the cart");
+    } else {
+      await userModel.findOneAndUpdate(
+        { _id: user.id },
+        { $push: { cart: foodId } }
+      );
+      res.send("Food item added to cart");
+    }
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};
+
+// Delete item from the cart
+module.exports.deleteItemFromCart = async (req, res) => {
+  try {
+    let user = req.user;
+    let { foodId } = req.body;
+
+    await userModel.findOneAndUpdate(
+      { _id: user.id },
+      { $pull: { cart: foodId } }
+    );
+    res.send("Food item removed from cart");
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};

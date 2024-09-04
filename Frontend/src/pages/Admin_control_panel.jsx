@@ -16,8 +16,8 @@ import Update_Category from "../Components/Update_Category";
 import Update_Food from "../Components/Update_Food";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Loader from "../Components/Loader";
 import Offers_array from "../Components/Array/Offers_array";
+import Loader from "../Components/Loader";
 import {
   deleteDeliveryBoy,
   fetchAllDeliveryBoy,
@@ -36,6 +36,7 @@ import {
   addNewCategory,
   fetchAllCategory,
 } from "../utils/utils";
+import TodaysOffer from "../Components/TodaysOffer";
 
 const Admin_control_panel = () => {
   var serial_food_item = 1,
@@ -142,9 +143,9 @@ const Admin_control_panel = () => {
       setrestaurents(response);
     });
 
-    fetchAllCategory().then((response) => {
+    fetchAllCategory().then((response)=>{
       setallCategory(response);
-    });
+    })
   };
 
   const [update_web_details, setUpdate_web_details] = useState(false);
@@ -303,6 +304,7 @@ const Admin_control_panel = () => {
     setTodays_info(false);
 
     fetchAllFoods().then((response) => {
+      console.log(response);
       setfoods(response);
     });
   };
@@ -381,12 +383,14 @@ const Admin_control_panel = () => {
         return currEle.name.toLowerCase() === search_item.toLowerCase();
       });
       setData(updateItem5);
-    }
+    }
     //Todays Offer Search
     if (todays_info === true) {
       serial_todays_offer = 1;
       const updateItem6 = data.filter((currEle) => {
-        return currEle.name.toLowerCase().includes(search_item.toLowerCase());
+        return (
+          currEle.name.toLowerCase().includes(search_item.toLowerCase())
+        );
       });
       setData(updateItem6);
     }
@@ -574,7 +578,6 @@ const Admin_control_panel = () => {
       setallCategory(response);
     });
   }, []);
-  
   return (
     <>
       <div className="Admin_control" style={{ height: "97vh" }}>
@@ -761,15 +764,15 @@ const Admin_control_panel = () => {
 
           {/* Default page--------------------------------------------------------------------------------------------------------- */}
           {!user_info &&
-          !order_info &&
-          !todays_info &&
-          !deliver_boy_info &&
-          !update &&
-          !update_web_details &&
-          !add_res &&
-          !update_food_category &&
-          !update_food_item &&
-          !update_delivery_boy ? (
+            !order_info &&
+            !todays_info &&
+            !deliver_boy_info &&
+            !update &&
+            !update_web_details &&
+            !add_res &&
+            !update_food_category &&
+            !update_food_item &&
+            !update_delivery_boy ? (
             <div
               className="col-10 admin_default_page"
               style={{ height: "98vh" }}
@@ -997,10 +1000,8 @@ const Admin_control_panel = () => {
               <div className="mt-4">
                 <button
                   className="btn btn-success"
-                  data-toggle="modal"
-                  data-target="#add_new_cat"
                 >
-                  Add Today's Offer
+                  <strong>Today's Offer</strong>
                 </button>
               </div>
               <div
@@ -1032,7 +1033,7 @@ const Admin_control_panel = () => {
                   </div>
 
                   <div
-                    className="head col-1 pt-2 pb-2"
+                    className="head col-2 pt-2 pb-2"
                     style={{
                       border: "1px solid black",
                       display: "flex",
@@ -1097,17 +1098,6 @@ const Admin_control_panel = () => {
                       alignItems: "center",
                     }}
                   >
-                    Update Details
-                  </div>
-                  <div
-                    className="head col-1 pt-2 pb-2"
-                    style={{
-                      border: "1px solid black",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
                     Delete
                   </div>
                 </div>
@@ -1123,7 +1113,7 @@ const Admin_control_panel = () => {
                   } = elem;
                   return (
                     <>
-                      <Update_Food
+                      <TodaysOffer
                         id={_id}
                         serial={serial_food_item++}
                         name={name}
@@ -1136,7 +1126,7 @@ const Admin_control_panel = () => {
                     </>
                   );
                 })}
-                <div
+                {/* <div
                   className="modal fade"
                   id="add_new_cat"
                   tabindex="-1"
@@ -1270,9 +1260,10 @@ const Admin_control_panel = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
+
           ) : null}
 
           {/* Delivery boy info--------------------------------------------------------------------------------------------------------- */}
@@ -1450,8 +1441,8 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {!update_web_details_phone &&
-              !update_web_details_mail &&
-              !update_web_details_name ? (
+                !update_web_details_mail &&
+                !update_web_details_name ? (
                 <div className="mt-5">
                   <h1>Change Website Details</h1>
                 </div>
@@ -1904,7 +1895,7 @@ const Admin_control_panel = () => {
                   </div>
 
                   <div
-                    className="head col-2 pt-2 pb-2"
+                    className="head col-1 pt-2 pb-2"
                     style={{
                       border: "1px solid black",
                       display: "flex",
@@ -1969,6 +1960,17 @@ const Admin_control_panel = () => {
                     }}
                   >
                     Delete
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-2"
+                    style={{
+                      border: "1px solid black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Add to Today's Offer
                   </div>
                 </div>
                 {foods.map((elem) => {

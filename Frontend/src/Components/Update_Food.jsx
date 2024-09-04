@@ -1,4 +1,4 @@
-// *Update_Food.jsx*
+// Update_Food.jsx
 import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi2";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -113,7 +113,7 @@ const Update_Food = ({
           ></img>
         </div>
         <div
-          className="col-2"
+          className="col-1"
           style={{
             boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
             height: "3rem",
@@ -197,6 +197,31 @@ const Update_Food = ({
               });
             }}
           />
+        </div>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+            height: "3rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="btn btn-success"
+            style={{
+              fontSize: "1.5rem",
+              width: "2.8rem",
+              height: "2.8rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingBottom: "10px",
+            }}
+          >
+            <strong>+</strong>
+          </div>
         </div>
       </div>
 

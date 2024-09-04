@@ -400,7 +400,7 @@ export const fetchAllCategory = async () => {
 };
 
 // Delete category
-export const deleteCategory=async(id)=>{
+export const deleteCategory = async (id) => {
   try {
     let response = await axios.delete(
       "http://localhost:8000/admins/deletecategory",
@@ -415,7 +415,7 @@ export const deleteCategory=async(id)=>{
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 // Update Category
 export const updateCategory = async (formData) => {
@@ -429,6 +429,20 @@ export const updateCategory = async (formData) => {
         },
         withCredentials: true,
       }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Add to cart
+export const addToCart = async (id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/users/addtocart",
+      { foodId: id },
+      { withCredentials: true }
     );
     return response.data;
   } catch (err) {
