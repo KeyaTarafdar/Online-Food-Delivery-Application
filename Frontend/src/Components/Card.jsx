@@ -1,13 +1,10 @@
+// *Card.jsx*
 import React, { useEffect, useState } from "react";
 import { addToCart, findUser } from "../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ id, name, image, price, restaurent }) => {
-  const options = [
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-    { label: "4", value: 4 },
-  ];
+  const navigate = useNavigate();
 
   const handleAddToCart = async () => {
     try {
@@ -24,10 +21,11 @@ const Card = ({ id, name, image, price, restaurent }) => {
     const fetchUserCart = async () => {
       try {
         const user = await findUser();
-        setUserCart(user.cart || []);
+        const cartIds = user.cart ? user.cart.map((item) => item.id) : [];
+        setUserCart(cartIds);
       } catch (error) {
         console.error("Error fetching user cart:", error);
-      } 
+      }
     };
 
     fetchUserCart();
@@ -73,17 +71,19 @@ const Card = ({ id, name, image, price, restaurent }) => {
             <h5 className="mt-1">{name}</h5>
             <h6 className="mt-1">{restaurent}</h6>
             <span>Price: {price}/-</span>
-            <select className="form-select ml-3">
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div className="pt-4">
-            <button className="btn-xs btn-warning" onClick={handleAddToCart}>
+            <button
+              className="btn-xs btn-warning"
+              onClick={() => {
+                if (userCart.includes(id)) {
+                  navigate("/My_cart");
+                } else {
+                  handleAddToCart();
+                }
+              }}
+            >
               {userCart.includes(id) ? "Go to Cart" : "Add to Cart"}
             </button>
           </div>

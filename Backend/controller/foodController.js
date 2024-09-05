@@ -49,6 +49,21 @@ module.exports.fetchAllFoodItems = async (req, res) => {
   }
 };
 
+// Fetch single food item
+module.exports.fetchSingleFoodItem = async (req, res) => {
+  try {
+    let { foodId } = req.body;
+    if (foodId) {
+      let food = await foodModel.findOne({ _id: foodId });
+      res.send(food);
+    } else {
+      res.send("Item not found");
+    }
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};
+
 // Delete Food Item
 module.exports.deleteFoodItem = async (req, res) => {
   try {

@@ -8,7 +8,6 @@ import Menu from './pages/Menu';
 import My_cart from './pages/My_cart';
 import My_order from './Components/My_order';
 import My_account from './pages/My_account';
-import Cart_table from './Components/Cart_table';
 import Order_table from './Components/Order_table';
 import Services from './Components/Services';
 import Restaurent from './pages/Restaurent';
@@ -28,11 +27,8 @@ function App() {
           <Route exact path='/My_cart' element={<My_cart/>}></Route>
           <Route exact path='/My_order' element={<My_order/>}></Route>
           <Route exact path='/My_account' element={<My_account/>}></Route>
-          <Route exact path='/Cart_table' element={<Cart_table/>}></Route>
           <Route exact path='/Order_table' element={<Order_table/>}></Route>
           <Route exact path='/Services' element={<Services/>}></Route>
-          {/* <Route exact path='/Restaurentcategory' element={<Restaurentcategory/>}></Route> */}
-          {/* <Route exact path='/Admin' element={<Login/>}></Route> */}
           <Route exact path='/Admin' element={<Admin_control_panel/>}></Route>
         </Routes>
       </BrowserRouter>

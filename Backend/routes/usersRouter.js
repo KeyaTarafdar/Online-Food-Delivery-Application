@@ -1,3 +1,4 @@
+// *usersRouter.js*
 const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middlewares/isLoggedIn");
@@ -44,5 +45,5 @@ router.post(
 router.put("/addtocart", isLoggedIn, addToCart);
 
 // DELETE FROM THE CART
-router.put("deleteitemfromcart", isLoggedIn, deleteItemFromCart);
+router.put("/deleteitemfromcart", isLoggedIn, deleteItemFromCart);
 module.exports = router;

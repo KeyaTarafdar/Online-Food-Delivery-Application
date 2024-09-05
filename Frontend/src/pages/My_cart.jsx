@@ -3,22 +3,9 @@ import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { FaBagShopping } from "react-icons/fa6";
 import NavLink from "react-bootstrap/esm/NavLink";
-import Cart_table from "../Components/Cart_table";
-import { fetchCompanyDetails } from "../utils/utils";
+import { deleteCartItem, fetchCompanyDetails, findUser } from "../utils/utils";
 
-const My_cart = ({
-  serial,
-  name,
-  time,
-  food = [],
-  qty = [],
-  res = [],
-  price = [],
-}) => {
-  const sum = Array.isArray(price)
-    ? price.reduce((acc, curr) => acc + curr, 0)
-    : 0;
-
+const My_cart = () => {
   const [modal, setModal] = useState(false);
 
   const handleOrderNow = () => {
@@ -30,14 +17,45 @@ const My_cart = ({
   };
 
   const [companyName, setcompanyName] = useState();
+  const [userCart, setuserCart] = useState([]);
+  const [uniqueCart, setUniqueCart] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [totalAmount, settotalAmount] = useState(0);
+
+  const getQuantity = (itemId) => {
+    return userCart.filter((item) => item.id === itemId).length;
+  };
+
+  const handledeleteCartItem = (id) => {
+    deleteCartItem(id);
+  };
 
   useEffect(() => {
     // Fetch company details
     fetchCompanyDetails().then((company) => {
       setcompanyName(company.name.toUpperCase());
     });
-  }, []);
 
+    findUser().then((user) => {
+      setuserCart(user.cart);
+      setLoading(false);
+
+      const total = userCart.reduce((sum, item) => sum + item.price, 0);
+      settotalAmount(total);
+
+      const uniqueItems = Array.from(
+        new Map(user.cart.map((item) => [item.id, item])).values()
+      );
+      setUniqueCart(uniqueItems);
+    });
+  }, [handledeleteCartItem]);
+
+  var s = 1;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       {/* Navbar */}
@@ -83,13 +101,13 @@ const My_cart = ({
       </div>
 
       {/* Cart Section */}
-      <div className="my_cart_background m-0 p-0">
+      <div className="my_cart_background m-0 p-0 ">
         <div className="row" style={{ padding: "40px 20px 20px 20px" }}>
           <div
-            className="col-7"
+            className="col-9"
             style={{ paddingBottom: "20px", paddingTop: "20px" }}
           >
-            <table className="col-12">
+            <table className="col-12 ">
               <tbody>
                 <tr className="col-12 cart_table">
                   <th
@@ -101,7 +119,7 @@ const My_cart = ({
                       borderColor: "black",
                     }}
                   >
-                    Serial No {serial}
+                    Serial No
                   </th>
                   <th
                     className="col-2 pt-2 pb-2"
@@ -115,6 +133,17 @@ const My_cart = ({
                     Image
                   </th>
                   <th
+                    className="col-4 pt-2 pb-2"
+                    style={{
+                      paddingLeft: "30px",
+                      paddingRight: "30px",
+                      borderStyle: "solid",
+                      borderColor: "black",
+                    }}
+                  >
+                    Item Name
+                  </th>
+                  <th
                     className="col-3 pt-2 pb-2"
                     style={{
                       paddingLeft: "30px",
@@ -123,29 +152,7 @@ const My_cart = ({
                       borderColor: "black",
                     }}
                   >
-                    Item Name{name}
-                  </th>
-                  <th
-                    className="col-2 pt-2 pb-2"
-                    style={{
-                      paddingLeft: "30px",
-                      paddingRight: "30px",
-                      borderStyle: "solid",
-                      borderColor: "black",
-                    }}
-                  >
-                    Restaurant Name{res}
-                  </th>
-                  <th
-                    className="col-2 pt-2 pb-2"
-                    style={{
-                      paddingLeft: "30px",
-                      paddingRight: "30px",
-                      borderStyle: "solid",
-                      borderColor: "black",
-                    }}
-                  >
-                    Quantity{qty}
+                    Restaurant Name
                   </th>
                   <th
                     className="col-1 pt-2 pb-2"
@@ -156,7 +163,7 @@ const My_cart = ({
                       borderColor: "black",
                     }}
                   >
-                    Price{price}
+                    Quantity
                   </th>
                   <th
                     className="col-1 pt-2 pb-2"
@@ -167,12 +174,52 @@ const My_cart = ({
                       borderColor: "black",
                     }}
                   >
-                    Time{time}
+                    Price
+                  </th>
+                  <th
+                    className="col-1 pt-2 pb-2"
+                    style={{
+                      paddingLeft: "30px",
+                      paddingRight: "30px",
+                      borderStyle: "solid",
+                      borderColor: "black",
+                    }}
+                  >
+                    Delete
                   </th>
                 </tr>
+                {uniqueCart.map((elem) => {
+                  const { id, image, name, restaurent, price } = elem;
+                  const itemQuantity = getQuantity(id);
+                  return (
+                    <tr>
+                      <td className="col-1">{s++}</td>
+                      <td className="col-2">
+                        <img
+                          src={`/foodItemsPictures/${image}`}
+                          style={{ height: "45px", width: "70px" }}
+                        ></img>
+                      </td>
+                      <td className="col-3">{name}</td>
+                      <td className="col-3">{restaurent}</td>
+                      <td className="col-2">{itemQuantity}</td>
+                      <td className="col-1">{price}</td>
+                      <td className="col-1">
+                        <button
+                          className="btn-sm btn-danger mt-2 mb-2 ml-4"
+                          style={{ height: "35px" }}
+                          onClick={() => {
+                            handledeleteCartItem(id);
+                          }}
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
-            <Cart_table />
           </div>
         </div>
 
@@ -199,7 +246,9 @@ const My_cart = ({
                 height: "100%",
               }}
             >
-              <h5 style={{ margin: 0, fontSize: "1.5rem" }}>Total :</h5>
+              <h5 style={{ margin: 0, fontSize: "1.5rem" }}>
+                Total : {totalAmount}
+              </h5>
             </button>
           </div>
           <button
@@ -251,8 +300,8 @@ const My_cart = ({
                     <b>Food Item</b>
                   </div>
                   <br />
-                  {food.map((item, index) => (
-                    <div key={index}>{item}</div>
+                  {uniqueCart.map((item) => (
+                    <div>{item.name}</div>
                   ))}
                 </div>
                 <div className="col-2">
@@ -260,31 +309,35 @@ const My_cart = ({
                     <b>Quantity</b>
                   </div>
                   <br />
-                  {qty.map((quantity, index) => (
-                    <div key={index}>{quantity}</div>
-                  ))}
+                  {uniqueCart.map((elem) => {
+                    const { id } = elem;
+                    const itemQuantity = getQuantity(id);
+                    return <div key={id}>{itemQuantity}</div>;
+                  })}
                 </div>
                 <div className="col-3">
                   <div>
                     <b>Restaurant</b>
                   </div>
                   <br />
-                  {res.map((restaurant, index) => (
-                    <div key={index}>{restaurant}</div>
-                  ))}
+                  {uniqueCart.map((elem) => {
+                    const { id, restaurent } = elem;
+                    return <div key={id}>{restaurent}</div>;
+                  })}
                 </div>
                 <div className="col-2">
                   <div>
                     <b>Price</b>
                   </div>
                   <br />
-                  {price.map((amount, index) => (
-                    <div key={index}>{amount}</div>
-                  ))}
+                  {uniqueCart.map((elem) => {
+                    const { id, price } = elem;
+                    return <div key={id}>{price}</div>;
+                  })}
                 </div>
               </div>
               <div>
-                <h6>Total Price: {sum}</h6>
+                <h6>Total Price: {totalAmount}</h6>
               </div>
               <div className="modal-footer">
                 <button

@@ -1,3 +1,4 @@
+// *userController.js*
 const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
@@ -94,14 +95,72 @@ module.exports.logoutUser = async (req, res) => {
 };
 
 // Get Single User
+// module.exports.getUser = async (req, res) => {
+//   try {
+//     if (req.user) {
+//       let user = await userModel.findOne({ email: req.user.email });
+//       res.send(user);
+//     }
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 module.exports.getUser = async (req, res) => {
   try {
     if (req.user) {
-      let user = await userModel.findOne({ email: req.user.email });
-      res.send(user);
+      // Find the user by email and populate the cart field
+      let user = await userModel
+        .findOne({ email: req.user.email })
+        .populate({
+          path: "cart",
+          select: "name price id restaurent image", // Select fields from the food model
+        })
+        .exec();
+
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+
+      // Destructure the user object
+      const {
+        username,
+        email,
+        password,
+        cart,
+        orders,
+        contact,
+        address,
+        image,
+      } = user;
+
+      // Create the transformed cart array
+      const transformedCart = cart.map((item) => ({
+        id: item._id,
+        name: item.name,
+        price: item.price,
+        restaurent: item.restaurent,
+        image: item.image,
+      }));
+
+      // Construct the response object
+      const responseUser = {
+        username,
+        email,
+        cart: transformedCart,
+        orders,
+        contact,
+        address,
+        image,
+      };
+
+      // Send the response
+      res.send(responseUser);
+    } else {
+      res.status(401).send({ message: "Unauthorized" });
     }
   } catch (err) {
     console.log(err.message);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 

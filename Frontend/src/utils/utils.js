@@ -246,6 +246,20 @@ export const fetchAllFoods = async () => {
   }
 };
 
+// Fetch single food item
+export const fetchSingleFood = async (id) => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/foods/getsinglefooditem",
+      { foodId: id },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 // Delete food item
 export const deleteFoodItem = async (id) => {
   try {
@@ -445,6 +459,19 @@ export const addToCart = async (id) => {
       { withCredentials: true }
     );
     return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+// Delete cart item
+export const deleteCartItem = async (id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/users/deleteitemfromcart",
+      { foodId: id },
+      { withCredentials: true }
+    );
+    alert(response.data)
   } catch (err) {
     console.log(err.message);
   }

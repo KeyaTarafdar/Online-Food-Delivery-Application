@@ -8,6 +8,7 @@ const {
   fetchAllFoodItems,
   deleteFoodItem,
   updateFoodItem,
+  fetchSingleFoodItem,
 } = require("../controller/foodController");
 
 router.get("/", (req, res) => {
@@ -22,8 +23,11 @@ router.post(
   createFoodItems
 );
 
-// FETCH FOOD ITEM
+// FETCH ALL FOOD ITEM
 router.get("/getallfooditems", isLoggedIn, fetchAllFoodItems);
+
+// FETCH SINGLE FOOD ITEM
+router.get("/getsinglefooditem", isLoggedIn, fetchSingleFoodItem);
 
 // DELETE FOOD ITEM
 router.delete("/deletefooditem", isLoggedIn, deleteFoodItem);

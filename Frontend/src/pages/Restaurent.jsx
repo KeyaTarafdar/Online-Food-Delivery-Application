@@ -22,7 +22,7 @@ import {
   fetchAllFoods,
   fetchAllRestaurent,
   logout,
-  findUser
+  findUser,
 } from "../utils/utils";
 
 const Restaurent = () => {
@@ -30,7 +30,7 @@ const Restaurent = () => {
   const [allFood, setallFood] = useState([]);
   const [allRestaurent, setallRestaurent] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [account,setAccount]=useState("My Account");
+  const [account, setAccount] = useState("My Account");
 
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
@@ -76,7 +76,6 @@ const Restaurent = () => {
     loop: {},
   });
 
-
   const myAccount = async () => {
     findUser().then((user) => {
       if (user.username) {
@@ -84,7 +83,7 @@ const Restaurent = () => {
       } else {
         alert("You have to Login first!");
       }
-    })
+    });
   };
 
   // Logout API
@@ -129,7 +128,7 @@ const Restaurent = () => {
       setIsRestaurentLoaded(true);
     });
 
-     // Find user
+    // Find user
     findUser().then((user) => {
       if (user.username) {
         setAccount(user.username.split(" ")[0]);
@@ -249,28 +248,31 @@ const Restaurent = () => {
                       style={{ height: "25px", width: "25px" }}
                       onClick={myAccount}
                     />
-                    <span className="header_menu" style={{ fontSize: "15px" }}
-                     onClick={myAccount}>
+                    <span
+                      className="header_menu"
+                      style={{ fontSize: "15px" }}
+                      onClick={myAccount}
+                    >
                       &nbsp;&nbsp;{account}
                     </span>
                   </NavLink>
                 </div>
                 <div
-                    className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
-                    style={{ float: "left"}}
-                  >
-                    {account !== "My Account" ? (
-                      <>
-                        <MdOutlineLogout
-                          className="header_menu"
-                          style={{ height: "25px", width: "25px" }}
-                        />
-                        <span className="header_menu" onClick={handleLogout}>
-                          &nbsp;&nbsp;Log&nbsp;out
-                        </span>
-                      </>
-                    ) : null}
-                  </div>
+                  className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
+                  style={{ float: "left" }}
+                >
+                  {account !== "My Account" ? (
+                    <>
+                      <MdOutlineLogout
+                        className="header_menu"
+                        style={{ height: "25px", width: "25px" }}
+                      />
+                      <span className="header_menu" onClick={handleLogout}>
+                        &nbsp;&nbsp;Log&nbsp;out
+                      </span>
+                    </>
+                  ) : null}
+                </div>
               </div>
 
               {/*Hamburger Menu--------------------------------------- */}
@@ -581,10 +583,12 @@ const Restaurent = () => {
               <div className="container-fluid">
                 <div className="col-lg-12 pt-1 pl-5 pr-5">
                   {data.map((elem) => {
-                    const { image, name, category, price, restaurent } = elem;
+                    const { _id, image, name, category, price, restaurent } =
+                      elem;
                     return (
                       <>
                         <Card
+                          id={_id}
                           name={name}
                           image={image}
                           price={price}
