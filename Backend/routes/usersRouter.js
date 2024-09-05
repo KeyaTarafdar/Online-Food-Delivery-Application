@@ -11,6 +11,8 @@ const {
   uploadProfilePicture,
   addToCart,
   deleteItemFromCart,
+  addToCartIncreaseQuantity,
+  deleteCartItemDecreaseQuantity,
 } = require("../controller/userController");
 const { uploadUserProfile } = require("../middlewares/multer");
 
@@ -47,3 +49,13 @@ router.put("/addtocart", isLoggedIn, addToCart);
 // DELETE FROM THE CART
 router.put("/deleteitemfromcart", isLoggedIn, deleteItemFromCart);
 module.exports = router;
+
+// ADD TO CART INCREASE QUANTITY
+router.put("/addtocartincreasequantity", isLoggedIn, addToCartIncreaseQuantity);
+
+// DELETE CART ITEM DECREASE QUANTITY
+router.put(
+  "/deletecartitemdecreasequantity",
+  isLoggedIn,
+  deleteCartItemDecreaseQuantity
+);

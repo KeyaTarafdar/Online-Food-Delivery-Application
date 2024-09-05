@@ -236,3 +236,36 @@ module.exports.deleteItemFromCart = async (req, res) => {
     res.send("Something went wrong");
   }
 };
+
+// Add to cart increase quantity
+module.exports.addToCartIncreaseQuantity = async (req, res) => {
+  try {
+    let user = req.user;
+    let { foodId } = req.body;
+    await userModel.findOneAndUpdate(
+      { _id: user.id },
+      { $push: { cart: foodId } }
+    );
+    res.send("Food item added to cart");
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};
+
+// Delete cart item decrease quantity
+module.exports.deleteCartItemDecreaseQuantity = async (req, res) => {
+  try {
+    let user = req.user;
+    let { foodId } = req.body;
+
+    const index = user.cart.indexOf(foodId);
+    
+    user.cart.splice(index, 1);
+    await user.save();
+    console.log(user.cart)
+
+    res.send("Food item removed from cart");
+  } catch (err) {
+    res.send("Something went wrong");
+  }
+};

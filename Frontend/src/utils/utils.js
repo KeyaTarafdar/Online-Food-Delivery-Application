@@ -471,7 +471,35 @@ export const deleteCartItem = async (id) => {
       { foodId: id },
       { withCredentials: true }
     );
-    alert(response.data)
+    alert(response.data);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Add to cart increase quantity
+export const addToCartIncreaseQuantity = async (id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/users/addtocartincreasequantity",
+      { foodId: id },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Add to cart decrease quantity
+export const deleteCartItemDecreaseQuantity = async (id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/users/deletecartitemdecreasequantity",
+      { foodId: id },
+      { withCredentials: true }
+    );
+    return response.data;
   } catch (err) {
     console.log(err.message);
   }

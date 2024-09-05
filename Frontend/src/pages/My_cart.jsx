@@ -3,7 +3,13 @@ import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { FaBagShopping } from "react-icons/fa6";
 import NavLink from "react-bootstrap/esm/NavLink";
-import { deleteCartItem, fetchCompanyDetails, findUser } from "../utils/utils";
+import {
+  addToCartIncreaseQuantity,
+  deleteCartItem,
+  fetchCompanyDetails,
+  findUser,
+  deleteCartItemDecreaseQuantity,
+} from "../utils/utils";
 
 const My_cart = () => {
   const [modal, setModal] = useState(false);
@@ -30,6 +36,14 @@ const My_cart = () => {
 
   const handledeleteCartItem = (id) => {
     deleteCartItem(id);
+  };
+
+  const handleQuantityIncrease = (id) => {
+    addToCartIncreaseQuantity(id);
+  };
+
+  const handleQuantityDecrease = (id) => {
+    deleteCartItemDecreaseQuantity(id);
   };
 
   useEffect(() => {
@@ -202,7 +216,27 @@ const My_cart = () => {
                       </td>
                       <td className="col-3">{name}</td>
                       <td className="col-3">{restaurent}</td>
-                      <td className="col-2">{itemQuantity}</td>
+                      <td className="col-2">
+                        <button
+                          className="btn btn-xxs btn-warning"
+                          style={{ fontWeight: "bolder", fontSize: "1rem" }}
+                          onClick={() => {
+                            handleQuantityDecrease(id);
+                          }}
+                        >
+                          -
+                        </button>
+                        &nbsp;&nbsp;{itemQuantity}&nbsp;&nbsp;
+                        <button
+                          className="btn btn-xxs btn-warning"
+                          style={{ fontWeight: "bolder", fontSize: "1rem" }}
+                          onClick={() => {
+                            handleQuantityIncrease(id);
+                          }}
+                        >
+                          +
+                        </button>
+                      </td>
                       <td className="col-1">{price}</td>
                       <td className="col-1">
                         <button
