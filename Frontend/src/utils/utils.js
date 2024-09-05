@@ -251,8 +251,10 @@ export const fetchSingleFood = async (id) => {
   try {
     let response = await axios.get(
       "http://localhost:8000/foods/getsinglefooditem",
-      { foodId: id },
-      { withCredentials: true }
+      {
+        params: { foodId: id },
+        withCredentials: true
+      }
     );
     return response.data;
   } catch (err) {
@@ -502,5 +504,48 @@ export const deleteCartItemDecreaseQuantity = async (id) => {
     return response.data;
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+// Create order
+export const createOrder = async ({ userCart, totalAmount, time }) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/users/createorder",
+      { userCart, totalAmount, time },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch orders of a particular user
+export const fetchSingleOrder = async () => {
+  try {
+    let response = await axios.get(
+      "http://localhost:8000/users/getSingleOrder",
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+// Fetch orders by Id
+export const fetchOrderById = async (id) => {
+  try {
+    let response = await axios.get(
+      `http://localhost:8000/users/getorderbyid`,
+      {
+        params: { id: id },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
   }
 };

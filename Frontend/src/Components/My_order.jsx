@@ -1,13 +1,14 @@
 // *My_order.jsx*
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import Orderitem_array from "./Array/Orderitem_array";
-import { fetchCompanyDetails } from "../utils/utils";
+import { fetchCompanyDetails, fetchOrderById } from "../utils/utils";
 
 const My_order = () => {
   const [companyName, setcompanyName] = useState();
 
   const [cancelOrder, setCancelOrder] = useState(false);
+
+  const [orders, setorders] = useState([]);
 
   const handleCancelOrder = () => {
     setCancelOrder(true);
@@ -22,7 +23,13 @@ const My_order = () => {
     fetchCompanyDetails().then((company) => {
       setcompanyName(company.name.toUpperCase());
     });
+
+    fetchOrderById().then((response) => {
+      setorders(response.orders);
+    });
   }, []);
+
+  let s = 1;
 
   return (
     <>
@@ -81,18 +88,7 @@ const My_order = () => {
                     borderColor: "black",
                   }}
                 >
-                  Order id
-                </th>
-                <th
-                  className="col-1 pt-2 pb-2"
-                  style={{
-                    paddingLeft: "30px",
-                    paddingRight: "30px",
-                    borderStyle: "solid",
-                    borderColor: "black",
-                  }}
-                >
-                  Image
+                  Time
                 </th>
                 <th
                   className="col-2 pt-2 pb-2"
@@ -103,7 +99,7 @@ const My_order = () => {
                     borderColor: "black",
                   }}
                 >
-                  Item Name
+                  Order Items
                 </th>
                 <th
                   className="col-2 pt-2 pb-2"
@@ -164,86 +160,88 @@ const My_order = () => {
             </table>
 
             <div className="col-12 m-0 p-0 cart_table_items">
-              {Orderitem_array.map((elem) => (
-                <div
-                  key={elem.serial_no}
-                  className="row1 col-12 m-0 p-0 Order_table_items_row"
-                  style={{ display: "flex" }}
-                >
-                  <table
-                    className="row1 col-12 m-0 p-0 Order_table_items_row"
-                    style={{ display: "flex" }}
-                  >
-                    <tr className="col-11 m-0 p-0 cart_table_items_row">
-                      <th
-                        className="col-1 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
+              {Array.isArray(orders)
+                ? orders.map((elem) => (
+                    <div
+                      className="row1 col-12 m-0 p-0 Order_table_items_row"
+                      style={{ display: "flex" }}
+                    >
+                      <table
+                        className="row1 col-12 m-0 p-0 Order_table_items_row"
+                        style={{ display: "flex" }}
                       >
-                        {elem.serial_no}
-                      </th>
-                      <th
-                        className="col-1 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        Order Id
-                      </th>
-                      <th
-                        className="col-1 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        <img
-                          src={elem.img}
-                          style={{ height: "45px", width: "70px" }}
-                        ></img>
-                      </th>
-                      <th
-                        className="col-2 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        {elem.item_name}
-                      </th>
-                      <th
-                        className="col-2 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        {elem.res_name}
-                      </th>
-                      <th
-                        className="col-1 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        {elem.qty}
-                      </th>
-                      <th
-                        className="col-1 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        {elem.price}
-                      </th>
-                      <th
-                        className="col-1 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        Address
-                      </th>
-                      <th
-                        className="col-2 pt-2 pb-2"
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                      >
-                        Phone no
-                      </th>
-                    </tr>
-                    <div className="col-1">
-                      <button
-                        className="btn-sm btn-warning mt-1"
-                        onClick={handleCancelOrder}
-                      >
-                        Cancel Order
-                      </button>
+                        <tr className="col-11 m-0 p-0 cart_table_items_row">
+                          <th className="col-1 pt-2 pb-2">{s++}</th>
+                          <th className="col-1 pt-2 pb-2">{elem.time}</th>
+                          <th className="col-2 pt-2 pb-2">
+                            <table>
+                              {[
+                                ...new Set(
+                                  elem.foodId.map((item) => item.name)
+                                ),
+                              ].map((name) => (
+                                <tr>{name}</tr>
+                              ))}
+                            </table>
+                          </th>
+                          <th className="col-2 pt-2 pb-2">
+                            <table>
+                              {[
+                                ...new Set(
+                                  elem.foodId.map((item) => item.restaurent)
+                                ),
+                              ].map((restaurent) => (
+                                <tr>{restaurent}</tr>
+                              ))}
+                            </table>
+                          </th>
+                          <th className="col-1 pt-2 pb-2">
+                            <table>
+                              {Object.entries(
+                                elem.foodId.reduce((acc, item) => {
+                                  acc[item._id] = (acc[item._id] || 0) + 1;
+                                  return acc;
+                                }, {})
+                              ).map(([id, count]) => (
+                                <tr>{count}</tr>
+                              ))}
+                            </table>
+                          </th>
+                          <th className="col-1 pt-2 pb-2">
+                            <table>
+                              {Object.entries(
+                                elem.foodId.reduce((acc, item) => {
+                                  acc[item._id] = {
+                                    count:
+                                      (acc[item._id]
+                                        ? acc[item._id].count
+                                        : 0) + 1,
+                                    price: item.price,
+                                  };
+                                  return acc;
+                                }, {})
+                              ).map(([id, { count, price }]) => (
+                                <tr>{count * price}</tr>
+                              ))}
+                            </table>
+                          </th>
+                          <th className="col-1 pt-2 pb-2">
+                            {elem.orderAddress}
+                          </th>
+                          <th className="col-2 pt-2 pb-2">{elem.phone}</th>
+                        </tr>
+                        <div className="col-1">
+                          <button
+                            className="btn-sm btn-warning mt-1"
+                            onClick={handleCancelOrder}
+                          >
+                            Cancel Order
+                          </button>
+                        </div>
+                      </table>
                     </div>
-                  </table>
-                </div>
-              ))}
+                  ))
+                : null}
             </div>
           </div>
         </div>

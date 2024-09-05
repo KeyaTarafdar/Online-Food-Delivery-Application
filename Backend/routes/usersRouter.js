@@ -13,8 +13,12 @@ const {
   deleteItemFromCart,
   addToCartIncreaseQuantity,
   deleteCartItemDecreaseQuantity,
+  createOrder,
+  fetchSingleOrder,
+  fetchOrderById,
 } = require("../controller/userController");
 const { uploadUserProfile } = require("../middlewares/multer");
+const foodModel = require("../models/food-model");
 
 router.get("/", (req, res) => {
   res.send("User");
@@ -59,3 +63,13 @@ router.put(
   isLoggedIn,
   deleteCartItemDecreaseQuantity
 );
+
+// CREATE ORDER
+router.post("/createorder", isLoggedIn, createOrder);
+
+// FETCH THE ORDERS OF A SINGLE USER
+router.get("/getSingleOrder", isLoggedIn, fetchSingleOrder);
+
+// FETCH ORDER BY ID
+router.get("/getorderbyid", isLoggedIn, fetchOrderById);
+

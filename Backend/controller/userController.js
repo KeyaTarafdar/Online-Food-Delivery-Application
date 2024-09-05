@@ -1,9 +1,12 @@
 // *userController.js*
 const userModel = require("../models/user-model");
+const orderModal = require("../models/order-model");
+const foodModel = require("../models/food-model");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
@@ -108,12 +111,11 @@ module.exports.logoutUser = async (req, res) => {
 module.exports.getUser = async (req, res) => {
   try {
     if (req.user) {
-      // Find the user by email and populate the cart field
       let user = await userModel
         .findOne({ email: req.user.email })
         .populate({
           path: "cart",
-          select: "name price id restaurent image", // Select fields from the food model
+          select: "name price id restaurent image",
         })
         .exec();
 
@@ -259,13 +261,64 @@ module.exports.deleteCartItemDecreaseQuantity = async (req, res) => {
     let { foodId } = req.body;
 
     const index = user.cart.indexOf(foodId);
-    
+
     user.cart.splice(index, 1);
     await user.save();
-    console.log(user.cart)
+    console.log(user.cart);
 
     res.send("Food item removed from cart");
   } catch (err) {
     res.send("Something went wrong");
+  }
+};
+
+// Create order
+module.exports.createOrder = async (req, res) => {
+  try {
+    let user = req.user;
+    let { userCart, time, totalAmount } = req.body;
+
+    const foodIds = userCart.map((food) => food.id);
+
+    let order = await orderModal.create({
+      userId: user._id,
+      foodId: foodIds,
+      time,
+      totalAmount,
+      orderAddress: user.address,
+      phone: user.contact,
+    });
+    await userModel.findOneAndUpdate(
+      { _id: user._id },
+      { $push: { orders: order._id } }
+    );
+    res.send("Your order is placed successfylly");
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch order of a particular user
+module.exports.fetchSingleOrder = async (req, res) => {
+  try {
+    let user = req.user;
+    let orderIds = user.orders;
+    res.send(orderIds);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch order by id
+module.exports.fetchOrderById = async (req, res) => {
+  try {
+    let user = req.user;
+    let orders = await user.populate({
+      path: "orders",
+      populate: { path: "foodId" },
+    });
+    res.send(orders);
+  } catch (err) {
+    res.send(err.message);
   }
 };

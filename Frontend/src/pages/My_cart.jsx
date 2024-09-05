@@ -9,6 +9,7 @@ import {
   fetchCompanyDetails,
   findUser,
   deleteCartItemDecreaseQuantity,
+  createOrder,
 } from "../utils/utils";
 
 const My_cart = () => {
@@ -20,6 +21,10 @@ const My_cart = () => {
 
   const closeModal = () => {
     setModal(false);
+    const time = new Date(Date.now()).toString().substring(0, 24);
+    createOrder({ userCart, totalAmount, time }).then((response) => {
+      alert(response);
+    });
   };
 
   const [companyName, setcompanyName] = useState();
@@ -380,7 +385,7 @@ const My_cart = () => {
                   data-dismiss="modal"
                   onClick={closeModal}
                 >
-                  Ok
+                  Order Now
                 </button>
               </div>
             </div>

@@ -52,10 +52,10 @@ module.exports.fetchAllFoodItems = async (req, res) => {
 // Fetch single food item
 module.exports.fetchSingleFoodItem = async (req, res) => {
   try {
-    let { foodId } = req.body;
+    let foodId = req.query.foodId;
     if (foodId) {
       let food = await foodModel.findOne({ _id: foodId });
-      res.send(food);
+      console.log(food)
     } else {
       res.send("Item not found");
     }
