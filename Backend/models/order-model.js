@@ -8,6 +8,8 @@ const orderSchema = mongoose.Schema({
   totalAmount: Number,
   orderAddress: String,
   phone: Number,
+  deliverStatus: { type: String, default: "Pending" },
+  isDeleted: { type: Boolean, default: false },
   // paymentId: String,
 });
 

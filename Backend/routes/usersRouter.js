@@ -1,4 +1,4 @@
-// *usersRouter.js*
+// usersRouter.js
 const express = require("express");
 const router = express.Router();
 const isLoggedIn = require("../middlewares/isLoggedIn");
@@ -15,10 +15,9 @@ const {
   deleteCartItemDecreaseQuantity,
   createOrder,
   fetchSingleOrder,
-  fetchOrderById,
+  cancleOrder,fetchOrderById
 } = require("../controller/userController");
 const { uploadUserProfile } = require("../middlewares/multer");
-const foodModel = require("../models/food-model");
 
 router.get("/", (req, res) => {
   res.send("User");
@@ -68,8 +67,10 @@ router.put(
 router.post("/createorder", isLoggedIn, createOrder);
 
 // FETCH THE ORDERS OF A SINGLE USER
-router.get("/getSingleOrder", isLoggedIn, fetchSingleOrder);
+// router.get("/getSingleOrder", isLoggedIn, fetchSingleOrder);
 
 // FETCH ORDER BY ID
 router.get("/getorderbyid", isLoggedIn, fetchOrderById);
 
+// CANCLE ORDER
+router.delete("/cancleorder", isLoggedIn, cancleOrder);

@@ -21,7 +21,7 @@ const Card = ({ id, name, image, price, restaurent }) => {
     const fetchUserCart = async () => {
       try {
         const user = await findUser();
-        const cartIds = user.cart ? user.cart.map((item) => item.id) : [];
+        const cartIds = user.cart ? user.cart.map((item) => item._id) : [];
         setUserCart(cartIds);
       } catch (error) {
         console.error("Error fetching user cart:", error);

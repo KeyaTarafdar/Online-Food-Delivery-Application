@@ -1,4 +1,4 @@
-// *My_cart.jsx*
+// My_cart.jsx
 import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { FaBagShopping } from "react-icons/fa6";
@@ -242,7 +242,7 @@ const My_cart = () => {
                           +
                         </button>
                       </td>
-                      <td className="col-1">{price}</td>
+                      <td className="col-1">{price*itemQuantity}</td>
                       <td className="col-1">
                         <button
                           className="btn-sm btn-danger mt-2 mb-2 ml-4"
@@ -371,7 +371,8 @@ const My_cart = () => {
                   <br />
                   {uniqueCart.map((elem) => {
                     const { id, price } = elem;
-                    return <div key={id}>{price}</div>;
+                    const itemQuantity = getQuantity(id);
+                    return <div key={id}>{price*itemQuantity}</div>;
                   })}
                 </div>
               </div>

@@ -522,23 +522,39 @@ export const createOrder = async ({ userCart, totalAmount, time }) => {
 };
 
 // Fetch orders of a particular user
-export const fetchSingleOrder = async () => {
-  try {
-    let response = await axios.get(
-      "http://localhost:8000/users/getSingleOrder",
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+// export const fetchSingleOrder = async () => {
+//   try {
+//     let response = await axios.get(
+//       "http://localhost:8000/users/getSingleOrder",
+//       { withCredentials: true }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
 // Fetch orders by Id
 export const fetchOrderById = async (id) => {
   try {
     let response = await axios.get(
       `http://localhost:8000/users/getorderbyid`,
+      {
+        params: { id: id },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+// Cancle order
+export const cancelSingleOrder = async (id) => {
+  try {
+    let response = await axios.delete(
+      `http://localhost:8000/users/cancleorder`,
       {
         params: { id: id },
         withCredentials: true

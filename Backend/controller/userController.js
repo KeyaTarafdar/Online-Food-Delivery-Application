@@ -1,4 +1,4 @@
-// *userController.js*
+// userController.js
 const userModel = require("../models/user-model");
 const orderModal = require("../models/order-model");
 const foodModel = require("../models/food-model");
@@ -7,6 +7,7 @@ const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
 const fs = require("fs");
 const mongoose = require("mongoose");
+const orderModel = require("../models/order-model");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
@@ -110,6 +111,7 @@ module.exports.logoutUser = async (req, res) => {
 // };
 module.exports.getUser = async (req, res) => {
   try {
+    
     if (req.user) {
       let user = await userModel
         .findOne({ email: req.user.email })
@@ -264,7 +266,6 @@ module.exports.deleteCartItemDecreaseQuantity = async (req, res) => {
 
     user.cart.splice(index, 1);
     await user.save();
-    console.log(user.cart);
 
     res.send("Food item removed from cart");
   } catch (err) {
@@ -299,15 +300,15 @@ module.exports.createOrder = async (req, res) => {
 };
 
 // Fetch order of a particular user
-module.exports.fetchSingleOrder = async (req, res) => {
-  try {
-    let user = req.user;
-    let orderIds = user.orders;
-    res.send(orderIds);
-  } catch (err) {
-    res.send(err.message);
-  }
-};
+// module.exports.fetchSingleOrder = async (req, res) => {
+//   try {
+//     let user = req.user;
+//     let orderIds = user.orders;
+//     res.send(orderIds);
+//   } catch (err) {
+//     res.send(err.message);
+//   }
+// };
 
 // Fetch order by id
 module.exports.fetchOrderById = async (req, res) => {
@@ -318,6 +319,25 @@ module.exports.fetchOrderById = async (req, res) => {
       populate: { path: "foodId" },
     });
     res.send(orders);
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Cancle order
+module.exports.cancleOrder = async (req, res) => {
+  try {
+    let orderId = req.query.id;
+    let user = req.user;
+    await userModel.updateOne(
+      { _id: user._id },
+      { $pull: { orders: orderId } }
+    );
+    await orderModel.findOneAndUpdate(
+      { _id: orderId },
+      { $set: { isDeleted: true } }
+    );
+    res.send("Order deleted");
   } catch (err) {
     res.send(err.message);
   }
