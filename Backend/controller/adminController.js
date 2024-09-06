@@ -8,6 +8,7 @@ const deliveryBoyModel = require("../models/deliveryBoy-model");
 const userModel = require("../models/user-model");
 const restaurentModel = require("../models/restaurent-model");
 const categoryModel = require("../models/category-model");
+const orderModel = require("../models/order-model");
 const fs = require("fs");
 
 // Create Admin
@@ -434,6 +435,23 @@ module.exports.updateCategory = async (req, res) => {
 
     res.send(`${name} category updated successfully`);
   } catch (err) {
+    res.send(err.message);
+  }
+};
+
+// Fetch all orders
+module.exports.fetchAllOredes = async (req, res) => {
+  try {
+    let admin = req.admin;
+    if (admin) {
+      let orders = await orderModel.find({}).populate({
+        path: "userId foodId deliveryBoy",
+      });
+      // console.log(orders)
+      res.send(orders);
+    }
+  } catch (err) {
+    console.log(err.message);
     res.send(err.message);
   }
 };

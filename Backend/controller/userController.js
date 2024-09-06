@@ -1,13 +1,12 @@
 // userController.js
 const userModel = require("../models/user-model");
 const orderModal = require("../models/order-model");
-const foodModel = require("../models/food-model");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../utils/generateToken");
 const dbgr = require("debug")("development:usercheck");
 const fs = require("fs");
-const mongoose = require("mongoose");
 const orderModel = require("../models/order-model");
+const deliveryBoyModel = require("../models/deliveryBoy-model");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
@@ -99,16 +98,6 @@ module.exports.logoutUser = async (req, res) => {
 };
 
 // Get Single User
-// module.exports.getUser = async (req, res) => {
-//   try {
-//     if (req.user) {
-//       let user = await userModel.findOne({ email: req.user.email });
-//       res.send(user);
-//     }
-//   } catch (err) {
-//     console.log(err.message);
-//   }
-// };
 module.exports.getUser = async (req, res) => {
   try {
     let user = req.user;
@@ -285,6 +274,14 @@ module.exports.createOrder = async (req, res) => {
 
     const foodIds = userCart.map((food) => food._id);
 
+    const OTP = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+    let deliveryBoys = await deliveryBoyModel.find({ address: user.address });
+
+    const index = Math.floor(Math.random() * deliveryBoys.length);
+    console.log(deliveryBoys);
+    const deliveryBoyId = deliveryBoys[index]._id;
+    console.log(deliveryBoyId);
+
     let order = await orderModal.create({
       userId: user._id,
       foodId: foodIds,
@@ -292,12 +289,20 @@ module.exports.createOrder = async (req, res) => {
       totalAmount,
       orderAddress: user.address,
       phone: user.contact,
+      OTP,
+      deliveryBoy: deliveryBoyId,
     });
+
+    await deliveryBoyModel.findOneAndUpdate(
+      { _id: deliveryBoyId },
+      { $push: { deliveryOrder: order._id } }
+    );
+
     await userModel.findOneAndUpdate(
       { _id: user._id },
       { $push: { orders: order._id } }
     );
-    res.send("Your order is placed successfylly");
+    res.send("Your order is placed successfully");
   } catch (err) {
     res.send(err.message);
   }
@@ -333,14 +338,21 @@ module.exports.cancleOrder = async (req, res) => {
   try {
     let orderId = req.query.id;
     let user = req.user;
+    let order = await orderModel.findOne({ _id: orderId });
 
     await userModel.updateOne(
       { _id: user._id },
       { $pull: { orders: orderId } }
     );
+
     await orderModel.findOneAndUpdate(
       { _id: orderId },
       { $set: { isDeleted: true } }
+    );
+
+    await deliveryBoyModel.findOneAndUpdate(
+      { _id: order.deliveryBoy },
+      { $pull: { deliveryOrder: orderId } }
     );
     res.send("Order deleted");
   } catch (err) {

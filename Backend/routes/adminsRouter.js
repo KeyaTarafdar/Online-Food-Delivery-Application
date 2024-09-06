@@ -25,6 +25,7 @@ const {
   fetchAllCategory,
   deleteCategory,
   updateCategory,
+  fetchAllOredes,
 } = require("../controller/adminController");
 const {
   uploadAdminProfile,
@@ -128,5 +129,8 @@ router.put(
   uploadCategory.single("image"),
   updateCategory
 );
+
+// FETCH ALL ORDER
+router.get("/fetchallorders", isLoggedIn, fetchAllOredes);
 
 module.exports = router;

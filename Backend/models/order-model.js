@@ -7,10 +7,12 @@ const orderSchema = mongoose.Schema({
   time: { type: String, require: true },
   totalAmount: Number,
   orderAddress: String,
-  phone: Number,
   deliverStatus: { type: String, default: "Pending" },
   isDeleted: { type: Boolean, default: false },
-  // paymentId: String,
+  OTP: Number,
+  deliveryBoy: { type: mongoose.Schema.Types.ObjectId, ref: "deliveryBoy" },
+  paymentMode: { type: String, default: "Offline" },
+  paymentStatus: { type: String, default: "Pending" },
 });
 
 module.exports = mongoose.model("order", orderSchema);

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const deliveryBoySchema = mongoose.Schema({
   username: String,
   contact: Number,
+  email: String,
   address: String,
   deliveryOrder: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
 });

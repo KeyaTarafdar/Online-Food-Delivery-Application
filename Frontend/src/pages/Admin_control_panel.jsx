@@ -35,6 +35,7 @@ import {
   fetchAllRestaurent,
   addNewCategory,
   fetchAllCategory,
+  getAllOrders,
 } from "../utils/utils";
 import TodaysOffer from "../Components/TodaysOffer";
 
@@ -143,9 +144,9 @@ const Admin_control_panel = () => {
       setrestaurents(response);
     });
 
-    fetchAllCategory().then((response)=>{
+    fetchAllCategory().then((response) => {
       setallCategory(response);
-    })
+    });
   };
 
   const [update_web_details, setUpdate_web_details] = useState(false);
@@ -383,14 +384,12 @@ const Admin_control_panel = () => {
         return currEle.name.toLowerCase() === search_item.toLowerCase();
       });
       setData(updateItem5);
-    }
+    }
     //Todays Offer Search
     if (todays_info === true) {
       serial_todays_offer = 1;
       const updateItem6 = data.filter((currEle) => {
-        return (
-          currEle.name.toLowerCase().includes(search_item.toLowerCase())
-        );
+        return currEle.name.toLowerCase().includes(search_item.toLowerCase());
       });
       setData(updateItem6);
     }
@@ -539,6 +538,8 @@ const Admin_control_panel = () => {
   const [categoryName, setcategoryName] = useState();
   const [categoryImage, setcategoryImage] = useState();
 
+  const [allOrders, setallOrders] = useState([]);
+
   const [allCategory, setallCategory] = useState([]);
 
   // Add new category
@@ -576,6 +577,10 @@ const Admin_control_panel = () => {
 
     fetchAllCategory().then((response) => {
       setallCategory(response);
+    });
+
+    getAllOrders().then((response) => {
+      setallOrders(response);
     });
   }, []);
   return (
@@ -631,7 +636,7 @@ const Admin_control_panel = () => {
             </div>
           </Navbar>
         </div>
-        <div className="container-fluid m-0 p-0 d-flex">
+        <div className="container-fluid m-0 p-0 d-flex" style={{overflowX:'auto'}}>
           {/* Side_menu----------------------------------------------------------------------------------------------- */}
           <div className="col-2 m-0 p-0 panel">
             <div className="col-12 dashboard m-0 p-0 pt-3">
@@ -764,15 +769,15 @@ const Admin_control_panel = () => {
 
           {/* Default page--------------------------------------------------------------------------------------------------------- */}
           {!user_info &&
-            !order_info &&
-            !todays_info &&
-            !deliver_boy_info &&
-            !update &&
-            !update_web_details &&
-            !add_res &&
-            !update_food_category &&
-            !update_food_item &&
-            !update_delivery_boy ? (
+          !order_info &&
+          !todays_info &&
+          !deliver_boy_info &&
+          !update &&
+          !update_web_details &&
+          !add_res &&
+          !update_food_category &&
+          !update_food_item &&
+          !update_delivery_boy ? (
             <div
               className="col-10 admin_default_page"
               style={{ height: "98vh" }}
@@ -885,8 +890,8 @@ const Admin_control_panel = () => {
 
           {/* Order Info------------------------------------------------------------------------------------------------------------------------ */}
           {order_info ? (
-            <div className="col-10 m-0 p-0">
-              <div className="col-12 m-0 p-0 d-flex">
+            <div className="col-12 m-0 p-0" style={{height:'98vh',overflowY: 'auto'}}>
+              <div className="m-0 p-0 d-flex">
                 <div
                   className="head col-1 pt-2 pb-0"
                   style={{ border: "1px solid black" }}
@@ -906,19 +911,19 @@ const Admin_control_panel = () => {
                   Phone no
                 </div>
                 <div
-                  className="head col-1 pt-2 pb-0"
+                  className="head col-3 pt-2 pb-0"
                   style={{ border: "1px solid black" }}
                 >
                   Address
                 </div>
                 <div
-                  className="head col-1 pt-2 pb-0"
+                  className="head col-2 pt-2 pb-0"
                   style={{ border: "1px solid black" }}
                 >
                   Time
                 </div>
                 <div
-                  className="head col-1 pt-2 pb-0"
+                  className="head col-2 pt-2 pb-0"
                   style={{ border: "1px solid black" }}
                 >
                   Order Id
@@ -928,6 +933,18 @@ const Admin_control_panel = () => {
                   style={{ border: "1px solid black" }}
                 >
                   Delivery Status
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Boy Name
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Boy Phone
                 </div>
                 <div
                   className="head col-1 pt-2 pb-0"
@@ -951,42 +968,36 @@ const Admin_control_panel = () => {
                   className="head col-1 pt-2 pb-0"
                   style={{ border: "1px solid black" }}
                 >
+                  OTP
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
                   Order Info
                 </div>
               </div>
-              {data.map((elem) => {
-                const {
-                  name,
-                  phone,
-                  address,
-                  time,
-                  id,
-                  delivery_sts,
-                  payment_sts,
-                  payment_mode,
-                  payment_id,
-                  food,
-                  qty,
-                  res,
-                  price,
-                } = elem;
+              {allOrders.map((elem) => {               
                 return (
                   <>
                     <Table_row
                       serial={serial_order++}
-                      name={name}
-                      phone={phone}
-                      address={address}
-                      time={time}
-                      id={id}
-                      delivery_sts={delivery_sts}
-                      payment_sts={payment_sts}
-                      payment_mode={payment_mode}
-                      payment_id={payment_id}
-                      food={food}
-                      qty={qty}
-                      res={res}
-                      price={price}
+                      name={elem.userId.username}
+                      phone={elem.userId.contact}
+                      address={elem.userId.address}
+                      time={elem.time}
+                      id={elem._id}
+                      delivery_sts={elem.deliverStatus}
+                      payment_sts={'payment_sts'}
+                      payment_mode={'payment_mode'}
+                      payment_id={'payment_id'}
+                      food={elem.foodId}
+                      qty={'d'}
+                      res={'res'}
+                      price={elem.totalAmount}
+                      otp={elem.OTP}
+                      deliveryBoyName={elem.deliveryBoy.username}
+                      deliveryBoyPhone={elem.deliveryBoy.contact}
                     />
                   </>
                 );
@@ -998,9 +1009,7 @@ const Admin_control_panel = () => {
           {todays_info ? (
             <div className="container-fluid m-0 p-0">
               <div className="mt-4">
-                <button
-                  className="btn btn-success"
-                >
+                <button className="btn btn-success">
                   <strong>Today's Offer</strong>
                 </button>
               </div>
@@ -1263,7 +1272,6 @@ const Admin_control_panel = () => {
                 </div> */}
               </div>
             </div>
-
           ) : null}
 
           {/* Delivery boy info--------------------------------------------------------------------------------------------------------- */}
@@ -1441,8 +1449,8 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {!update_web_details_phone &&
-                !update_web_details_mail &&
-                !update_web_details_name ? (
+              !update_web_details_mail &&
+              !update_web_details_name ? (
                 <div className="mt-5">
                   <h1>Change Website Details</h1>
                 </div>
@@ -1475,9 +1483,7 @@ const Admin_control_panel = () => {
                     </button>
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+              ) : null}
               {update_web_details_mail ? (
                 <div
                   className="pt-5 pb-5 m-auto pl-5 pr-5"
@@ -1506,9 +1512,7 @@ const Admin_control_panel = () => {
                     </button>
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+              ) : null}
               {update_web_details_name ? (
                 <div
                   className="pt-5 pb-5 m-auto pl-5 pr-5"
@@ -1537,9 +1541,7 @@ const Admin_control_panel = () => {
                     </button>
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+              ) : null}
             </div>
           ) : null}
 

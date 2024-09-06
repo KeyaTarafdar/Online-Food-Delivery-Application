@@ -253,7 +253,7 @@ export const fetchSingleFood = async (id) => {
       "http://localhost:8000/foods/getsinglefooditem",
       {
         params: { foodId: id },
-        withCredentials: true
+        withCredentials: true,
       }
     );
     return response.data;
@@ -557,7 +557,22 @@ export const cancelSingleOrder = async (id) => {
       `http://localhost:8000/users/cancleorder`,
       {
         params: { id: id },
-        withCredentials: true
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+// Fetch all orders
+export const getAllOrders = async () => {
+  try {
+    let response = await axios.get(
+      `http://localhost:8000/admins/fetchallorders`,
+      {
+        withCredentials: true,
       }
     );
     return response.data;
