@@ -111,57 +111,61 @@ module.exports.logoutUser = async (req, res) => {
 // };
 module.exports.getUser = async (req, res) => {
   try {
-    
-    if (req.user) {
-      let user = await userModel
-        .findOne({ email: req.user.email })
-        .populate({
-          path: "cart",
-          select: "name price id restaurent image",
-        })
-        .exec();
+    let user = req.user;
+    await user.populate({
+      path: "cart",
+    });
+    await user.populate({
+      path: "orders",
+      populate: { path: "foodId" },
+    });
+    res.send(user);
+    // if (req.user) {
+    //   let user = await userModel
+    //     .findOne({ email: req.user.email })
+    //     .populate({
+    //       path: "cart",
+    //       select: "name price id restaurent image",
+    //     })
+    //     .exec();
 
-      if (!user) {
-        return res.status(404).send({ message: "User not found" });
-      }
+    //   if (!user) {
+    //     return res.status(404).send({ message: "User not found" });
+    //   }
 
-      // Destructure the user object
-      const {
-        username,
-        email,
-        password,
-        cart,
-        orders,
-        contact,
-        address,
-        image,
-      } = user;
+    //   const {
+    //     username,
+    //     email,
+    //     password,
+    //     cart,
+    //     orders,
+    //     contact,
+    //     address,
+    //     image,
+    //   } = user;
 
-      // Create the transformed cart array
-      const transformedCart = cart.map((item) => ({
-        id: item._id,
-        name: item.name,
-        price: item.price,
-        restaurent: item.restaurent,
-        image: item.image,
-      }));
+    //   const transformedCart = cart.map((item) => ({
+    //     id: item._id,
+    //     name: item.name,
+    //     price: item.price,
+    //     restaurent: item.restaurent,
+    //     image: item.image,
+    //   }));
 
-      // Construct the response object
-      const responseUser = {
-        username,
-        email,
-        cart: transformedCart,
-        orders,
-        contact,
-        address,
-        image,
-      };
+    //   const responseUser = {
+    //     username,
+    //     email,
+    //     cart: transformedCart,
+    //     orders,
+    //     contact,
+    //     address,
+    //     image,
+    //   };
 
-      // Send the response
-      res.send(responseUser);
-    } else {
-      res.status(401).send({ message: "Unauthorized" });
-    }
+    //   res.send(responseUser);
+    // } else {
+    //   res.status(401).send({ message: "Unauthorized" });
+    // }
   } catch (err) {
     console.log(err.message);
     res.status(500).send({ message: "Internal Server Error" });
@@ -279,7 +283,7 @@ module.exports.createOrder = async (req, res) => {
     let user = req.user;
     let { userCart, time, totalAmount } = req.body;
 
-    const foodIds = userCart.map((food) => food.id);
+    const foodIds = userCart.map((food) => food._id);
 
     let order = await orderModal.create({
       userId: user._id,
@@ -329,6 +333,7 @@ module.exports.cancleOrder = async (req, res) => {
   try {
     let orderId = req.query.id;
     let user = req.user;
+
     await userModel.updateOne(
       { _id: user._id },
       { $pull: { orders: orderId } }

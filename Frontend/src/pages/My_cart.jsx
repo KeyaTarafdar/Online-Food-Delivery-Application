@@ -36,7 +36,7 @@ const My_cart = () => {
   const [totalAmount, settotalAmount] = useState(0);
 
   const getQuantity = (itemId) => {
-    return userCart.filter((item) => item.id === itemId).length;
+    return userCart.filter((item) => item._id === itemId).length;
   };
 
   const handledeleteCartItem = (id) => {
@@ -65,9 +65,10 @@ const My_cart = () => {
       settotalAmount(total);
 
       const uniqueItems = Array.from(
-        new Map(user.cart.map((item) => [item.id, item])).values()
+        new Map(user.cart.map((item) => [item._id, item])).values()
       );
       setUniqueCart(uniqueItems);
+      // console.log(user.cart)
     });
   }, [handledeleteCartItem]);
 
@@ -208,8 +209,8 @@ const My_cart = () => {
                   </th>
                 </tr>
                 {uniqueCart.map((elem) => {
-                  const { id, image, name, restaurent, price } = elem;
-                  const itemQuantity = getQuantity(id);
+                  const { _id, image, name, restaurent, price } = elem;
+                  const itemQuantity = getQuantity(_id);
                   return (
                     <tr>
                       <td className="col-1">{s++}</td>
@@ -226,7 +227,7 @@ const My_cart = () => {
                           className="btn btn-xxs btn-warning"
                           style={{ fontWeight: "bolder", fontSize: "1rem" }}
                           onClick={() => {
-                            handleQuantityDecrease(id);
+                            handleQuantityDecrease(_id);
                           }}
                         >
                           -
@@ -236,7 +237,7 @@ const My_cart = () => {
                           className="btn btn-xxs btn-warning"
                           style={{ fontWeight: "bolder", fontSize: "1rem" }}
                           onClick={() => {
-                            handleQuantityIncrease(id);
+                            handleQuantityIncrease(_id);
                           }}
                         >
                           +
@@ -248,7 +249,7 @@ const My_cart = () => {
                           className="btn-sm btn-danger mt-2 mb-2 ml-4"
                           style={{ height: "35px" }}
                           onClick={() => {
-                            handledeleteCartItem(id);
+                            handledeleteCartItem(_id);
                           }}
                         >
                           <i class="fa-solid fa-trash"></i>
@@ -349,9 +350,9 @@ const My_cart = () => {
                   </div>
                   <br />
                   {uniqueCart.map((elem) => {
-                    const { id } = elem;
-                    const itemQuantity = getQuantity(id);
-                    return <div key={id}>{itemQuantity}</div>;
+                    const { _id } = elem;
+                    const itemQuantity = getQuantity(_id);
+                    return <div key={_id}>{itemQuantity}</div>;
                   })}
                 </div>
                 <div className="col-3">
@@ -360,8 +361,8 @@ const My_cart = () => {
                   </div>
                   <br />
                   {uniqueCart.map((elem) => {
-                    const { id, restaurent } = elem;
-                    return <div key={id}>{restaurent}</div>;
+                    const { _id, restaurent } = elem;
+                    return <div key={_id}>{restaurent}</div>;
                   })}
                 </div>
                 <div className="col-2">
@@ -370,9 +371,9 @@ const My_cart = () => {
                   </div>
                   <br />
                   {uniqueCart.map((elem) => {
-                    const { id, price } = elem;
-                    const itemQuantity = getQuantity(id);
-                    return <div key={id}>{price*itemQuantity}</div>;
+                    const { _id, price } = elem;
+                    const itemQuantity = getQuantity(_id);
+                    return <div key={_id}>{price*itemQuantity}</div>;
                   })}
                 </div>
               </div>

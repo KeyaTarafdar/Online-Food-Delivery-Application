@@ -535,20 +535,20 @@ export const createOrder = async ({ userCart, totalAmount, time }) => {
 // };
 
 // Fetch orders by Id
-export const fetchOrderById = async (id) => {
-  try {
-    let response = await axios.get(
-      `http://localhost:8000/users/getorderbyid`,
-      {
-        params: { id: id },
-        withCredentials: true
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.error(err.message);
-  }
-};
+// export const fetchOrderById = async (id) => {
+//   try {
+//     let response = await axios.get(
+//       `http://localhost:8000/users/getorderbyid`,
+//       {
+//         params: { id: id },
+//         withCredentials: true
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// };
 
 // Cancle order
 export const cancelSingleOrder = async (id) => {

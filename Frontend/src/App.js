@@ -6,7 +6,7 @@ import Sign_up from './pages/Sign_up';
 import Home2 from './pages/Home2';
 import Menu from './pages/Menu';
 import My_cart from './pages/My_cart';
-import My_order from './Components/My_order';
+import My_order from './pages/My_order';
 import My_account from './pages/My_account';
 import Order_table from './Components/Order_table';
 import Services from './Components/Services';
