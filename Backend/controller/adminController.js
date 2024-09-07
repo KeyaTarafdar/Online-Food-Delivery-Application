@@ -161,7 +161,12 @@ module.exports.updateCompanyEmail = async (req, res) => {
 // Fetch Single Admin
 module.exports.getAdmin = async (req, res) => {
   try {
-    res.send(req.admin);
+    let admin = await req.admin.populate({
+      path: "currentOrders",
+      populate: { path: "deliveryBoy userId foodId" },
+    });
+    // console.log(admin);
+    res.send(admin);
   } catch (err) {
     res.send("Something went wrong");
   }
@@ -170,12 +175,14 @@ module.exports.getAdmin = async (req, res) => {
 // Create Delivery Boy
 module.exports.createDeliveryBoy = async (req, res) => {
   try {
-    let { username, contact, address } = req.body;
-    if (username && contact && address) {
+    let { username, contact, email, address, serviceAddress } = req.body;
+    if (username && contact && email && address && serviceAddress) {
       await deliveryBoyModel.create({
         username,
         contact,
+        email,
         address,
+        serviceAddress,
       });
       res.send("Delivery Boy added successfully");
     } else {
@@ -450,6 +457,22 @@ module.exports.fetchAllOredes = async (req, res) => {
       // console.log(orders)
       res.send(orders);
     }
+  } catch (err) {
+    console.log(err.message);
+    res.send(err.message);
+  }
+};
+
+// Comfirm delete
+module.exports.confirmDelete = async (req, res) => {
+  try {
+    let {orderId} = req.body;
+    await adminModel.updateMany(
+      {
+        $pull: { currentOrders: orderId },
+      }
+    );
+    res.send("Delete confirmed");
   } catch (err) {
     console.log(err.message);
     res.send(err.message);

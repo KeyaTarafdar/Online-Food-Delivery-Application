@@ -13,6 +13,7 @@ const orderSchema = mongoose.Schema({
   deliveryBoy: { type: mongoose.Schema.Types.ObjectId, ref: "deliveryBoy" },
   paymentMode: { type: String, default: "Offline" },
   paymentStatus: { type: String, default: "Pending" },
+  expectedDeliveryTime:{type:String,default:'45 min'}
 });
 
 module.exports = mongoose.model("order", orderSchema);

@@ -162,11 +162,17 @@ export const updateCompanyPhone = async (phone) => {
 };
 
 // Add delivery boy
-export const addDeliveryBoy = async (username, contact, address) => {
+export const addDeliveryBoy = async (
+  username,
+  contact,
+  email,
+  address,
+  serviceAddress
+) => {
   try {
     let response = await axios.post(
       "http://localhost:8000/admins/createdeliveryboy",
-      { username, contact, address },
+      { username, contact, email, address, serviceAddress },
       { withCredentials: true }
     );
     return response.data;
@@ -571,6 +577,22 @@ export const getAllOrders = async () => {
   try {
     let response = await axios.get(
       `http://localhost:8000/admins/fetchallorders`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+// Confirm order delete
+export const confirmOrderDelete = async (id) => {
+  try {
+    let response = await axios.put(
+      `http://localhost:8000/admins/confirmdelete`,
+      { orderId: id },
       {
         withCredentials: true,
       }

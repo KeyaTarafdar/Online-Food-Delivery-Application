@@ -7,6 +7,8 @@ const userSchema = mongoose.Schema({
   password: String,
   cart: [{ type: mongoose.Schema.Types.ObjectId, ref: "food" }],
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
+  deliveredOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
+  cancledOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
   contact: Number,
   address: String,
   image: String,

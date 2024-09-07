@@ -79,6 +79,7 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setTodays_info(false);
+    getAdmin()
   };
 
   const [todays_info, setTodays_info] = useState(false);
@@ -411,6 +412,7 @@ const Admin_control_panel = () => {
     fetchAdmin().then((response) => {
       setadminName(response.username);
       SetprofilePicture(response.image);
+      setallOrders(response.currentOrders)
     });
   };
 
@@ -465,13 +467,18 @@ const Admin_control_panel = () => {
 
   const [newDeliveryBoyName, setnewDeliveryBoyName] = useState();
   const [newDeliveryBoyPhone, setnewDeliveryBoyPhone] = useState();
+  const [newDeliveryBoyEmail, setnewDeliveryBoyEmail] = useState();
   const [newDeliveryBoyAddress, setnewDeliveryBoyAddress] = useState();
+  const [newDeliveryBoyServiceAddress, setnewDeliveryBoyServiceAddress] =
+    useState();
   // Add Delivery boy
   const handleSubmit_deliveryBoy = () => {
     addDeliveryBoy(
       newDeliveryBoyName,
       newDeliveryBoyPhone,
-      newDeliveryBoyAddress
+      newDeliveryBoyEmail,
+      newDeliveryBoyAddress,
+      newDeliveryBoyServiceAddress
     ).then((response) => {
       alert(response);
       setUpdate_delivery_boy(false);
@@ -579,9 +586,9 @@ const Admin_control_panel = () => {
       setallCategory(response);
     });
 
-    getAllOrders().then((response) => {
-      setallOrders(response);
-    });
+    // getAllOrders().then((response) => {
+    //   setallOrders(response);
+    // });
   }, []);
   return (
     <>
@@ -636,7 +643,10 @@ const Admin_control_panel = () => {
             </div>
           </Navbar>
         </div>
-        <div className="container-fluid m-0 p-0 d-flex" style={{overflowX:'auto'}}>
+        <div
+          className="container-fluid m-0 p-0 d-flex"
+          style={{ overflowX: "auto" }}
+        >
           {/* Side_menu----------------------------------------------------------------------------------------------- */}
           <div className="col-2 m-0 p-0 panel">
             <div className="col-12 dashboard m-0 p-0 pt-3">
@@ -780,7 +790,7 @@ const Admin_control_panel = () => {
           !update_delivery_boy ? (
             <div
               className="col-10 admin_default_page"
-              style={{ height: "98vh" }}
+              style={{ height: "92vh" }}
             >
               <b>
                 <h1 style={{ margin: "auto", paddingTop: "22%" }}>
@@ -890,7 +900,10 @@ const Admin_control_panel = () => {
 
           {/* Order Info------------------------------------------------------------------------------------------------------------------------ */}
           {order_info ? (
-            <div className="col-12 m-0 p-0" style={{height:'98vh',overflowY: 'auto'}}>
+            <div
+              className="col-12 m-0 p-0"
+              style={{ height: "92vh", overflowY: "auto" }}
+            >
               <div className="m-0 p-0 d-flex">
                 <div
                   className="head col-1 pt-2 pb-0"
@@ -977,29 +990,32 @@ const Admin_control_panel = () => {
                   Order Info
                 </div>
               </div>
-              {allOrders.map((elem) => {               
+              {allOrders.map((elem) => {
                 return (
-                  <>
-                    <Table_row
-                      serial={serial_order++}
-                      name={elem.userId.username}
-                      phone={elem.userId.contact}
-                      address={elem.userId.address}
-                      time={elem.time}
-                      id={elem._id}
-                      delivery_sts={elem.deliverStatus}
-                      payment_sts={'payment_sts'}
-                      payment_mode={'payment_mode'}
-                      payment_id={'payment_id'}
-                      food={elem.foodId}
-                      qty={'d'}
-                      res={'res'}
-                      price={elem.totalAmount}
-                      otp={elem.OTP}
-                      deliveryBoyName={elem.deliveryBoy.username}
-                      deliveryBoyPhone={elem.deliveryBoy.contact}
-                    />
-                  </>
+                  <Table_row
+                    serial={serial_order++}
+                    name={elem.userId ? elem.userId.username : ""}
+                    phone={elem.userId.contact}
+                    address={elem.userId.address}
+                    time={elem.time}
+                    id={elem._id}
+                    delivery_sts={elem.deliverStatus}
+                    payment_sts={"payment_sts"}
+                    payment_mode={"payment_mode"}
+                    payment_id={"payment_id"}
+                    food={elem.foodId}
+                    qty={"d"}
+                    res={"res"}
+                    price={elem.totalAmount}
+                    otp={elem.OTP}
+                    deliveryBoyName={
+                      elem.deliveryBoy ? elem.deliveryBoy.username : ""
+                    }
+                    deliveryBoyPhone={
+                      elem.deliveryBoy ? elem.deliveryBoy.contact : ""
+                    }
+                    isDeleted={elem.isDeleted}
+                  />
                 );
               })}
             </div>
@@ -1135,141 +1151,6 @@ const Admin_control_panel = () => {
                     </>
                   );
                 })}
-                {/* <div
-                  className="modal fade"
-                  id="add_new_cat"
-                  tabindex="-1"
-                  role="dialog"
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                          Add New Food Item Details
-                        </h5>
-                        <button
-                          type="button"
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Enter Item Name:</b>
-                          </div>
-                          <div className="col-6 m-0 p-0">
-                            <input
-                              type="text"
-                              placeholder="Enter Item Name..."
-                              onChange={(e) => {
-                                setfoodName(e.target.value);
-                              }}
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Enter Item Price:</b>
-                          </div>
-                          <div className="col-6 m-0 p-0">
-                            <input
-                              type="number"
-                              placeholder="Enter Item Price..."
-                              onChange={(e) => {
-                                setfoodPrice(e.target.value);
-                              }}
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Enter Item Quantity:</b>
-                          </div>
-                          <div className="col-6 m-0 p-0">
-                            <input
-                              type="text"
-                              placeholder="Enter Item Quantity/Size..."
-                              onChange={(e) => {
-                                setfoodQuantity(e.target.value);
-                              }}
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Upload Item Image:</b>
-                          </div>
-                          <div className="col-6 m-0 p-0">
-                            <input
-                              type="file"
-                              onChange={(e) => {
-                                setImage(e.target.files[0]);
-                              }}
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Select Item Category:</b>
-                          </div>
-                          <select
-                            className="form-select ml-3"
-                            onChange={(e) => {
-                              setfoodCategory(e.target.value);
-                            }}
-                          >
-                            <option value="" disabled selected>
-                              Select Item Category...
-                            </option>
-                            {Category_array.map((option) => (
-                              <option value={option.value}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="d-flex mt-3 p-0">
-                          <div className="col-5 m-0 p-0">
-                            <b>Select Restaurent Name:</b>
-                          </div>
-                          <select
-                            className="form-select ml-3"
-                            onChange={(e) => {
-                              setrestaurentName(e.target.value);
-                            }}
-                          >
-                            <option value="" disabled selected>
-                              Select Restaurent Name...
-                            </option>
-                            {Restaurent_list_array.map((option) => (
-                              <option value={option.value}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                      <div className="modal-footer">
-                        <button
-                          className="btn btn-success"
-                          data-dismiss="modal"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleAddNewFoodItem();
-                          }}
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           ) : null}
@@ -1285,22 +1166,34 @@ const Admin_control_panel = () => {
                   Serial no
                 </div>
                 <div
-                  className="head col-3 pt-2 pb-2"
+                  className="head col-2 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Name
                 </div>
                 <div
-                  className="head col-2 pt-2 pb-2"
+                  className="head col-1 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Phone no
                 </div>
                 <div
-                  className="head col-4 pt-2 pb-2"
+                  className="head col-2 pt-2 pb-2"
+                  style={{ border: "1px solid black" }}
+                >
+                  Email
+                </div>
+                <div
+                  className="head col-3 pt-2 pb-2"
                   style={{ border: "1px solid black" }}
                 >
                   Address
+                </div>
+                <div
+                  className="head col-4 pt-2 pb-2"
+                  style={{ border: "1px solid black" }}
+                >
+                  Service Address
                 </div>
                 <div
                   className="head col-1 pt-2 pb-2"
@@ -1310,7 +1203,14 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {deliveryBoy.map((elem) => {
-                const { username, contact, address, id = elem._id } = elem;
+                const {
+                  username,
+                  contact,
+                  address,
+                  id = elem._id,
+                  serviceAddress,
+                  email,
+                } = elem;
                 return (
                   <>
                     <div
@@ -1329,7 +1229,7 @@ const Admin_control_panel = () => {
                         {serial_delivery++}
                       </div>
                       <div
-                        className="col-3"
+                        className="col-2"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
@@ -1337,7 +1237,7 @@ const Admin_control_panel = () => {
                         {username}
                       </div>
                       <div
-                        className="col-2"
+                        className="col-1"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
@@ -1345,12 +1245,28 @@ const Admin_control_panel = () => {
                         {contact}
                       </div>
                       <div
-                        className="col-4"
+                        className="col-2"
+                        style={{
+                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                        }}
+                      >
+                        {email}
+                      </div>
+                      <div
+                        className="col-3"
                         style={{
                           boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
                         }}
                       >
                         {address}
+                      </div>
+                      <div
+                        className="col-4"
+                        style={{
+                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                        }}
+                      >
+                        {serviceAddress}
                       </div>
 
                       <div
@@ -2190,6 +2106,23 @@ const Admin_control_panel = () => {
                 </div>
                 <div className="col-12 pt-3" style={{ display: "flex" }}>
                   <div className="col-4 pl-0 pt-0">
+                    <h5 style={{ marginTop: "7px" }}>Enter Email: </h5>
+                  </div>
+                  <input
+                    className="col-8 pt-0"
+                    placeholder="Enter New Email Id..."
+                    style={{
+                      borderStyle: "solid",
+                      borderRadius: "5px",
+                      height: "50px",
+                    }}
+                    onChange={(e) => {
+                      setnewDeliveryBoyEmail(e.target.value);
+                    }}
+                  ></input>
+                </div>
+                <div className="col-12 pt-3" style={{ display: "flex" }}>
+                  <div className="col-4 pl-0 pt-0">
                     <h5 style={{ marginTop: "7px" }}>Enter Address: </h5>
                   </div>
                   <input
@@ -2202,6 +2135,25 @@ const Admin_control_panel = () => {
                     }}
                     onChange={(e) => {
                       setnewDeliveryBoyAddress(e.target.value);
+                    }}
+                  ></input>
+                </div>
+                <div className="col-12 pt-3" style={{ display: "flex" }}>
+                  <div className="col-4 pl-0 pt-0">
+                    <h5 style={{ marginTop: "7px" }}>
+                      Enter Service Address:{" "}
+                    </h5>
+                  </div>
+                  <input
+                    className="col-8 pt-0"
+                    placeholder="Ex= address1, address2, ..."
+                    style={{
+                      borderStyle: "solid",
+                      borderRadius: "5px",
+                      height: "50px",
+                    }}
+                    onChange={(e) => {
+                      setnewDeliveryBoyServiceAddress(e.target.value);
                     }}
                   ></input>
                 </div>

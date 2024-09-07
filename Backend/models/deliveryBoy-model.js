@@ -6,6 +6,7 @@ const deliveryBoySchema = mongoose.Schema({
   contact: Number,
   email: String,
   address: String,
+  serviceAddress: String,
   deliveryOrder: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
 });
 

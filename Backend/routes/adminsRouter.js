@@ -26,6 +26,7 @@ const {
   deleteCategory,
   updateCategory,
   fetchAllOredes,
+  confirmDelete,
 } = require("../controller/adminController");
 const {
   uploadAdminProfile,
@@ -132,5 +133,8 @@ router.put(
 
 // FETCH ALL ORDER
 router.get("/fetchallorders", isLoggedIn, fetchAllOredes);
+
+// CONFIRM DELETE
+router.put("/confirmdelete", isLoggedIn, confirmDelete);
 
 module.exports = router;

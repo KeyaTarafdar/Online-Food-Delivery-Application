@@ -13,6 +13,7 @@ const adminSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  currentOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
   gstin: String,
 });
 

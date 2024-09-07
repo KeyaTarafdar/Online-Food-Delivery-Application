@@ -7,6 +7,7 @@ const dbgr = require("debug")("development:usercheck");
 const fs = require("fs");
 const orderModel = require("../models/order-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
+const adminModel = require("../models/admin-model");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
@@ -105,9 +106,11 @@ module.exports.getUser = async (req, res) => {
       path: "cart",
     });
     await user.populate({
-      path: "orders",
-      populate: { path: "foodId" },
+      // path: "cancledOrders",
+      path: "orders cancledOrders",
+      populate: { path: "foodId deliveryBoy" },
     });
+    // console.log(user)
     res.send(user);
     // if (req.user) {
     //   let user = await userModel
@@ -275,12 +278,27 @@ module.exports.createOrder = async (req, res) => {
     const foodIds = userCart.map((food) => food._id);
 
     const OTP = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-    let deliveryBoys = await deliveryBoyModel.find({ address: user.address });
+
+    let deliveryBoys = await deliveryBoyModel.aggregate([
+      {
+        $addFields: {
+          addressParts: { $split: ["$serviceAddress", ", "] },
+        },
+      },
+      {
+        $match: {
+          addressParts: { $elemMatch: { $in: [user.address] } },
+        },
+      },
+      {
+        $project: {
+          addressParts: 0,
+        },
+      },
+    ]);
 
     const index = Math.floor(Math.random() * deliveryBoys.length);
-    console.log(deliveryBoys);
     const deliveryBoyId = deliveryBoys[index]._id;
-    console.log(deliveryBoyId);
 
     let order = await orderModal.create({
       userId: user._id,
@@ -292,6 +310,8 @@ module.exports.createOrder = async (req, res) => {
       OTP,
       deliveryBoy: deliveryBoyId,
     });
+
+    await adminModel.updateMany({}, { $push: { currentOrders: order._id } });
 
     await deliveryBoyModel.findOneAndUpdate(
       { _id: deliveryBoyId },
@@ -343,6 +363,11 @@ module.exports.cancleOrder = async (req, res) => {
     await userModel.updateOne(
       { _id: user._id },
       { $pull: { orders: orderId } }
+    );
+
+    await userModel.updateOne(
+      { _id: user._id },
+      { $push: { cancledOrders: orderId } }
     );
 
     await orderModel.findOneAndUpdate(
