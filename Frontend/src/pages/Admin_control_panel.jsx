@@ -7,17 +7,13 @@ import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
 import { BiSolidOffer } from "react-icons/bi";
 import Navbar from "react-bootstrap/Navbar";
-import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
 import DeletedOrderTableRow from "../Components/DeletedOrderTableRow";
-import Restaurent_list_array from "../Components/Array/Restaurent_list_array";
 import Update_Res from "../Components/Update_Res";
-import Category_array from "../Components/Array/Category_array";
 import Update_Category from "../Components/Update_Category";
 import Update_Food from "../Components/Update_Food";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Offers_array from "../Components/Array/Offers_array";
 import Loader from "../Components/Loader";
 import {
   deleteDeliveryBoy,
@@ -70,7 +66,7 @@ const Admin_control_panel = () => {
 
   const [order_info, setOrder_info] = useState(false);
   const OrderInfo = () => {
-    setData(Admin_order_array);
+    // setData(Admin_order_array);
     setOrder_info(true);
     setshowCancleOrders(false);
     setshowDeliveredOrders(false);
@@ -279,7 +275,6 @@ const Admin_control_panel = () => {
 
   const [add_res, setAdd_res] = useState(false);
   const AddRes = () => {
-    setData(Restaurent_list_array);
     setOrder_info(false);
     setUser_info(false);
     setUpdate(false);
@@ -347,11 +342,8 @@ const Admin_control_panel = () => {
     //For Order search
     if (order_info === true) {
       serial_order = 1;
-      const updateItem1 = Admin_order_array.filter((currEle) => {
-        return (
-          currEle.name.toLowerCase() === search_item.toLowerCase() ||
-          currEle.id === search_item
-        );
+      const updateItem1 = allOrders.filter((currEle) => {
+        return currEle.name.toLowerCase().includes(search_item.toLowerCase());
       });
       setData(updateItem1);
     }
@@ -371,7 +363,7 @@ const Admin_control_panel = () => {
     //For Restaurent search
     if (add_res === true) {
       serial_res = 1;
-      const updateItem3 = restaurentList.filter((currEle) => {
+      const updateItem3 = restaurents.filter((currEle) => {
         return (
           currEle.name.toLowerCase() === search_item.toLowerCase() ||
           currEle.id === search_item ||
@@ -558,8 +550,6 @@ const Admin_control_panel = () => {
   // Fetch all restaurent
   const [restaurents, setrestaurents] = useState([]);
 
-  const [restaurentList, setrestaurentList] = useState();
-
   const [categoryName, setcategoryName] = useState();
   const [categoryImage, setcategoryImage] = useState();
 
@@ -584,6 +574,8 @@ const Admin_control_panel = () => {
     });
   };
 
+  const [allLoading, setallLoading] = useState(true);
+
   useEffect(() => {
     getCompanyDetails();
     getAdmin();
@@ -596,10 +588,6 @@ const Admin_control_panel = () => {
 
     fetchAllRestaurent().then((response) => {
       setrestaurents(response);
-    });
-
-    fetchAllRestaurent().then((response) => {
-      setrestaurentList(response);
     });
 
     fetchAllCategory().then((response) => {
@@ -616,7 +604,12 @@ const Admin_control_panel = () => {
       );
       setallDeliveredOrders(deliveredOrders);
     });
+    setallLoading(false);
   }, []);
+
+  if (allLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <div className="Admin_control" style={{ height: "97vh" }}>
@@ -1020,32 +1013,33 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {allOrders.map((elem) => {
-                return (
-                  <Table_row
-                    serial={serial_order++}
-                    name={elem.userId ? elem.userId.username : ""}
-                    phone={elem.userId.contact}
-                    address={elem.userId.address}
-                    time={elem.time}
-                    id={elem._id}
-                    delivery_sts={elem.deliverStatus}
-                    payment_sts={"payment_sts"}
-                    payment_mode={"payment_mode"}
-                    payment_id={"payment_id"}
-                    food={elem.foodId}
-                    qty={"d"}
-                    res={"res"}
-                    price={elem.totalAmount}
-                    otp={elem.OTP}
-                    deliveryBoyName={
-                      elem.deliveryBoy ? elem.deliveryBoy.username : ""
-                    }
-                    deliveryBoyPhone={
-                      elem.deliveryBoy ? elem.deliveryBoy.contact : ""
-                    }
-                    isDeleted={elem.isDeleted}
-                  />
-                );
+                if (elem.deliverStatus == "Pending")
+                  return (
+                    <Table_row
+                      serial={serial_order++}
+                      name={elem.userId ? elem.userId.username : ""}
+                      phone={elem.userId.contact}
+                      address={elem.userId.address}
+                      time={elem.time}
+                      id={elem._id}
+                      delivery_sts={elem.deliverStatus}
+                      payment_sts={"payment_sts"}
+                      payment_mode={"payment_mode"}
+                      payment_id={"payment_id"}
+                      food={elem.foodId}
+                      qty={"d"}
+                      res={"res"}
+                      price={elem.totalAmount}
+                      otp={elem.OTP}
+                      deliveryBoyName={
+                        elem.deliveryBoy ? elem.deliveryBoy.username : ""
+                      }
+                      deliveryBoyPhone={
+                        elem.deliveryBoy ? elem.deliveryBoy.contact : ""
+                      }
+                      isDeleted={elem.isDeleted}
+                    />
+                  );
               })}
               <div
                 style={{
@@ -1423,7 +1417,7 @@ const Admin_control_panel = () => {
                     Delete
                   </div>
                 </div>
-                {Offers_array.map((elem) => {
+                {foods.map((elem) => {
                   const {
                     _id,
                     name,
@@ -1432,21 +1426,23 @@ const Admin_control_panel = () => {
                     category,
                     quantity,
                     price,
+                    setAsTodaysOffer,
                   } = elem;
-                  return (
-                    <>
-                      <TodaysOffer
-                        id={_id}
-                        serial={serial_food_item++}
-                        name={name}
-                        image={image}
-                        category={category}
-                        price={price}
-                        restaurent={restaurent}
-                        quantity={quantity}
-                      />
-                    </>
-                  );
+                  if (setAsTodaysOffer)
+                    return (
+                      <>
+                        <TodaysOffer
+                          id={_id}
+                          serial={serial_food_item++}
+                          name={name}
+                          image={image}
+                          category={category}
+                          price={price}
+                          restaurent={restaurent}
+                          quantity={quantity}
+                        />
+                      </>
+                    );
                 })}
               </div>
             </div>
@@ -2197,6 +2193,7 @@ const Admin_control_panel = () => {
                     category,
                     quantity,
                     price,
+                    setAsTodaysOffer,
                   } = elem;
                   return (
                     <>
@@ -2209,6 +2206,7 @@ const Admin_control_panel = () => {
                         price={price}
                         restaurent={restaurent}
                         quantity={quantity}
+                        setAsTodaysOfferStatus={setAsTodaysOffer}
                       />
                     </>
                   );
@@ -2305,7 +2303,7 @@ const Admin_control_panel = () => {
                             <option value="" disabled selected>
                               Select Item Category...
                             </option>
-                            {Category_array.map((option) => (
+                            {allCategory.map((option) => (
                               <option value={option.value}>
                                 {option.name}
                               </option>
@@ -2325,7 +2323,7 @@ const Admin_control_panel = () => {
                             <option value="" disabled selected>
                               Select Restaurent Name...
                             </option>
-                            {restaurentList.map((option) => (
+                            {restaurents.map((option) => (
                               <option value={option.value}>
                                 {option.name}-{option.address}
                               </option>

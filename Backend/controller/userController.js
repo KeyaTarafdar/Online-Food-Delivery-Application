@@ -106,58 +106,10 @@ module.exports.getUser = async (req, res) => {
       path: "cart",
     });
     await user.populate({
-      // path: "cancledOrders",
       path: "orders cancledOrders deliveredOrders",
       populate: { path: "foodId deliveryBoy" },
     });
-    // console.log(user)
     res.send(user);
-    // if (req.user) {
-    //   let user = await userModel
-    //     .findOne({ email: req.user.email })
-    //     .populate({
-    //       path: "cart",
-    //       select: "name price id restaurent image",
-    //     })
-    //     .exec();
-
-    //   if (!user) {
-    //     return res.status(404).send({ message: "User not found" });
-    //   }
-
-    //   const {
-    //     username,
-    //     email,
-    //     password,
-    //     cart,
-    //     orders,
-    //     contact,
-    //     address,
-    //     image,
-    //   } = user;
-
-    //   const transformedCart = cart.map((item) => ({
-    //     id: item._id,
-    //     name: item.name,
-    //     price: item.price,
-    //     restaurent: item.restaurent,
-    //     image: item.image,
-    //   }));
-
-    //   const responseUser = {
-    //     username,
-    //     email,
-    //     cart: transformedCart,
-    //     orders,
-    //     contact,
-    //     address,
-    //     image,
-    //   };
-
-    //   res.send(responseUser);
-    // } else {
-    //   res.status(401).send({ message: "Unauthorized" });
-    // }
   } catch (err) {
     console.log(err.message);
     res.status(500).send({ message: "Internal Server Error" });
@@ -323,31 +275,6 @@ module.exports.createOrder = async (req, res) => {
       { $push: { orders: order._id } }
     );
     res.send("Your order is placed successfully");
-  } catch (err) {
-    res.send(err.message);
-  }
-};
-
-// Fetch order of a particular user
-// module.exports.fetchSingleOrder = async (req, res) => {
-//   try {
-//     let user = req.user;
-//     let orderIds = user.orders;
-//     res.send(orderIds);
-//   } catch (err) {
-//     res.send(err.message);
-//   }
-// };
-
-// Fetch order by id
-module.exports.fetchOrderById = async (req, res) => {
-  try {
-    let user = req.user;
-    let orders = await user.populate({
-      path: "orders",
-      populate: { path: "foodId" },
-    });
-    res.send(orders);
   } catch (err) {
     res.send(err.message);
   }

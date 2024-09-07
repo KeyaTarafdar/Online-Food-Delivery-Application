@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { MdOutlineLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { fetchDeliveryBoy, fetchCompanyDetails, logout } from "../utils/utils";
+import {
+  fetchDeliveryBoy,
+  fetchCompanyDetails,
+  logout,
+  deliverySuccessfull,
+} from "../utils/utils";
 import axios from "axios";
 
 function DeliveryPage() {
@@ -30,16 +35,9 @@ function DeliveryPage() {
   };
 
   const handleDeliverySuccessfull = async (otp, id) => {
-    try {
-      let response = await axios.put(
-        "http://localhost:8000/deliveryboys/deliverysuccessfull",
-        { otp, orderId: id },
-        { withCredentials: true }
-      );
-      alert(response.data);
-    } catch (err) {
-      alert(err.message);
-    }
+    deliverySuccessfull(otp, id).then((response) => {
+      alert(response);
+    });
   };
 
   useEffect(() => {
@@ -52,7 +50,7 @@ function DeliveryPage() {
       setallOrders(response.deliveryOrder);
       setLoading(false);
     });
-  }, []);
+  }, [handleDeliverySuccessfull]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -181,8 +179,8 @@ function DeliveryPage() {
                 ? allOrders.map((elem) => (
                     <>
                       <tr className="col-12 pl-1 pr-1">
-                        <td className="pl-1 pr-1 div">{s++}</td>
-                        <td className="col-1 pl-1 pr-1 div">
+                        <td className="pl-1 pr-1">{s++}</td>
+                        <td className="col-1 pl-1 pr-1">
                           <table style={{ textAlign: "center" }}>
                             {[
                               ...new Set(elem.foodId.map((item) => item.name)),
@@ -191,7 +189,7 @@ function DeliveryPage() {
                             ))}
                           </table>
                         </td>
-                        <td className="pl-1 pr-1 div">
+                        <td className="pl-1 pr-1">
                           <table>
                             {[
                               ...new Set(
@@ -202,7 +200,7 @@ function DeliveryPage() {
                             ))}
                           </table>
                         </td>
-                        <td className="pl-1 pr-1 div">
+                        <td className="pl-1 pr-1">
                           <table>
                             {Object.entries(
                               elem.foodId.reduce((acc, item) => {
@@ -214,7 +212,7 @@ function DeliveryPage() {
                             ))}
                           </table>
                         </td>
-                        <td className="pl-1 pr-1 div">
+                        <td className="pl-1 pr-1">
                           <table>
                             {Object.entries(
                               elem.foodId.reduce((acc, item) => {
@@ -231,14 +229,14 @@ function DeliveryPage() {
                             ))}
                           </table>
                         </td>
-                        <td className="pl-1 pr-1 div">{elem.orderAddress}</td>
-                        <td className="pl-1 pr-1 div">
+                        <td className="pl-1 pr-1">{elem.orderAddress}</td>
+                        <td className="pl-1 pr-1">
                           <table>
                             <tr>{elem.userId.username}</tr>
                             <tr>{elem.userId.contact}</tr>
                           </table>
                         </td>
-                        <td className="col-1 div">
+                        <td className="col-1">
                           <button
                             className="btn btn-success"
                             style={{ color: "white", fontWeight: "bolder" }}

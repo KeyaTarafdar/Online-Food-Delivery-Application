@@ -64,11 +64,9 @@ module.exports.deliverySuccessfull = async (req, res) => {
   try {
     let deliveryBoy = req.deliveryBoy;
     let { otp, orderId } = req.body;
-    console.log(req.body)
+
     let order = await orderModel.findOne({ _id: orderId });
     await order.populate({ path: "userId" });
-
-    // console.log(order.OTP);
 
     if (order.OTP == otp) {
       await deliveryBoyModel.findOneAndUpdate(
@@ -90,7 +88,7 @@ module.exports.deliverySuccessfull = async (req, res) => {
         { _id: orderId },
         { $set: { paymentStatus: "Paid", deliverStatus: "Delivered" } }
       );
-      res.send("Delivery successfully");
+      return res.send("Delivery successfully");
     }
     // console.log(order);
     res.send("OTP is not correct");

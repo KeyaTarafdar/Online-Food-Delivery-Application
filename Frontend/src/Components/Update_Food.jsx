@@ -7,6 +7,7 @@ import {
   updateFoodItem,
   fetchAllCategory,
   fetchAllRestaurent,
+  setAsTodaysOffer,
 } from "../utils/utils";
 
 const Update_Food = ({
@@ -18,6 +19,7 @@ const Update_Food = ({
   price,
   restaurent,
   quantity,
+  setAsTodaysOfferStatus,
 }) => {
   const [clicked_update, setClicked_update] = useState(false);
 
@@ -62,7 +64,7 @@ const Update_Food = ({
 
   useEffect(() => {
     setdisplay("block");
-  }, [id]);
+  }, [setAsTodaysOffer]);
 
   return (
     <div style={{ display: `${display}` }}>
@@ -208,20 +210,25 @@ const Update_Food = ({
             alignItems: "center",
           }}
         >
-          <div
-            className="btn btn-success"
-            style={{
-              fontSize: "1.5rem",
-              width: "2.8rem",
-              height: "2.8rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingBottom: "10px",
-            }}
-          >
-            <strong>+</strong>
-          </div>
+          {!setAsTodaysOfferStatus && (
+            <div
+              className="btn btn-success"
+              style={{
+                fontSize: "1.5rem",
+                width: "2.8rem",
+                height: "2.8rem",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingBottom: "10px",
+              }}
+              onClick={(e) => {
+                setAsTodaysOffer(id);
+              }}
+            >
+              <strong>+</strong>
+            </div>
+          )}
         </div>
       </div>
 

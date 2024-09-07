@@ -8,13 +8,17 @@ import { MdOutlineLogout, MdAccountCircle } from "react-icons/md";
 import { CgLogIn } from "react-icons/cg";
 import { FaBagShopping } from "react-icons/fa6";
 import Slider from "react-slick";
-import Offers_array from "../Components/Array/Offers_array";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { useNavigate } from "react-router-dom";
-import { logout, findUser, fetchCompanyDetails } from "../utils/utils";
+import {
+  logout,
+  findUser,
+  fetchCompanyDetails,
+  fetchAllFoods,
+} from "../utils/utils";
 import Loader from "../Components/Loader";
 
 const Home2 = () => {
@@ -23,7 +27,9 @@ const Home2 = () => {
   const [companyPhone, setcompanyPhone] = useState();
   const [companyFB, setcompanyFB] = useState();
   const [companyInsta, setcompanyInsta] = useState();
-  const [loader,setLoader]=useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const [foods, setfoods] = useState([]);
 
   const navigate = useNavigate();
   //Hamburger Menu-------------
@@ -42,8 +48,8 @@ const Home2 = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 5,
+    slidesToShow: foods.filter((card) => card.setAsTodaysOffer).length,
+    slidesToScroll: foods.filter((card) => card.setAsTodaysOffer).length,
   };
   // Card Slider(For lg)----------------------
   const sliderSettings_lg = {
@@ -79,28 +85,31 @@ const Home2 = () => {
   ];
 
   const [account, setAccount] = useState("My Account");
-
   // Logout API
   const handleLogout = async () => {
-    setLoader(true)
+    setLoader(true);
     if ((await logout()) === "Logout successfully") {
-      setTimeout(()=>{
-        setLoader(false)
+      setTimeout(() => {
+        setLoader(false);
         navigate("/Home2");
         setAccount("My Account");
-      },3000);
-    }else{
+      }, 3000);
+    } else {
       setLoader(false);
     }
   };
 
   const myAccount = async () => {
-    findUser().then((user)=>{if (user.username) {
-      navigate("/My_account");
-    } else {
-      alert("You have to Login first!");
-    }})
+    findUser().then((user) => {
+      if (user.username) {
+        navigate("/My_account");
+      } else {
+        alert("You have to Login first!");
+      }
+    });
   };
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch company details
@@ -111,7 +120,7 @@ const Home2 = () => {
       setcompanyFB(company.fbLink);
       setcompanyInsta(company.instaLink);
     });
-    
+
     // Find user
     findUser().then((user) => {
       if (user.username) {
@@ -120,7 +129,18 @@ const Home2 = () => {
         setAccount("My Account");
       }
     });
+
+    // Fetch all food
+    fetchAllFoods().then((response) => {
+      setfoods(response);
+    });
+
+    setLoading(false);
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container-fluid m-0 p-0" style={{ width: "100%" }}>
@@ -289,10 +309,7 @@ const Home2 = () => {
               </button>
             </div>
             <div className="home2_search col-lg-3 col-md-3 col-sm-4 col-xs-2 m-0 p-0">
-              <button
-                className="btn btn-success home2_search_button"
-                style={{}}
-              >
+              <button className="btn btn-success home2_search_button">
                 <NavLink className="home2_search_nav" to={"/Menu"}>
                   Search For Food
                 </NavLink>
@@ -313,242 +330,271 @@ const Home2 = () => {
           {/* Card Slider(For xl Screen)-------------------------------------------- */}
           <div className="col-lg-12 pt-1 pl-5 pr-5 d-none d-xl-block">
             <Slider {...sliderSettings_xl}>
-              {Offers_array.map((card) => (
-                <div key={card.id} className="pt-0 p-3">
-                  <div className="card m-2">
-                    <div
-                      className="m-0 p-0"
-                      style={{
-                        height: "280px",
-                        color: "black",
-                        borderRadius: "0.75rem",
-                      }}
-                    >
-                      <div
-                        className="justify-center items-center"
-                        style={{
-                          borderTopLeftRadius: "0.75rem",
-                          borderTopRightRadius: "0.75rem",
-                          backgroundColor: "indigo",
-                          height: "130px",
-                        }}
-                      >
-                        <img
-                          src={card.img}
-                          alt=""
-                          className=""
+              {foods
+                .filter((card) => card.setAsTodaysOffer)
+                .map((card) => {
+                  return (
+                    <div key={card._id} className="pt-0 p-3">
+                      <div className="card m-2">
+                        <div
+                          className="m-0 p-0"
                           style={{
-                            borderTopLeftRadius: "0.20rem",
-                            borderTopRightRadius: "0.20rem",
-                            height: "100%",
-                            width: "100%",
-                            margin: "auto",
+                            height: "280px",
+                            color: "black",
+                            borderRadius: "0.75rem",
                           }}
-                        ></img>
-                      </div>
+                        >
+                          <div
+                            className="justify-center items-center"
+                            style={{
+                              borderTopLeftRadius: "0.75rem",
+                              borderTopRightRadius: "0.75rem",
+                              backgroundColor: "indigo",
+                              height: "130px",
+                            }}
+                          >
+                            <img
+                              src={`foodItemsPictures/${card.image}`}
+                              style={{
+                                borderTopLeftRadius: "0.20rem",
+                                borderTopRightRadius: "0.20rem",
+                                height: "100%",
+                                width: "100%",
+                                margin: "auto",
+                              }}
+                            ></img>
+                          </div>
 
-                      <div
-                        className="flex flex-col justify-center items-center m-0 p-0"
-                        style={{ height: "30%" }}
-                      >
-                        <h5 className="mt-1">{card.res}</h5>
-                        <h6 className="mt-1">{card.name}</h6>
-                        <span className="">Price: {card.price}</span>
-                        <select className="form-select ml-3">
-                          {options.map((option) => (
-                            <option value={option.value}>{option.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="pt-3">
-                        <button className="btn-xs btn-warning">
-                          Add to Cart
-                        </button>
+                          <div
+                            className="flex flex-col justify-center items-center m-0 p-0"
+                            style={{ height: "30%" }}
+                          >
+                            <h5 className="mt-1">{card.restaurent}</h5>
+                            <h6 className="mt-1">{card.name}</h6>
+                            <span className="">Price: {card.price}</span>
+                            <select className="form-select ml-3">
+                              {options.map((option) => (
+                                <option value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="pt-3">
+                            <button className="btn-xs btn-warning">
+                              Add to Cart
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })}
             </Slider>
           </div>
+
           {/* Card Slider(For lg Screen)-------------------------------------------- */}
           <div className="col-lg-12 pt-1 pl-5 pr-5 d-none d-lg-block d-xl-none">
             <Slider {...sliderSettings_lg}>
-              {Offers_array.map((card) => (
-                <div key={card.id} className="pt-0 p-3">
-                  <div className="card m-2">
-                    <div
-                      className="m-0 p-0"
-                      style={{
-                        height: "280px",
-                        color: "black",
-                        borderRadius: "0.75rem",
-                      }}
-                    >
-                      <div
-                        className="justify-center items-center"
-                        style={{
-                          borderTopLeftRadius: "0.75rem",
-                          borderTopRightRadius: "0.75rem",
-                          backgroundColor: "indigo",
-                          height: "130px",
-                        }}
-                      >
-                        <img
-                          src={card.img}
-                          alt=""
-                          className=""
-                          style={{
-                            borderTopLeftRadius: "0.20rem",
-                            borderTopRightRadius: "0.20rem",
-                            height: "100%",
-                            width: "100%",
-                            margin: "auto",
-                          }}
-                        ></img>
-                      </div>
+              {foods.map((card) => {
+                if (card.setAsTodaysOffer)
+                  return (
+                    <>
+                      <div key={card.id} className="pt-0 p-3">
+                        <div className="card m-2">
+                          <div
+                            className="m-0 p-0"
+                            style={{
+                              height: "280px",
+                              color: "black",
+                              borderRadius: "0.75rem",
+                            }}
+                          >
+                            <div
+                              className="justify-center items-center"
+                              style={{
+                                borderTopLeftRadius: "0.75rem",
+                                borderTopRightRadius: "0.75rem",
+                                backgroundColor: "indigo",
+                                height: "130px",
+                              }}
+                            >
+                              <img
+                                src={`foodItemsPictures/${card.image}`}
+                                style={{
+                                  borderTopLeftRadius: "0.20rem",
+                                  borderTopRightRadius: "0.20rem",
+                                  height: "100%",
+                                  width: "100%",
+                                  margin: "auto",
+                                }}
+                              ></img>
+                            </div>
 
-                      <div
-                        className="flex flex-col justify-center items-center m-0 p-0"
-                        style={{ height: "30%" }}
-                      >
-                        <h6 className="mt-1">{card.name}</h6>
-                        <span className="">Price: {card.price}</span>
-                        <select className="form-select ml-3">
-                          {options.map((option) => (
-                            <option value={option.value}>{option.label}</option>
-                          ))}
-                        </select>
+                            <div
+                              className="flex flex-col justify-center items-center m-0 p-0"
+                              style={{ height: "30%" }}
+                            >
+                              <h5 className="mt-1">{card.restaurent}</h5>
+                              <h6 className="mt-1">{card.name}</h6>
+                              <span className="">Price: {card.price}</span>
+                              <select className="form-select ml-3">
+                                {options.map((option) => (
+                                  <option value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="pt-3">
+                              <button className="btn-xs btn-warning">
+                                Add to Cart
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="pt-3">
-                        <button className="btn-xs btn-warning">
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                    </>
+                  );
+              })}
             </Slider>
           </div>
+
           {/* Card Slider(For md Screen)--------------------------------------------  */}
           <div className="col-lg-12 pt-1 pl-5 pr-5 d-none d-md-block d-lg-none">
             <Slider {...sliderSettings_md}>
-              {Offers_array.map((card) => (
-                <div key={card.id} className="pt-0 p-3">
-                  <div className="card m-2">
-                    <div
-                      className="m-0 p-0"
-                      style={{
-                        height: "280px",
-                        color: "black",
-                        borderRadius: "0.75rem",
-                      }}
-                    >
-                      <div
-                        className="justify-center items-center"
-                        style={{
-                          borderTopLeftRadius: "0.75rem",
-                          borderTopRightRadius: "0.75rem",
-                          backgroundColor: "indigo",
-                          height: "130px",
-                        }}
-                      >
-                        <img
-                          src={card.img}
-                          alt=""
-                          className=""
-                          style={{
-                            borderTopLeftRadius: "0.20rem",
-                            borderTopRightRadius: "0.20rem",
-                            height: "100%",
-                            width: "100%",
-                            margin: "auto",
-                          }}
-                        ></img>
-                      </div>
+              {foods.map((card) => {
+                if (card.setAsTodaysOffer)
+                  return (
+                    <>
+                      <div key={card.id} className="pt-0 p-3">
+                        <div className="card m-2">
+                          <div
+                            className="m-0 p-0"
+                            style={{
+                              height: "280px",
+                              color: "black",
+                              borderRadius: "0.75rem",
+                            }}
+                          >
+                            <div
+                              className="justify-center items-center"
+                              style={{
+                                borderTopLeftRadius: "0.75rem",
+                                borderTopRightRadius: "0.75rem",
+                                backgroundColor: "indigo",
+                                height: "130px",
+                              }}
+                            >
+                              <img
+                                src={card.img}
+                                alt=""
+                                className=""
+                                style={{
+                                  borderTopLeftRadius: "0.20rem",
+                                  borderTopRightRadius: "0.20rem",
+                                  height: "100%",
+                                  width: "100%",
+                                  margin: "auto",
+                                }}
+                              ></img>
+                            </div>
 
-                      <div
-                        className="flex flex-col justify-center items-center m-0 p-0"
-                        style={{ height: "30%" }}
-                      >
-                        <h6 className="mt-1">{card.name}</h6>
-                        <span className="">Price: {card.price}</span>
-                        <select className="form-select ml-3">
-                          {options.map((option) => (
-                            <option value={option.value}>{option.label}</option>
-                          ))}
-                        </select>
+                            <div
+                              className="flex flex-col justify-center items-center m-0 p-0"
+                              style={{ height: "30%" }}
+                            >
+                              <h5 className="mt-1">{card.res}</h5>
+                              <h6 className="mt-1">{card.name}</h6>
+                              <span className="">Price: {card.price}</span>
+                              <select className="form-select ml-3">
+                                {options.map((option) => (
+                                  <option value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="pt-3">
+                              <button className="btn-xs btn-warning">
+                                Add to Cart
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="pt-3">
-                        <button className="btn-xs btn-warning">
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                    </>
+                  );
+              })}
             </Slider>
           </div>
+
           {/* Card Slider(For sm Screen)--------------------------------------------  */}
           <div className="col-lg-12 pt-1 pl-5 pr-5  d-sm-block d-md-none">
             <Slider {...sliderSettings_sm}>
-              {Offers_array.map((card) => (
-                <div key={card.id} className="pt-0 p-3">
-                  <div className="card m-2">
-                    <div
-                      className="m-0 p-0"
-                      style={{
-                        height: "280px",
-                        color: "black",
-                        borderRadius: "0.75rem",
-                      }}
-                    >
-                      <div
-                        className="justify-center items-center"
-                        style={{
-                          borderTopLeftRadius: "0.75rem",
-                          borderTopRightRadius: "0.75rem",
-                          backgroundColor: "indigo",
-                          height: "130px",
-                        }}
-                      >
-                        <img
-                          src={card.img}
-                          alt=""
-                          className=""
-                          style={{
-                            borderTopLeftRadius: "0.20rem",
-                            borderTopRightRadius: "0.20rem",
-                            height: "100%",
-                            width: "100%",
-                            margin: "auto",
-                          }}
-                        ></img>
-                      </div>
+              {foods.map((card) => {
+                if (card.setAsTodaysOffer)
+                  return (
+                    <>
+                      <div key={card.id} className="pt-0 p-3">
+                        <div className="card m-2">
+                          <div
+                            className="m-0 p-0"
+                            style={{
+                              height: "280px",
+                              color: "black",
+                              borderRadius: "0.75rem",
+                            }}
+                          >
+                            <div
+                              className="justify-center items-center"
+                              style={{
+                                borderTopLeftRadius: "0.75rem",
+                                borderTopRightRadius: "0.75rem",
+                                backgroundColor: "indigo",
+                                height: "130px",
+                              }}
+                            >
+                              <img
+                                src={card.img}
+                                alt=""
+                                className=""
+                                style={{
+                                  borderTopLeftRadius: "0.20rem",
+                                  borderTopRightRadius: "0.20rem",
+                                  height: "100%",
+                                  width: "100%",
+                                  margin: "auto",
+                                }}
+                              ></img>
+                            </div>
 
-                      <div
-                        className="flex flex-col justify-center items-center m-0 p-0"
-                        style={{ height: "30%" }}
-                      >
-                        <h6 className="mt-1">{card.name}</h6>
-                        <span className="">Price: {card.price}</span>
-                        <select className="form-select ml-3">
-                          {options.map((option) => (
-                            <option value={option.value}>{option.label}</option>
-                          ))}
-                        </select>
+                            <div
+                              className="flex flex-col justify-center items-center m-0 p-0"
+                              style={{ height: "30%" }}
+                            >
+                              <h5 className="mt-1">{card.res}</h5>
+                              <h6 className="mt-1">{card.name}</h6>
+                              <span className="">Price: {card.price}</span>
+                              <select className="form-select ml-3">
+                                {options.map((option) => (
+                                  <option value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="pt-3">
+                              <button className="btn-xs btn-warning">
+                                Add to Cart
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="pt-3">
-                        <button className="btn-xs btn-warning">
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                    </>
+                  );
+              })}
             </Slider>
           </div>
         </div>

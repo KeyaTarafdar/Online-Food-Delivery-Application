@@ -14,8 +14,7 @@ const {
   addToCartIncreaseQuantity,
   deleteCartItemDecreaseQuantity,
   createOrder,
-  fetchSingleOrder,
-  cancleOrder,fetchOrderById
+  cancleOrder,
 } = require("../controller/userController");
 const { uploadUserProfile } = require("../middlewares/multer");
 
@@ -64,12 +63,6 @@ router.put(
 
 // CREATE ORDER
 router.post("/createorder", isLoggedIn, createOrder);
-
-// FETCH THE ORDERS OF A SINGLE USER
-// router.get("/getSingleOrder", isLoggedIn, fetchSingleOrder);
-
-// FETCH ORDER BY ID
-router.get("/getorderbyid", isLoggedIn, fetchOrderById);
 
 // CANCLE ORDER
 router.delete("/cancleorder", isLoggedIn, cancleOrder);

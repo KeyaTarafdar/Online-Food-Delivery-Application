@@ -543,35 +543,6 @@ export const createOrder = async ({ userCart, totalAmount, time }) => {
   }
 };
 
-// Fetch orders of a particular user
-// export const fetchSingleOrder = async () => {
-//   try {
-//     let response = await axios.get(
-//       "http://localhost:8000/users/getSingleOrder",
-//       { withCredentials: true }
-//     );
-//     return response.data;
-//   } catch (err) {
-//     console.log(err.message);
-//   }
-// };
-
-// Fetch orders by Id
-// export const fetchOrderById = async (id) => {
-//   try {
-//     let response = await axios.get(
-//       `http://localhost:8000/users/getorderbyid`,
-//       {
-//         params: { id: id },
-//         withCredentials: true
-//       }
-//     );
-//     return response.data;
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-// };
-
 // Cancle order
 export const cancelSingleOrder = async (id) => {
   try {
@@ -620,7 +591,7 @@ export const confirmOrderDelete = async (id) => {
 };
 
 // Fetch delivery boy
-export const fetchDeliveryBoy=async () => {
+export const fetchDeliveryBoy = async () => {
   try {
     let response = await axios.get(
       `http://localhost:8000/deliveryboys/fetchsingledeliveryboy`,
@@ -631,5 +602,47 @@ export const fetchDeliveryBoy=async () => {
     return response.data;
   } catch (err) {
     console.error(err.message);
+  }
+};
+
+// Successfull delivery
+export const deliverySuccessfull = async (otp, id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/deliveryboys/deliverysuccessfull",
+      { otp, orderId: id },
+      { withCredentials: true }
+    );
+    alert(response.data);
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+// Set as taday's offer
+export const setAsTodaysOffer = async (id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/todaysoffer",
+      { foodId: id },
+      { withCredentials: true }
+    );
+    alert(response.data);
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+//Remove from taday's offer
+export const removeFromTodaysOffer = async (id) => {
+  try {
+    let response = await axios.put(
+      "http://localhost:8000/admins/removetodaysoffer",
+      { foodId: id },
+      { withCredentials: true }
+    );
+    alert(response.data);
+  } catch (err) {
+    alert(err.message);
   }
 };

@@ -7,6 +7,8 @@ const foodSchema = mongoose.Schema({
   price: Number,
   category: String,
   restaurent: String,
+  quantity: String,
+  setAsTodaysOffer: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("food", foodSchema);

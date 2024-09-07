@@ -8,7 +8,6 @@ import Menu from './pages/Menu';
 import My_cart from './pages/My_cart';
 import My_order from './pages/My_order';
 import My_account from './pages/My_account';
-import Order_table from './Components/Order_table';
 import Services from './Components/Services';
 import Restaurent from './pages/Restaurent';
 import Admin_control_panel from './pages/Admin_control_panel';
@@ -28,7 +27,6 @@ function App() {
           <Route exact path='/My_cart' element={<My_cart/>}></Route>
           <Route exact path='/My_order' element={<My_order/>}></Route>
           <Route exact path='/My_account' element={<My_account/>}></Route>
-          <Route exact path='/Order_table' element={<Order_table/>}></Route>
           <Route exact path='/Services' element={<Services/>}></Route>
           <Route exact path='/Admin' element={<Admin_control_panel/>}></Route>
           <Route exact path='/DeliveryBoy' element={<DeliveryPage/>}></Route>

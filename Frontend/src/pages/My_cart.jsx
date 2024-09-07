@@ -59,7 +59,6 @@ const My_cart = () => {
 
     findUser().then((user) => {
       setuserCart(user.cart);
-      setLoading(false);
 
       const total = userCart.reduce((sum, item) => sum + item.price, 0);
       settotalAmount(total);
@@ -69,6 +68,7 @@ const My_cart = () => {
       );
       setUniqueCart(uniqueItems);
       // console.log(user.cart)
+      setLoading(false);
     });
   }, [handledeleteCartItem]);
 

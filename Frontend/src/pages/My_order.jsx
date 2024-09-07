@@ -36,7 +36,9 @@ const My_order = () => {
     });
   }, [handleCancelOrder]);
 
-  let s = 1;
+  let s1 = 1,
+    s2 = 1,
+    s3 = 1;
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -141,6 +143,15 @@ const My_order = () => {
                   Address
                 </th>
                 <th
+                  className="col-1 pt-2 pb-2"
+                  style={{
+                    borderStyle: "solid",
+                    borderColor: "black",
+                  }}
+                >
+                  OTP
+                </th>
+                <th
                   className="col-2 pt-2 pb-2"
                   style={{
                     borderStyle: "solid",
@@ -163,7 +174,7 @@ const My_order = () => {
                 ? orders.map((elem) => (
                     <>
                       <tr className="col-12 pl-1 pr-1">
-                        <td className="pl-1 pr-1">{s++}</td>
+                        <td className="pl-1 pr-1">{s1++}</td>
                         <td className="pl-1 pr-1">{elem.time}</td>
                         <td className="pl-1 pr-1">
                           <table style={{ textAlign: "center" }}>
@@ -215,6 +226,7 @@ const My_order = () => {
                           </table>
                         </td>
                         <td className="pl-1 pr-1">{elem.orderAddress}</td>
+                        <td className="pl-1 pr-1">{elem.OTP}</td>
                         <td className="pl-1 pr-1">
                           <table>
                             <tr>{elem.deliveryBoy.username}</tr>
@@ -291,6 +303,7 @@ const My_order = () => {
             >
               Cancled Orders
             </div>
+
             {/* Show cancled orders */}
             <table className="col-11">
               <tr className="col-12 Order_table">
@@ -362,7 +375,7 @@ const My_order = () => {
                 ? cancledOrders.map((elem) => (
                     <>
                       <tr className="col-12 pl-1 pr-1">
-                        <td className="pl-1 pr-1">{s++}</td>
+                        <td className="pl-1 pr-1">{s2++}</td>
                         <td className="pl-1 pr-1">{elem.time}</td>
                         <td className="pl-1 pr-1">
                           <table style={{ textAlign: "center" }}>
@@ -470,6 +483,7 @@ const My_order = () => {
             >
               Delivered Orders
             </div>
+
             {/* Show delivered orders */}
             <table className="col-11">
               <tr className="col-12 Order_table">
@@ -550,7 +564,7 @@ const My_order = () => {
                 ? delivereddOrders.map((elem) => (
                     <>
                       <tr className="col-12 pl-1 pr-1">
-                        <td className="pl-1 pr-1">{s++}</td>
+                        <td className="pl-1 pr-1">{s3++}</td>
                         <td className="pl-1 pr-1">{elem.time}</td>
                         <td className="pl-1 pr-1">
                           <table style={{ textAlign: "center" }}>

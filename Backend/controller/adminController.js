@@ -9,6 +9,7 @@ const userModel = require("../models/user-model");
 const restaurentModel = require("../models/restaurent-model");
 const categoryModel = require("../models/category-model");
 const orderModel = require("../models/order-model");
+const foodModel = require("../models/food-model");
 const fs = require("fs");
 
 // Create Admin
@@ -482,6 +483,40 @@ module.exports.confirmDelete = async (req, res) => {
       $pull: { currentOrders: orderId },
     });
     res.send("Delete confirmed");
+  } catch (err) {
+    console.log(err.message);
+    res.send(err.message);
+  }
+};
+
+// Set as today's offer
+module.exports.setAsTodaysOffer = async (req, res) => {
+  try {
+    let { foodId } = req.body;
+    await foodModel.findOneAndUpdate(
+      { _id: foodId },
+      {
+        $set: { setAsTodaysOffer: true },
+      }
+    );
+    res.send("Set as today's offer");
+  } catch (err) {
+    console.log(err.message);
+    res.send(err.message);
+  }
+};
+
+// Remove from today's offer
+module.exports.removeFromTodaysOffer = async (req, res) => {
+  try {
+    let { foodId } = req.body;
+    await foodModel.findOneAndUpdate(
+      { _id: foodId },
+      {
+        $set: { setAsTodaysOffer: false },
+      }
+    );
+    res.send("Removed today's offer");
   } catch (err) {
     console.log(err.message);
     res.send(err.message);

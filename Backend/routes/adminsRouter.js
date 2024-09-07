@@ -27,6 +27,7 @@ const {
   updateCategory,
   fetchAllOredes,
   confirmDelete,
+  setAsTodaysOffer,removeFromTodaysOffer
 } = require("../controller/adminController");
 const {
   uploadAdminProfile,
@@ -136,5 +137,11 @@ router.get("/fetchallorders", isLoggedIn, fetchAllOredes);
 
 // CONFIRM DELETE
 router.put("/confirmdelete", isLoggedIn, confirmDelete);
+
+// Add to todays offer
+router.put("/todaysoffer", isLoggedIn, setAsTodaysOffer);
+
+// Remove from todays offer
+router.put("/removetodaysoffer", isLoggedIn, removeFromTodaysOffer);
 
 module.exports = router;
