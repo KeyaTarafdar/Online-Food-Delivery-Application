@@ -107,7 +107,7 @@ module.exports.getUser = async (req, res) => {
     });
     await user.populate({
       // path: "cancledOrders",
-      path: "orders cancledOrders",
+      path: "orders cancledOrders deliveredOrders",
       populate: { path: "foodId deliveryBoy" },
     });
     // console.log(user)

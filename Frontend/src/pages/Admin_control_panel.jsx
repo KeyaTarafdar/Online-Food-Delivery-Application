@@ -9,6 +9,7 @@ import { BiSolidOffer } from "react-icons/bi";
 import Navbar from "react-bootstrap/Navbar";
 import Admin_order_array from "../Components/Array/Admin_order_array";
 import Table_row from "../Components/Table_row";
+import DeletedOrderTableRow from "../Components/DeletedOrderTableRow";
 import Restaurent_list_array from "../Components/Array/Restaurent_list_array";
 import Update_Res from "../Components/Update_Res";
 import Category_array from "../Components/Array/Category_array";
@@ -71,6 +72,8 @@ const Admin_control_panel = () => {
   const OrderInfo = () => {
     setData(Admin_order_array);
     setOrder_info(true);
+    setshowCancleOrders(false);
+    setshowDeliveredOrders(false);
     setUser_info(false);
     setDelivery_boy_info(false);
     setUpdate(false);
@@ -79,7 +82,7 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setTodays_info(false);
-    getAdmin()
+    getAdmin();
   };
 
   const [todays_info, setTodays_info] = useState(false);
@@ -207,6 +210,19 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setTodays_info(false);
+  };
+
+  const [showCancleOrders, setshowCancleOrders] = useState(false);
+  const [showDeliveredOrders, setshowDeliveredOrders] = useState(false);
+
+  const handleShowCancledOrders = () => {
+    setshowCancleOrders(true);
+    setOrder_info(false);
+  };
+
+  const handleShowDeliveredOrders = () => {
+    setshowDeliveredOrders(true);
+    setOrder_info(false);
   };
 
   // Update company name---------------------------------------------------
@@ -412,7 +428,7 @@ const Admin_control_panel = () => {
     fetchAdmin().then((response) => {
       setadminName(response.username);
       SetprofilePicture(response.image);
-      setallOrders(response.currentOrders)
+      setallOrders(response.currentOrders);
     });
   };
 
@@ -469,6 +485,7 @@ const Admin_control_panel = () => {
   const [newDeliveryBoyPhone, setnewDeliveryBoyPhone] = useState();
   const [newDeliveryBoyEmail, setnewDeliveryBoyEmail] = useState();
   const [newDeliveryBoyAddress, setnewDeliveryBoyAddress] = useState();
+  const [newDeliveryBoyPassword, setnewDeliveryBoyPassword] = useState();
   const [newDeliveryBoyServiceAddress, setnewDeliveryBoyServiceAddress] =
     useState();
   // Add Delivery boy
@@ -477,6 +494,7 @@ const Admin_control_panel = () => {
       newDeliveryBoyName,
       newDeliveryBoyPhone,
       newDeliveryBoyEmail,
+      newDeliveryBoyPassword,
       newDeliveryBoyAddress,
       newDeliveryBoyServiceAddress
     ).then((response) => {
@@ -546,6 +564,8 @@ const Admin_control_panel = () => {
   const [categoryImage, setcategoryImage] = useState();
 
   const [allOrders, setallOrders] = useState([]);
+  const [allCancledOrders, setallCancledOrders] = useState([]);
+  const [allDeliveredOrders, setallDeliveredOrders] = useState([]);
 
   const [allCategory, setallCategory] = useState([]);
 
@@ -586,9 +606,16 @@ const Admin_control_panel = () => {
       setallCategory(response);
     });
 
-    // getAllOrders().then((response) => {
-    //   setallOrders(response);
-    // });
+    getAllOrders().then((response) => {
+      const canceledOrders = response.filter(
+        (order) => order.isDeleted === true
+      );
+      setallCancledOrders(canceledOrders);
+      const deliveredOrders = response.filter(
+        (order) => order.deliverStatus == "Delivered"
+      );
+      setallDeliveredOrders(deliveredOrders);
+    });
   }, []);
   return (
     <>
@@ -787,7 +814,9 @@ const Admin_control_panel = () => {
           !add_res &&
           !update_food_category &&
           !update_food_item &&
-          !update_delivery_boy ? (
+          !update_delivery_boy &&
+          !showCancleOrders &&
+          !showDeliveredOrders ? (
             <div
               className="col-10 admin_default_page"
               style={{ height: "92vh" }}
@@ -991,6 +1020,274 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {allOrders.map((elem) => {
+                return (
+                  <Table_row
+                    serial={serial_order++}
+                    name={elem.userId ? elem.userId.username : ""}
+                    phone={elem.userId.contact}
+                    address={elem.userId.address}
+                    time={elem.time}
+                    id={elem._id}
+                    delivery_sts={elem.deliverStatus}
+                    payment_sts={"payment_sts"}
+                    payment_mode={"payment_mode"}
+                    payment_id={"payment_id"}
+                    food={elem.foodId}
+                    qty={"d"}
+                    res={"res"}
+                    price={elem.totalAmount}
+                    otp={elem.OTP}
+                    deliveryBoyName={
+                      elem.deliveryBoy ? elem.deliveryBoy.username : ""
+                    }
+                    deliveryBoyPhone={
+                      elem.deliveryBoy ? elem.deliveryBoy.contact : ""
+                    }
+                    isDeleted={elem.isDeleted}
+                  />
+                );
+              })}
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "5rem",
+                  marginLeft: "2rem",
+                  justifyContent: "left",
+                  gap: "5rem",
+                }}
+              >
+                <button
+                  className="btn btn-success"
+                  onClick={handleShowCancledOrders}
+                >
+                  Cancle Orders
+                </button>
+                <button
+                  className="btn btn-success"
+                  onClick={handleShowDeliveredOrders}
+                >
+                  Delivered Orders
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          {/* Show cancled orders */}
+          {showCancleOrders ? (
+            <div
+              className="col-12 m-0 p-0"
+              style={{ height: "92vh", overflowY: "auto" }}
+            >
+              <div className="m-0 p-0 d-flex">
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Serial no
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Username
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Phone no
+                </div>
+                <div
+                  className="head col-3 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Address
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Time
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Order Id
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Status
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Boy Name
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Boy Phone
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Payment Status
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Payment Mode
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Payment Id
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  OTP
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Order Info
+                </div>
+              </div>
+              {allCancledOrders.map((elem) => {
+                return (
+                  <DeletedOrderTableRow
+                    serial={serial_order++}
+                    name={elem.userId ? elem.userId.username : ""}
+                    phone={elem.userId.contact}
+                    address={elem.userId.address}
+                    time={elem.time}
+                    id={elem._id}
+                    delivery_sts={elem.deliverStatus}
+                    payment_sts={"payment_sts"}
+                    payment_mode={"payment_mode"}
+                    payment_id={"payment_id"}
+                    food={elem.foodId}
+                    qty={"d"}
+                    res={"res"}
+                    price={elem.totalAmount}
+                    otp={elem.OTP}
+                    deliveryBoyName={
+                      elem.deliveryBoy ? elem.deliveryBoy.username : ""
+                    }
+                    deliveryBoyPhone={
+                      elem.deliveryBoy ? elem.deliveryBoy.contact : ""
+                    }
+                    isDeleted={elem.isDeleted}
+                  />
+                );
+              })}
+            </div>
+          ) : null}
+
+          {/* Show delivered orders */}
+          {showDeliveredOrders ? (
+            <div
+              className="col-12 m-0 p-0"
+              style={{ height: "92vh", overflowY: "auto" }}
+            >
+              <div className="m-0 p-0 d-flex">
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Serial no
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Username
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Phone no
+                </div>
+                <div
+                  className="head col-3 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Address
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Time
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Order Id
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Status
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Boy Name
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Delivery Boy Phone
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Payment Status
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Payment Mode
+                </div>
+                <div
+                  className="head col-2 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Payment Id
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  OTP
+                </div>
+                <div
+                  className="head col-1 pt-2 pb-0"
+                  style={{ border: "1px solid black" }}
+                >
+                  Order Info
+                </div>
+              </div>
+              {allDeliveredOrders.map((elem) => {
                 return (
                   <Table_row
                     serial={serial_order++}
@@ -2066,7 +2363,7 @@ const Admin_control_panel = () => {
                   border: "2px solid black",
                   borderRadius: "50px",
                   marginLeft: "25%",
-                  marginTop: "12%",
+                  marginTop: "5%",
                   paddingBottom: "10rem",
                 }}
               >
@@ -2118,6 +2415,24 @@ const Admin_control_panel = () => {
                     }}
                     onChange={(e) => {
                       setnewDeliveryBoyEmail(e.target.value);
+                    }}
+                  ></input>
+                </div>
+                <div className="col-12 pt-3" style={{ display: "flex" }}>
+                  <div className="col-4 pl-0 pt-0">
+                    <h5 style={{ marginTop: "7px" }}>Enter Password: </h5>
+                  </div>
+                  <input
+                    className="col-8 pt-0"
+                    type="password"
+                    placeholder="Enter Password..."
+                    style={{
+                      borderStyle: "solid",
+                      borderRadius: "5px",
+                      height: "50px",
+                    }}
+                    onChange={(e) => {
+                      setnewDeliveryBoyPassword(e.target.value);
                     }}
                   ></input>
                 </div>

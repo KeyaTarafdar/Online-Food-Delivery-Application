@@ -5,6 +5,7 @@ const db = require("./config/mongoose-connection");
 const adminsRouter = require("./routes/adminsRouter");
 const foodsRouter = require("./routes/foodsRouter");
 const usersRouter = require("./routes/usersRouter");
+const deliveryBoysRouter=require('./routes/deliveryBoysRouters')
 const cors = require("cors");
 const companyDetailsModel = require("./models/companyDetails-model");
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use("/admins", adminsRouter);
 app.use("/users", usersRouter);
+app.use("/deliveryboys", deliveryBoysRouter);
 app.use("/foods", foodsRouter);
 
 app.get("/companyDetails", async (req, res) => {

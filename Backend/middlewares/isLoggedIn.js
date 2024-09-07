@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user-model");
 const adminModel = require("../models/admin-model");
+const deliveryBoyModel = require("../models/deliveryBoy-model");
 
 module.exports = async (req, res, next) => {
   try {
@@ -14,13 +15,21 @@ module.exports = async (req, res, next) => {
       if (user) {
         req.user = user;
         next();
-      } else {
+      } else{
         let admin = await adminModel
           .findOne({ email: decode.email })
           .select("-password");
         if (admin) {
           req.admin = admin;
           next();
+        }else{
+          let deliveryBoy = await deliveryBoyModel
+          .findOne({ email: decode.email })
+          .select("-password");
+        if (deliveryBoy) {
+          req.deliveryBoy = deliveryBoy;
+          next();
+        }
         }
       }
     } else {

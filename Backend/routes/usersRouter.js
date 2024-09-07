@@ -51,7 +51,6 @@ router.put("/addtocart", isLoggedIn, addToCart);
 
 // DELETE FROM THE CART
 router.put("/deleteitemfromcart", isLoggedIn, deleteItemFromCart);
-module.exports = router;
 
 // ADD TO CART INCREASE QUANTITY
 router.put("/addtocartincreasequantity", isLoggedIn, addToCartIncreaseQuantity);
@@ -74,3 +73,5 @@ router.get("/getorderbyid", isLoggedIn, fetchOrderById);
 
 // CANCLE ORDER
 router.delete("/cancleorder", isLoggedIn, cancleOrder);
+
+module.exports = router;

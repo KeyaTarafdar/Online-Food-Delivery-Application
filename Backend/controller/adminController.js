@@ -175,15 +175,26 @@ module.exports.getAdmin = async (req, res) => {
 // Create Delivery Boy
 module.exports.createDeliveryBoy = async (req, res) => {
   try {
-    let { username, contact, email, address, serviceAddress } = req.body;
-    if (username && contact && email && address && serviceAddress) {
-      await deliveryBoyModel.create({
-        username,
-        contact,
-        email,
-        address,
-        serviceAddress,
+    let { username, contact, email, password, address, serviceAddress } =
+      req.body;
+    if (username && contact && email && password && address && serviceAddress) {
+      bcrypt.genSalt(12, async (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+          if (err) {
+            return res.send(err.message);
+          }
+          let a = await deliveryBoyModel.create({
+            username,
+            contact,
+            email,
+            password: hash,
+            address,
+            serviceAddress,
+          });
+          console.log(a);
+        });
       });
+
       res.send("Delivery Boy added successfully");
     } else {
       res.send("Something is missing");
@@ -466,12 +477,10 @@ module.exports.fetchAllOredes = async (req, res) => {
 // Comfirm delete
 module.exports.confirmDelete = async (req, res) => {
   try {
-    let {orderId} = req.body;
-    await adminModel.updateMany(
-      {
-        $pull: { currentOrders: orderId },
-      }
-    );
+    let { orderId } = req.body;
+    await adminModel.updateMany({
+      $pull: { currentOrders: orderId },
+    });
     res.send("Delete confirmed");
   } catch (err) {
     console.log(err.message);

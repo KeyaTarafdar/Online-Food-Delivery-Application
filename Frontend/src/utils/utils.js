@@ -92,6 +92,21 @@ export const loginAdmin = async (email, password) => {
   }
 };
 
+// Login delivery boy
+export const loginDeliveryBoy = async (email, password) => {
+  try {
+    let response = await axios.post(
+      "http://localhost:8000/deliveryboys/login",
+      { email, password },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err.message);
+    alert("An error occured during login");
+  }
+};
+
 // Admin logout
 export const logoutAdmin = async () => {
   try {
@@ -166,13 +181,14 @@ export const addDeliveryBoy = async (
   username,
   contact,
   email,
+  password,
   address,
   serviceAddress
 ) => {
   try {
     let response = await axios.post(
       "http://localhost:8000/admins/createdeliveryboy",
-      { username, contact, email, address, serviceAddress },
+      { username, contact, email, password, address, serviceAddress },
       { withCredentials: true }
     );
     return response.data;
@@ -593,6 +609,21 @@ export const confirmOrderDelete = async (id) => {
     let response = await axios.put(
       `http://localhost:8000/admins/confirmdelete`,
       { orderId: id },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+// Fetch delivery boy
+export const fetchDeliveryBoy=async () => {
+  try {
+    let response = await axios.get(
+      `http://localhost:8000/deliveryboys/fetchsingledeliveryboy`,
       {
         withCredentials: true,
       }

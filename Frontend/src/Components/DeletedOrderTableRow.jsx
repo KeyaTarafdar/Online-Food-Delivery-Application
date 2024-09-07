@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { confirmOrderDelete } from "../utils/utils";
+import React, { useEffect } from "react";
+import { useState } from "react";
 
 const Table_row = ({
   serial,
@@ -17,22 +16,12 @@ const Table_row = ({
   otp,
   deliveryBoyName,
   deliveryBoyPhone,
-  isDeleted,
 }) => {
   const [totalAmount, settotalAmount] = useState(0);
   useEffect(() => {
     const total = food.reduce((sum, item) => sum + item.price, 0);
     settotalAmount(total);
   }, []);
-
-  const color = isDeleted ? "red" : "black";
-  const display = isDeleted ? "block" : "none";
-
-  const style = {
-    boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
-    color: color,
-  };
-
   return (
     <>
       <div
@@ -42,46 +31,116 @@ const Table_row = ({
             "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
         }}
       >
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {serial}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {name}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {phone}
         </div>
-        <div className="col-3" style={style}>
+        <div
+          className="col-3"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {address}
         </div>
-        <div className="col-2" style={style}>
+        <div
+          className="col-2"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {time}
         </div>
-        <div className="col-2" style={style}>
+        <div
+          className="col-2"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {id}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {delivery_sts}
         </div>
-        <div className="col-2" style={style}>
+        <div
+          className="col-2"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {deliveryBoyName}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {deliveryBoyPhone}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {payment_sts}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {payment_mode}
         </div>
-        <div className="col-2" style={style}>
+        <div
+          className="col-2"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {payment_id}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           {otp}
         </div>
-        <div className="col-1" style={style}>
+        <div
+          className="col-1"
+          style={{
+            boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+          }}
+        >
           <button
             className="btn-xs btn-success"
             data-toggle="modal"
@@ -90,15 +149,6 @@ const Table_row = ({
             Check
           </button>
         </div>
-        <button
-          className="btn-xs btn-success"
-          style={{ display: display }}
-          onClick={() => {
-            confirmOrderDelete(id).then((response) => alert(response));
-          }}
-        >
-          Ok
-        </button>
       </div>
 
       {/* <!-- Modal --> */}
@@ -126,7 +176,7 @@ const Table_row = ({
             </div>
             <div class="modal-body d-flex">
               <div className="col-5">
-                <div >
+                <div className="">
                   <b>FoodItem</b>
                 </div>
                 <br></br>
@@ -137,7 +187,7 @@ const Table_row = ({
                 </table>
               </div>
               <div className="col-2">
-                <div>
+                <div className="">
                   <b>Quantity</b>
                 </div>
                 <br></br>
@@ -153,7 +203,7 @@ const Table_row = ({
                 </table>
               </div>
               <div className="col-3">
-                <div >
+                <div className="">
                   <b>Restaurent</b>
                 </div>
                 <br></br>
@@ -166,7 +216,7 @@ const Table_row = ({
                 </table>
               </div>
               <div className="col-3">
-                <div>
+                <div className="">
                   <b>Price</b>
                 </div>
                 <br></br>
@@ -185,8 +235,8 @@ const Table_row = ({
                 </table>
               </div>
             </div>
-            <div>
-            <h6>Total Price: {totalAmount}</h6>
+            <div className="">
+              <h6>Total Price: {totalAmount}</h6>
             </div>
             <div class="modal-footer">
               <button

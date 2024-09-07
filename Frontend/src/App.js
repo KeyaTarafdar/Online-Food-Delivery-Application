@@ -12,6 +12,7 @@ import Order_table from './Components/Order_table';
 import Services from './Components/Services';
 import Restaurent from './pages/Restaurent';
 import Admin_control_panel from './pages/Admin_control_panel';
+import DeliveryPage from './pages/DeliveryPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route exact path='/Order_table' element={<Order_table/>}></Route>
           <Route exact path='/Services' element={<Services/>}></Route>
           <Route exact path='/Admin' element={<Admin_control_panel/>}></Route>
+          <Route exact path='/DeliveryBoy' element={<DeliveryPage/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loader";
-import { loginUser, loginAdmin, fetchCompanyDetails } from "../utils/utils";
+import {
+  loginUser,
+  loginAdmin,
+  fetchCompanyDetails,
+  loginDeliveryBoy,
+} from "../utils/utils";
 
 const Login = () => {
   const [companyName, setcompanyName] = useState();
@@ -41,7 +46,17 @@ const Login = () => {
               navigate("/Admin");
             }, 3000);
           } else {
-            alert(adminResponse);
+            loginDeliveryBoy(email, password).then((deliveryBoyResponse) => {
+              if (deliveryBoyResponse === "Login successfully") {
+                setLoading(true);
+                setTimeout(() => {
+                  setLoading(false);
+                  navigate("/DeliveryBoy");
+                }, 3000);
+              } else {
+                alert(deliveryBoyResponse);
+              }
+            });
           }
         });
       }
