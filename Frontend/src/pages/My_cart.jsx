@@ -313,7 +313,7 @@ const My_cart = () => {
         <div
           className={`modal fade show`}
           id="orderModal"
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby="exampleModalLabel"
           aria-hidden={!modal}
           style={{ display: modal ? "block" : "none" }}

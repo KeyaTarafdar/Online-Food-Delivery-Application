@@ -201,7 +201,7 @@ const Update_Res = ({ serial, name, image, address, id }) => {
       <div
         class="modal fade"
         id={`exampleModal-${id}`}
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"

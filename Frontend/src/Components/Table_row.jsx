@@ -105,7 +105,7 @@ const Table_row = ({
       <div
         class="modal fade"
         id={`exampleModal-${id}`}
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >

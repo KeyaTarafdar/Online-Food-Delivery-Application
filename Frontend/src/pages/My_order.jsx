@@ -252,7 +252,7 @@ const My_order = () => {
                       <div
                         class="modal fade"
                         id={`exampleModal-${elem._id}`}
-                        tabindex="-1"
+                        tabIndex="-1"
                         role="dialog"
                         aria-labelledby="exampleModalLabel"
                         aria-hidden="true"
@@ -432,7 +432,7 @@ const My_order = () => {
                       <div
                         class="modal fade"
                         id={`exampleModal-${elem._id}`}
-                        tabindex="-1"
+                        tabIndex="-1"
                         role="dialog"
                         aria-labelledby="exampleModalLabel"
                         aria-hidden="true"
@@ -622,7 +622,7 @@ const My_order = () => {
                       <div
                         class="modal fade"
                         id={`exampleModal-${elem._id}`}
-                        tabindex="-1"
+                        tabIndex="-1"
                         role="dialog"
                         aria-labelledby="exampleModalLabel"
                         aria-hidden="true"

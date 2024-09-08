@@ -84,7 +84,7 @@ const Services = () => {
     <>
       <div className="col-lg-12 pt-1 pl-5 pr-5 d-none d-xl-block pb-2">
         <Slider {...sliderSettings_xl}>
-          {restaurents.map((card) => (
+          {Array.isArray(restaurents) && restaurents.map((card) => (
             <div
               key={card.id}
               className="pt-3"
@@ -135,7 +135,7 @@ const Services = () => {
         style={{ backgroundColor: "#fff" }}
       >
         <Slider {...sliderSettings_lg}>
-          {restaurents.map((card) => (
+          {Array.isArray(restaurents) && restaurents.map((card) => (
             <div
               key={card.id}
               className="pt-3"
@@ -186,7 +186,7 @@ const Services = () => {
         style={{ backgroundColor: "#fff" }}
       >
         <Slider {...sliderSettings_md}>
-          {restaurents.map((card) => (
+          {Array.isArray(restaurents) && restaurents.map((card) => (
             <div
               key={card.id}
               className="pt-3"
@@ -237,7 +237,7 @@ const Services = () => {
         style={{ backgroundColor: "#fff" }}
       >
         <Slider {...sliderSettings_sm}>
-          {restaurents.map((card) => (
+          {Array.isArray(restaurents) && restaurents.map((card) => (
             <div
               key={card.id}
               className="pt-3"

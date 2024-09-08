@@ -1835,7 +1835,7 @@ const Admin_control_panel = () => {
                 <div
                   className="modal fade"
                   id="add_new"
-                  tabindex="-1"
+                  tabIndex="-1"
                   role="dialog"
                   aria-labelledby="exampleModalLabel"
                   aria-hidden="true"
@@ -1984,7 +1984,7 @@ const Admin_control_panel = () => {
                 <div
                   className="modal fade"
                   id="add_new_cat"
-                  tabindex="-1"
+                  tabIndex="-1"
                   role="dialog"
                   aria-labelledby="exampleModalLabel"
                   aria-hidden="true"
@@ -2214,7 +2214,7 @@ const Admin_control_panel = () => {
                 <div
                   className="modal fade"
                   id="add_new_cat"
-                  tabindex="-1"
+                  tabIndex="-1"
                   role="dialog"
                   aria-labelledby="exampleModalLabel"
                   aria-hidden="true"
