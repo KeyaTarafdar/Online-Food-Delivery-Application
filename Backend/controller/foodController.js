@@ -102,7 +102,7 @@ module.exports.updateFoodItem = async (req, res) => {
     if (name !== "undefined") {
       await foodModel.findOneAndUpdate({ _id: id }, { $set: { name } });
     }
-    if (price !== "0") {
+    if (price !== 'undefined') {
       await foodModel.findOneAndUpdate({ _id: id }, { $set: { price } });
     }
     if (category !== "undefined") {

@@ -102,7 +102,7 @@ router.put(
 );
 
 // FETCH ALL RESTAURENT
-router.get("/fetchallrestaurent", isLoggedIn, fetchAllRestaurent);
+router.get("/fetchallrestaurent", fetchAllRestaurent);
 
 // FETCH A PARTICULAR RESTAURENT
 router.get("/fetchsinglerestaurent", isLoggedIn, fetchSingleRestaurent);
