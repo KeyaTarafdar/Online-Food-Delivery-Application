@@ -55,11 +55,14 @@ const Admin_control_panel = () => {
     setOrder_info(false);
     setDelivery_boy_info(false);
     setUpdate(false);
-    setUpdate_web_details(FaRegCircleStop);
+    setUpdate_web_details(false);
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setTodays_info(false);
+    setshowCancleOrders(false);
+    setshowDeliveredOrders(false);
+    setUpdate(false)
 
     getAllUsers();
   };
@@ -93,6 +96,8 @@ const Admin_control_panel = () => {
     setAdd_res(false);
     setUpdate_food_category(false);
     setUpdate_food_item(false);
+    setshowCancleOrders(false);
+    setshowDeliveredOrders(false);
   };
 
   const [deliver_boy_info, setDelivery_boy_info] = useState(false);
@@ -106,6 +111,8 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setTodays_info(false);
+    setshowCancleOrders(false);
+    setshowDeliveredOrders(false);
 
     getDeliveryBoy();
   };
@@ -705,8 +712,14 @@ const Admin_control_panel = () => {
               <div className="admin_name p-0">{adminName}</div>
               <div className="admin_deg ">Admin</div>
             </div>
-            <div className="">
-              <div className="admin_menu">
+            <div>
+              <div
+                className="admin_menu"
+                style={{
+                  backgroundColor: user_info ? "#5cb85c" : "",
+                  color: user_info ? "white" : "black",
+                }}
+              >
                 <div className="col-2">
                   <FaUser className="admin_icon" />
                 </div>
@@ -718,7 +731,19 @@ const Admin_control_panel = () => {
                   User Info&emsp;&emsp;&emsp;
                 </div>
               </div>
-              <div className="admin_menu">
+              <div
+                className="admin_menu"
+                style={{
+                  backgroundColor:
+                    order_info || showCancleOrders || showDeliveredOrders
+                      ? "#5cb85c"
+                      : "",
+                  color:
+                    order_info || showCancleOrders || showDeliveredOrders
+                      ? "white"
+                      : "black",
+                }}
+              >
                 <div className="col-2 pt-0">
                   <FaGift className="admin_icon" />
                 </div>
@@ -732,7 +757,13 @@ const Admin_control_panel = () => {
               </div>
 
               {/* Todays Offer */}
-              <div className="admin_menu">
+              <div
+                className="admin_menu"
+                style={{
+                  backgroundColor: todays_info ? "#5cb85c" : "",
+                  color: todays_info ? "white" : "black",
+                }}
+              >
                 <div className="col-2 pt-0 ">
                   <BiSolidOffer className="admin_icon" />
                 </div>
@@ -745,7 +776,13 @@ const Admin_control_panel = () => {
                 </div>
               </div>
 
-              <div className="admin_menu">
+              <div
+                className="admin_menu"
+                style={{
+                  backgroundColor: deliver_boy_info ? "#5cb85c" : "",
+                  color: deliver_boy_info ? "white" : "black",
+                }}
+              >
                 <div className="col-2 pt-0">
                   <MdDeliveryDining className="admin_icon" />
                 </div>
@@ -757,7 +794,13 @@ const Admin_control_panel = () => {
                   Delivery Boy Info
                 </div>
               </div>
-              <div className="admin_menu">
+              <div
+                className="admin_menu"
+                style={{
+                  backgroundColor: update || update_web_details || update_delivery_boy || update_food_item || update_food_category || add_res ? "#5cb85c" : "",
+                  color: update || update_web_details || update_delivery_boy || update_food_item || update_food_category || add_res ? "white" : "black",
+                }}
+              >
                 <div className="col-2 pt-0">
                   <GrUpdate className="admin_icon" />
                 </div>
@@ -812,7 +855,7 @@ const Admin_control_panel = () => {
           !showDeliveredOrders ? (
             <div
               className="col-10 admin_default_page"
-              style={{ height: "92vh" }}
+              style={{ height: "98vh" }}
             >
               <b>
                 <h1 style={{ margin: "auto", paddingTop: "22%" }}>
@@ -924,7 +967,7 @@ const Admin_control_panel = () => {
           {order_info ? (
             <div
               className="col-12 m-0 p-0"
-              style={{ height: "92vh", overflowY: "auto" }}
+              style={{ height: "98vh", overflowY: "auto" }}
             >
               <div className="m-0 p-0 d-flex">
                 <div
@@ -1070,7 +1113,7 @@ const Admin_control_panel = () => {
           {showCancleOrders ? (
             <div
               className="col-12 m-0 p-0"
-              style={{ height: "92vh", overflowY: "auto" }}
+              style={{ height: "98vh", overflowY: "auto" }}
             >
               <div className="m-0 p-0 d-flex">
                 <div
@@ -1193,7 +1236,7 @@ const Admin_control_panel = () => {
           {showDeliveredOrders ? (
             <div
               className="col-12 m-0 p-0"
-              style={{ height: "92vh", overflowY: "auto" }}
+              style={{ height: "98vh", overflowY: "auto" }}
             >
               <div className="m-0 p-0 d-flex">
                 <div

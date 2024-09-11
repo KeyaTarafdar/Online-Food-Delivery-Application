@@ -101,13 +101,11 @@ const Home2 = () => {
   };
 
   const myAccount = async () => {
-    findUser().then((user) => {
-      if (user.username) {
+      if (account!=="My Account") {
         navigate("/My_account");
       } else {
         alert("You have to Login first!");
       }
-    });
   };
 
   const handleAddToCart = async (id) => {
@@ -148,12 +146,25 @@ const Home2 = () => {
     fetchAllFoods().then((response) => {
       setfoods(response);
     });
-
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, [handleAddToCart]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
+        <div class="Home2_loader"></div>
+      </div>
+    );
   }
 
   return (

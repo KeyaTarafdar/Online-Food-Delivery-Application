@@ -24,7 +24,7 @@ router.post(
 );
 
 // FETCH ALL FOOD ITEM
-router.get("/getallfooditems", isLoggedIn, fetchAllFoodItems);
+router.get("/getallfooditems", fetchAllFoodItems);
 
 // FETCH SINGLE FOOD ITEM
 router.get("/getsinglefooditem", isLoggedIn, fetchSingleFoodItem);

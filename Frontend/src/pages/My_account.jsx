@@ -10,6 +10,7 @@ import Loader from "../Components/Loader";
 
 const My_account = () => {
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
   const [updateButtonClick, setupdateButtonClick] = useState(false);
 
   const [name, setname] = useState("");
@@ -24,6 +25,7 @@ const My_account = () => {
   const [profilePicture, SetprofilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
 
+
   const fetchUser = () => {
     findUser().then((user) => {
       setname(user.username);
@@ -31,6 +33,7 @@ const My_account = () => {
       setphone(user.contact);
       setaddress(user.address);
       SetprofilePicture(user.image);
+      setLoader(false);
     });
   };
 
@@ -116,8 +119,25 @@ const My_account = () => {
     fetchCompanyDetails().then((company) => {
       setcompanyName(company.name.toUpperCase());
     });
+
     fetchUser();
   }, []);
+
+  if (loader) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
+        <div class="myAccount_loader"></div>
+      </div>
+    );
+  }
 
   return (
     <>

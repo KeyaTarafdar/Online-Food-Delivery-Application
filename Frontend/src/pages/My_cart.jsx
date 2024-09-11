@@ -74,7 +74,20 @@ const My_cart = () => {
 
   var s = 1;
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <div class="myCart_loader">
+          <div class="myCart_panWrapper">
+            <div class="myCart_pan">
+              <div class="myCart_food"></div>
+              <div class="myCart_panBase"></div>
+              <div class="myCart_panHandle"></div>
+            </div>
+            <div class="myCart_panShadow"></div>
+          </div>
+        </div>
+      </>
+    );
   }
   return (
     <>
@@ -243,7 +256,7 @@ const My_cart = () => {
                           +
                         </button>
                       </td>
-                      <td className="col-1">{price*itemQuantity}</td>
+                      <td className="col-1">{price * itemQuantity}</td>
                       <td className="col-1">
                         <button
                           className="btn-sm btn-danger mt-2 mb-2 ml-4"
@@ -373,7 +386,7 @@ const My_cart = () => {
                   {uniqueCart.map((elem) => {
                     const { _id, price } = elem;
                     const itemQuantity = getQuantity(_id);
-                    return <div key={_id}>{price*itemQuantity}</div>;
+                    return <div key={_id}>{price * itemQuantity}</div>;
                   })}
                 </div>
               </div>
