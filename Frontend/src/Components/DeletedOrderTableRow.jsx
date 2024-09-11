@@ -176,7 +176,7 @@ const Table_row = ({
             </div>
             <div class="modal-body d-flex">
               <div className="col-5">
-                <div className="">
+                <div>
                   <b>FoodItem</b>
                 </div>
                 <br></br>
@@ -187,7 +187,7 @@ const Table_row = ({
                 </table>
               </div>
               <div className="col-2">
-                <div className="">
+                <div>
                   <b>Quantity</b>
                 </div>
                 <br></br>
@@ -203,7 +203,7 @@ const Table_row = ({
                 </table>
               </div>
               <div className="col-3">
-                <div className="">
+                <div>
                   <b>Restaurent</b>
                 </div>
                 <br></br>
@@ -216,7 +216,7 @@ const Table_row = ({
                 </table>
               </div>
               <div className="col-3">
-                <div className="">
+                <div>
                   <b>Price</b>
                 </div>
                 <br></br>
@@ -235,7 +235,7 @@ const Table_row = ({
                 </table>
               </div>
             </div>
-            <div className="">
+            <div>
               <h6>Total Price: {totalAmount}</h6>
             </div>
             <div class="modal-footer">

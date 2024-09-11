@@ -105,17 +105,17 @@ const Menu = () => {
   const [allFood, setallFood] = useState([]);
   const [allCategory, setallCategory] = useState([]);
 
-  const [loader, setloader] = useState(true)
+  const [loader, setloader] = useState(true);
 
   useEffect(() => {
     // Find user
     findUser().then((user) => {
       if (user.username) {
         setAccount(user.username.split(" ")[0]);
-        setloader(false)
+        setloader(false);
       } else {
         setAccount("My Account");
-        setloader(false)
+        setloader(false);
       }
     });
 
@@ -153,7 +153,7 @@ const Menu = () => {
     setc(false);
   };
 
-  if (allFood.length==0 || loader || companyName===null) {
+  if (allFood.length === 0 || loader || companyName === null) {
     return (
       <div className="Menu_main">
         <svg
@@ -815,6 +815,7 @@ const Menu = () => {
               >
                 <img
                   src="/Image/allFood.jpeg"
+                  alt="All food"
                   style={{
                     boxShadow:
                       "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
@@ -848,6 +849,7 @@ const Menu = () => {
                       >
                         <img
                           src={`/categoryPictures/${image}`}
+                          alt="categories"
                           style={{
                             boxShadow:
                               "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",

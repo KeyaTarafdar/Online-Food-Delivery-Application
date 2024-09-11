@@ -101,11 +101,11 @@ const Home2 = () => {
   };
 
   const myAccount = async () => {
-      if (account!=="My Account") {
-        navigate("/My_account");
-      } else {
-        alert("You have to Login first!");
-      }
+    if (account !== "My Account") {
+      navigate("/My_account");
+    } else {
+      alert("You have to Login first!");
+    }
   };
 
   const handleAddToCart = async (id) => {
@@ -395,7 +395,7 @@ const Home2 = () => {
                             >
                               <h5 className="mt-1">{card.restaurent}</h5>
                               <h6 className="mt-1">{card.name}</h6>
-                              <span className="">Price: {card.price}</span>
+                              <span>Price: {card.price}</span>
                             </div>
                             <div className="pt-3">
                               <button
@@ -466,7 +466,7 @@ const Home2 = () => {
                               >
                                 <h5 className="mt-1">{card.restaurent}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
-                                <span className="">Price: {card.price}</span>
+                                <span>Price: {card.price}</span>
                               </div>
                               <div className="pt-3">
                                 <button
@@ -523,7 +523,6 @@ const Home2 = () => {
                                 <img
                                   src={card.img}
                                   alt=""
-                                  className=""
                                   style={{
                                     borderTopLeftRadius: "0.20rem",
                                     borderTopRightRadius: "0.20rem",
@@ -540,7 +539,7 @@ const Home2 = () => {
                               >
                                 <h5 className="mt-1">{card.res}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
-                                <span className="">Price: {card.price}</span>
+                                <span>Price: {card.price}</span>
                               </div>
                               <div className="pt-3">
                                 <button
@@ -597,7 +596,6 @@ const Home2 = () => {
                                 <img
                                   src={card.img}
                                   alt=""
-                                  className=""
                                   style={{
                                     borderTopLeftRadius: "0.20rem",
                                     borderTopRightRadius: "0.20rem",
@@ -614,7 +612,7 @@ const Home2 = () => {
                               >
                                 <h5 className="mt-1">{card.res}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
-                                <span className="">Price: {card.price}</span>
+                                <span>Price: {card.price}</span>
                               </div>
                               <div className="pt-3">
                                 <button

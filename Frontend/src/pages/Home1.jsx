@@ -499,7 +499,6 @@ const Home1 = () => {
 
         <div className="mt-5 pb-2">
           <h4
-            className=""
             style={{
               boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
               fontFamily: "teko",

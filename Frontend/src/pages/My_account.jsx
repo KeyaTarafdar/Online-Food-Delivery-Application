@@ -200,6 +200,7 @@ const My_account = () => {
               {profilePicture ? (
                 <img
                   src={`/userProfilePictures/${profilePicture}`}
+                  alt="Profile picture"
                   onClick={() => {
                     fileInputRef.current.click();
                   }}

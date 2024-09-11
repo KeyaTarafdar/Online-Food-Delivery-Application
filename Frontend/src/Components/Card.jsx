@@ -53,7 +53,6 @@ const Card = ({ id, name, image, price, restaurent }) => {
             <img
               src={`/foodItemsPictures/${image}`}
               alt={name}
-              className=""
               style={{
                 borderTopLeftRadius: "0.20rem",
                 borderTopRightRadius: "0.20rem",

@@ -105,7 +105,6 @@ const Services = () => {
                     <img
                       src={`restaurentPictures/${card.image}`}
                       alt=""
-                      className=""
                       style={{
                         height: "100%",
                         width: "80%",
@@ -156,7 +155,6 @@ const Services = () => {
                     <img
                       src={`restaurentPictures/${card.image}`}
                       alt=""
-                      className=""
                       style={{
                         height: "100%",
                         width: "80%",
@@ -207,7 +205,6 @@ const Services = () => {
                     <img
                       src={`restaurentPictures/${card.image}`}
                       alt=""
-                      className=""
                       style={{
                         height: "100%",
                         width: "80%",
@@ -258,7 +255,6 @@ const Services = () => {
                     <img
                       src={`restaurentPictures/${card.image}`}
                       alt=""
-                      className=""
                       style={{
                         height: "100%",
                         width: "100%",

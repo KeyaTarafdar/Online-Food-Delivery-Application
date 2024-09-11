@@ -135,15 +135,15 @@ const Restaurent = () => {
     findUser().then((user) => {
       if (user.username) {
         setAccount(user.username.split(" ")[0]);
-        setloader(false)
+        setloader(false);
       } else {
         setAccount("My Account");
-        setloader(false)
+        setloader(false);
       }
     });
   }, []);
 
-  if (allFood.length == 0 || loader || companyName === null) {
+  if (allFood.length === 0 || loader || companyName === null) {
     return (
       <div className="Menu_main">
         <svg
@@ -511,33 +511,33 @@ const Restaurent = () => {
                   </NavLink>
                 </div>
                 <div
-                    className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
-                    style={{ float: "left" }}
-                  >
-                    {account !== "My Account" ? (
-                      <>
-                        <MdOutlineLogout
+                  className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
+                  style={{ float: "left" }}
+                >
+                  {account !== "My Account" ? (
+                    <>
+                      <MdOutlineLogout
+                        className="header_menu"
+                        style={{ height: "25px", width: "25px" }}
+                      />
+                      <span className="header_menu" onClick={handleLogout}>
+                        &nbsp;&nbsp;Log&nbsp;out
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <NavLink to={"/Login"}>
+                        <CgLogIn
                           className="header_menu"
                           style={{ height: "25px", width: "25px" }}
                         />
-                        <span className="header_menu" onClick={handleLogout}>
-                          &nbsp;&nbsp;Log&nbsp;out
+                        <span className="header_menu">
+                          &nbsp;&nbsp;Log&nbsp;in
                         </span>
-                      </>
-                    ) : (
-                      <>
-                        <NavLink to={"/Login"}>
-                          <CgLogIn
-                            className="header_menu"
-                            style={{ height: "25px", width: "25px" }}
-                          />
-                          <span className="header_menu">
-                            &nbsp;&nbsp;Log&nbsp;in
-                          </span>
-                        </NavLink>
-                      </>
-                    )}
-                  </div>
+                      </NavLink>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/*Hamburger Menu--------------------------------------- */}
@@ -793,7 +793,6 @@ const Restaurent = () => {
               <button
                 className="flex flex-col justify-center items-center m-0 ml-2 mr-2 mt-2 mb-2 p-0"
                 style={{
-                  height: "20%",
                   borderRadius: "10px",
                   borderStyle: "solid",
                   borderColor: "#16A085",
@@ -822,7 +821,6 @@ const Restaurent = () => {
                     <button
                       className="flex flex-col justify-center items-center m-0 ml-2 mr-2 mt-2 mb-2 p-0"
                       style={{
-                        height: "20%",
                         borderRadius: "10px",
                         borderStyle: "solid",
                         borderColor: "#16A085",
@@ -848,8 +846,7 @@ const Restaurent = () => {
               <div className="container-fluid">
                 <div className="col-lg-12 pt-1 pl-5 pr-5">
                   {data.map((elem) => {
-                    const { _id, image, name, category, price, restaurent } =
-                      elem;
+                    const { _id, image, name, price, restaurent } = elem;
                     return (
                       <>
                         <Card

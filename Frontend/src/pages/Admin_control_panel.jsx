@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaUser, FaGift } from "react-icons/fa";
-import { FaRegCircleStop, FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import { MdDeliveryDining, MdDelete } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
@@ -69,7 +69,6 @@ const Admin_control_panel = () => {
 
   const [order_info, setOrder_info] = useState(false);
   const OrderInfo = () => {
-    // setData(Admin_order_array);
     setOrder_info(true);
     setshowCancleOrders(false);
     setshowDeliveredOrders(false);
@@ -607,7 +606,7 @@ const Admin_control_panel = () => {
       );
       setallCancledOrders(canceledOrders);
       const deliveredOrders = response.filter(
-        (order) => order.deliverStatus == "Delivered"
+        (order) => order.deliverStatus === "Delivered"
       );
       setallDeliveredOrders(deliveredOrders);
     });
@@ -681,6 +680,7 @@ const Admin_control_panel = () => {
                 {profilePicture ? (
                   <img
                     src={`/adminProfilePictures/${profilePicture}`}
+                    alt="Profile picture"
                     onClick={() => {
                       fileInputRef.current.click();
                     }}
@@ -725,7 +725,7 @@ const Admin_control_panel = () => {
                 </div>
                 <div
                   className="col-7 m-0 p-0"
-                  style={{ cursor: "-webkit-grab", cursor: "grab" }}
+                  style={{ cursor: "grab" }}
                   onClick={UserInfo}
                 >
                   User Info&emsp;&emsp;&emsp;
@@ -749,7 +749,7 @@ const Admin_control_panel = () => {
                 </div>
                 <div
                   className="col-7 m-0 p-0"
-                  style={{ cursor: "-webkit-grab", cursor: "grab" }}
+                  style={{ cursor: "grab" }}
                   onClick={OrderInfo}
                 >
                   Order DB&emsp;&emsp;&emsp;
@@ -769,7 +769,7 @@ const Admin_control_panel = () => {
                 </div>
                 <div
                   className="col-8 m-0 p-0"
-                  style={{ cursor: "-webkit-grab", cursor: "grab" }}
+                  style={{ cursor: "grab" }}
                   onClick={TodaysOfferInfo}
                 >
                   Today's Offers&emsp;&emsp;&emsp;
@@ -788,7 +788,7 @@ const Admin_control_panel = () => {
                 </div>
                 <div
                   className="col-7 m-0 p-0"
-                  style={{ cursor: "-webkit-grab", cursor: "grab" }}
+                  style={{cursor: "grab" }}
                   onClick={DeliverBoyInfo}
                 >
                   Delivery Boy Info
@@ -806,7 +806,7 @@ const Admin_control_panel = () => {
                 </div>
                 <div
                   className="col-7 m-0 p-0"
-                  style={{ cursor: "-webkit-grab", cursor: "grab" }}
+                  style={{ cursor: "grab" }}
                   onClick={UpdateInfo}
                 >
                   Update&emsp;&emsp;&emsp;&emsp;
@@ -1056,7 +1056,7 @@ const Admin_control_panel = () => {
                 </div>
               </div>
               {allOrders.map((elem) => {
-                if (elem.deliverStatus == "Pending")
+                if (elem.deliverStatus === "Pending")
                   return (
                     <Table_row
                       serial={serial_order++}
