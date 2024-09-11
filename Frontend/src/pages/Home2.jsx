@@ -231,29 +231,37 @@ const Home2 = () => {
                   className="col-lg-3 col-md-4 col-sm-6 m-0 p-0 m-0 d-none d-sm-block"
                   style={{ float: "left" }}
                 >
-                  <NavLink to={"/My_cart"} style={{ paddingTop: "0px" }}>
                     <FaCartArrowDown
                       className="header_menu"
                       style={{ height: "25px", width: "25px" }}
                     />
-                    <span className="header_menu">
+                    <span className="header_menu" onClick={()=>{
+                      if(account!=="My Account"){
+                        navigate('/My_cart')
+                      }else{
+                        alert("You Need to Login First!")
+                      }
+                    }}>
                       &nbsp;&nbsp;My&nbsp;Cart
                     </span>
-                  </NavLink>
                 </div>
                 <div
                   className="col-lg-3 col-md-4 m-0 p-0 d-none d-sm-none d-md-block"
                   style={{ float: "left" }}
                 >
-                  <NavLink to={"/My_order"} style={{ paddingTop: "0px" }}>
                     <FaBagShopping
                       className="header_menu"
                       style={{ height: "22px", width: "22px" }}
                     />
-                    <span className="header_menu">
+                    <span className="header_menu" onClick={()=>{
+                      if(account!=="My Account"){
+                        navigate('/My_order')
+                      }else{
+                        alert("You Need to Login First!")
+                      }
+                    }}>
                       &nbsp;&nbsp;My&nbsp;Orders
                     </span>
-                  </NavLink>
                 </div>
                 <div
                   className="col-lg-3 col-md-3 m-0 p-0 d-sm-none  d-md-none d-none d-lg-block"
