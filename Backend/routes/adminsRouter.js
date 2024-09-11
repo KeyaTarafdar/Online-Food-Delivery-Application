@@ -119,7 +119,7 @@ router.post(
 );
 
 // FETCH ALL CATEGORY
-router.get("/getallcategory", isLoggedIn, fetchAllCategory);
+router.get("/getallcategory",fetchAllCategory);
 
 // DELETE CATEGORY
 router.delete("/deletecategory", isLoggedIn, deleteCategory);

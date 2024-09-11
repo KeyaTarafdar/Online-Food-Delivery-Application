@@ -259,7 +259,6 @@ const Home2 = () => {
                   className="col-lg-3 col-md-3 m-0 p-0 d-sm-none  d-md-none d-none d-lg-block"
                   style={{ float: "left" }}
                 >
-                  {/* <NavLink to={"/My_account"} style={{ paddingTop: "0px" }}> */}
                   <MdAccountCircle
                     className="header_menu"
                     style={{ height: "25px", width: "25px" }}
@@ -268,7 +267,6 @@ const Home2 = () => {
                   <span className="header_menu" onClick={myAccount}>
                     &nbsp;&nbsp;{account}
                   </span>
-                  {/* </NavLink> */}
                 </div>
                 <div
                   className="col-lg-3 col-md-4 col-sm-6 col-xs-2 m-0 p-0"
