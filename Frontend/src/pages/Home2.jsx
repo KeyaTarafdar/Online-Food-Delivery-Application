@@ -18,6 +18,7 @@ import {
   findUser,
   fetchCompanyDetails,
   fetchAllFoods,
+  addToCart,
 } from "../utils/utils";
 import Loader from "../Components/Loader";
 
@@ -48,12 +49,16 @@ const Home2 = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: Array.isArray(foods)
-      ? foods.filter((card) => card.setAsTodaysOffer).length
-      : 1,
-    slidesToScroll: Array.isArray(foods)
-      ? foods.filter((card) => card.setAsTodaysOffer).length
-      : 1,
+    slidesToShow:
+      Array.isArray(foods) &&
+      foods.filter((card) => card.setAsTodaysOffer).length < 5
+        ? foods.filter((card) => card.setAsTodaysOffer).length
+        : 5,
+    slidesToScroll:
+      Array.isArray(foods) &&
+      foods.filter((card) => card.setAsTodaysOffer).length < 5
+        ? foods.filter((card) => card.setAsTodaysOffer).length
+        : 5,
   };
   // Card Slider(For lg)----------------------
   const sliderSettings_lg = {
@@ -80,14 +85,6 @@ const Home2 = () => {
     slidesToScroll: 2,
   };
 
-  // Quantity Option-------------------------
-  const options = [
-    { label: "1", value: 1 },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-    { label: "4", value: 4 },
-  ];
-
   const [account, setAccount] = useState("My Account");
   // Logout API
   const handleLogout = async () => {
@@ -113,7 +110,18 @@ const Home2 = () => {
     });
   };
 
+  const handleAddToCart = async (id) => {
+    try {
+      const response = await addToCart(id);
+      alert(response);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+
   const [loading, setLoading] = useState(true);
+
+  const [userCart, setUserCart] = useState([]);
 
   useEffect(() => {
     // Fetch company details
@@ -129,6 +137,8 @@ const Home2 = () => {
     findUser().then((user) => {
       if (user.username) {
         setAccount(user.username.split(" ")[0]);
+        const cartIds = user.cart ? user.cart.map((item) => item._id) : [];
+        setUserCart(cartIds);
       } else {
         setAccount("My Account");
       }
@@ -140,7 +150,7 @@ const Home2 = () => {
     });
 
     setLoading(false);
-  }, []);
+  }, [handleAddToCart]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -377,17 +387,21 @@ const Home2 = () => {
                               <h5 className="mt-1">{card.restaurent}</h5>
                               <h6 className="mt-1">{card.name}</h6>
                               <span className="">Price: {card.price}</span>
-                              <select className="form-select ml-3">
-                                {options.map((option) => (
-                                  <option value={option.value}>
-                                    {option.label}
-                                  </option>
-                                ))}
-                              </select>
                             </div>
                             <div className="pt-3">
-                              <button className="btn-xs btn-warning">
-                                Add to Cart
+                              <button
+                                className="btn-xs btn-warning"
+                                onClick={() => {
+                                  if (userCart.includes(card._id)) {
+                                    navigate("/My_cart");
+                                  } else {
+                                    handleAddToCart(card._id);
+                                  }
+                                }}
+                              >
+                                {userCart.includes(card._id)
+                                  ? "Go to Cart"
+                                  : "Add to Cart"}
                               </button>
                             </div>
                           </div>
@@ -444,17 +458,21 @@ const Home2 = () => {
                                 <h5 className="mt-1">{card.restaurent}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
                                 <span className="">Price: {card.price}</span>
-                                <select className="form-select ml-3">
-                                  {options.map((option) => (
-                                    <option value={option.value}>
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </select>
                               </div>
                               <div className="pt-3">
-                                <button className="btn-xs btn-warning">
-                                  Add to Cart
+                                <button
+                                  className="btn-xs btn-warning"
+                                  onClick={() => {
+                                    if (userCart.includes(card._id)) {
+                                      navigate("/My_cart");
+                                    } else {
+                                      handleAddToCart(card._id);
+                                    }
+                                  }}
+                                >
+                                  {userCart.includes(card._id)
+                                    ? "Go to Cart"
+                                    : "Add to Cart"}
                                 </button>
                               </div>
                             </div>
@@ -514,17 +532,21 @@ const Home2 = () => {
                                 <h5 className="mt-1">{card.res}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
                                 <span className="">Price: {card.price}</span>
-                                <select className="form-select ml-3">
-                                  {options.map((option) => (
-                                    <option value={option.value}>
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </select>
                               </div>
                               <div className="pt-3">
-                                <button className="btn-xs btn-warning">
-                                  Add to Cart
+                                <button
+                                  className="btn-xs btn-warning"
+                                  onClick={() => {
+                                    if (userCart.includes(card._id)) {
+                                      navigate("/My_cart");
+                                    } else {
+                                      handleAddToCart(card._id);
+                                    }
+                                  }}
+                                >
+                                  {userCart.includes(card._id)
+                                    ? "Go to Cart"
+                                    : "Add to Cart"}
                                 </button>
                               </div>
                             </div>
@@ -584,17 +606,21 @@ const Home2 = () => {
                                 <h5 className="mt-1">{card.res}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
                                 <span className="">Price: {card.price}</span>
-                                <select className="form-select ml-3">
-                                  {options.map((option) => (
-                                    <option value={option.value}>
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </select>
                               </div>
                               <div className="pt-3">
-                                <button className="btn-xs btn-warning">
-                                  Add to Cart
+                                <button
+                                  className="btn-xs btn-warning"
+                                  onClick={() => {
+                                    if (userCart.includes(card._id)) {
+                                      navigate("/My_cart");
+                                    } else {
+                                      handleAddToCart(card._id);
+                                    }
+                                  }}
+                                >
+                                  {userCart.includes(card._id)
+                                    ? "Go to Cart"
+                                    : "Add to Cart"}
                                 </button>
                               </div>
                             </div>
