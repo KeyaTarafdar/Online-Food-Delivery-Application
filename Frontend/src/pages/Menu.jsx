@@ -8,6 +8,7 @@ import { Link, Element } from "react-scroll";
 import { MdOutlineLogout, MdAccountCircle } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { FaBagShopping } from "react-icons/fa6";
+import { LuUtensilsCrossed } from "react-icons/lu";
 import { CgLogIn } from "react-icons/cg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -74,7 +75,7 @@ const Menu = () => {
       if (user.username) {
         navigate("/My_account");
       } else {
-        alert("You have to Login first!");
+        setoops(true);
       }
     });
   };
@@ -152,6 +153,40 @@ const Menu = () => {
     setData(allFood);
     setc(false);
   };
+
+  const [oops, setoops] = useState(false);
+
+  if (oops) {
+    return (
+      <>
+        <div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "right",
+              paddingTop: "3rem",
+              paddingRight: "5rem",
+              cursor: "pointer",
+              fontSize: "24px",
+            }}
+          >
+            <LuUtensilsCrossed
+              onClick={() => {
+                setoops(false);
+              }}
+            />
+          </div>
+          <div style={{ paddingTop: "8rem" }}>
+            <img src="/Image/oops.jpg"></img>
+          </div>
+          <div style={{ paddingTop: "2rem" }}>
+            <h4>You Need to first Login!</h4>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (allFood.length === 0 || loader || companyName === null) {
     return (
@@ -477,7 +512,7 @@ const Menu = () => {
                         if (account !== "My Account") {
                           navigate("/My_cart");
                         } else {
-                          alert("You Need to Login First!");
+                          setoops(true);
                         }
                       }}
                     >
@@ -499,7 +534,7 @@ const Menu = () => {
                         if (account !== "My Account") {
                           navigate("/My_order");
                         } else {
-                          alert("You Need to Login First!");
+                          setoops(true);
                         }
                       }}
                     >

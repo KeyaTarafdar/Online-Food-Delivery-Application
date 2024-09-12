@@ -7,6 +7,7 @@ import { Link, Element } from "react-scroll";
 import { MdOutlineLogout, MdAccountCircle } from "react-icons/md";
 import { CgLogIn } from "react-icons/cg";
 import { FaBagShopping } from "react-icons/fa6";
+import { LuUtensilsCrossed } from "react-icons/lu";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -104,7 +105,7 @@ const Home2 = () => {
     if (account !== "My Account") {
       navigate("/My_account");
     } else {
-      alert("You have to Login first!");
+      setoops(true);
     }
   };
 
@@ -131,6 +132,16 @@ const Home2 = () => {
       setcompanyInsta(company.instaLink);
     });
 
+    // Fetch all food
+    fetchAllFoods().then((response) => {
+      setfoods(response);
+    });
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, [handleAddToCart]);
+
+  useEffect(() => {
     // Find user
     findUser().then((user) => {
       if (user.username) {
@@ -141,15 +152,41 @@ const Home2 = () => {
         setAccount("My Account");
       }
     });
+  }, [handleLogout]);
 
-    // Fetch all food
-    fetchAllFoods().then((response) => {
-      setfoods(response);
-    });
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, [handleAddToCart]);
+  const [oops, setoops] = useState(false);
+
+  if (oops) {
+    return (
+      <>
+        <div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "right",
+              paddingTop: "3rem",
+              paddingRight: "5rem",
+              cursor: "pointer",
+              fontSize: "24px",
+            }}
+          >
+            <LuUtensilsCrossed
+              onClick={() => {
+                setoops(false);
+              }}
+            />
+          </div>
+          <div style={{ paddingTop: "8rem" }}>
+            <img src="/Image/oops.jpg"></img>
+          </div>
+          <div style={{paddingTop:'2rem'}}>
+            <h4>You Need to first Login!</h4>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (loading) {
     return (
@@ -231,37 +268,43 @@ const Home2 = () => {
                   className="col-lg-3 col-md-4 col-sm-6 m-0 p-0 m-0 d-none d-sm-block"
                   style={{ float: "left" }}
                 >
-                    <FaCartArrowDown
-                      className="header_menu"
-                      style={{ height: "25px", width: "25px" }}
-                    />
-                    <span className="header_menu" onClick={()=>{
-                      if(account!=="My Account"){
-                        navigate('/My_cart')
-                      }else{
-                        alert("You Need to Login First!")
+                  <FaCartArrowDown
+                    className="header_menu"
+                    style={{ height: "25px", width: "25px" }}
+                  />
+                  <span
+                    className="header_menu"
+                    onClick={() => {
+                      if (account !== "My Account") {
+                        navigate("/My_cart");
+                      } else {
+                        setoops(true)
                       }
-                    }}>
-                      &nbsp;&nbsp;My&nbsp;Cart
-                    </span>
+                    }}
+                  >
+                    &nbsp;&nbsp;My&nbsp;Cart
+                  </span>
                 </div>
                 <div
                   className="col-lg-3 col-md-4 m-0 p-0 d-none d-sm-none d-md-block"
                   style={{ float: "left" }}
                 >
-                    <FaBagShopping
-                      className="header_menu"
-                      style={{ height: "22px", width: "22px" }}
-                    />
-                    <span className="header_menu" onClick={()=>{
-                      if(account!=="My Account"){
-                        navigate('/My_order')
-                      }else{
-                        alert("You Need to Login First!")
+                  <FaBagShopping
+                    className="header_menu"
+                    style={{ height: "22px", width: "22px" }}
+                  />
+                  <span
+                    className="header_menu"
+                    onClick={() => {
+                      if (account !== "My Account") {
+                        navigate("/My_order");
+                      } else {
+                        setoops(true)
                       }
-                    }}>
-                      &nbsp;&nbsp;My&nbsp;Orders
-                    </span>
+                    }}
+                  >
+                    &nbsp;&nbsp;My&nbsp;Orders
+                  </span>
                 </div>
                 <div
                   className="col-lg-3 col-md-3 m-0 p-0 d-sm-none  d-md-none d-none d-lg-block"
