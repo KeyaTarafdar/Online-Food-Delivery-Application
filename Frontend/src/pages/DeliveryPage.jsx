@@ -35,9 +35,7 @@ function DeliveryPage() {
   };
 
   const handleDeliverySuccessfull = async (otp, id) => {
-    deliverySuccessfull(otp, id).then((response) => {
-      alert(response);
-    });
+    deliverySuccessfull(otp, id);
   };
 
   useEffect(() => {
@@ -53,7 +51,19 @@ function DeliveryPage() {
   }, [handleDeliverySuccessfull]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
+        <div class="DeliveryBoy_loader"></div>
+      </div>
+    );
   }
 
   let s = 1;
@@ -157,6 +167,15 @@ function DeliveryPage() {
                   Price
                 </th>
                 <th
+                  className="col-1 pt-2 pb-2"
+                  style={{
+                    borderStyle: "solid",
+                    borderColor: "black",
+                  }}
+                >
+                  Payment Status
+                </th>
+                <th
                   className="col-2 pt-2 pb-2"
                   style={{
                     borderStyle: "solid",
@@ -229,6 +248,7 @@ function DeliveryPage() {
                             ))}
                           </table>
                         </td>
+                        <td className="pl-1 pr-1">{elem.paymentStatus}</td>
                         <td className="pl-1 pr-1">{elem.orderAddress}</td>
                         <td className="pl-1 pr-1">
                           <table>

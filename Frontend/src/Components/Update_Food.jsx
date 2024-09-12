@@ -1,7 +1,6 @@
 // Update_Food.jsx
 import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi2";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import {
   deleteFoodItem,
   updateFoodItem,
@@ -9,6 +8,7 @@ import {
   fetchAllRestaurent,
   setAsTodaysOffer,
 } from "../utils/utils";
+import DeleteButton from "./DeleteButton";
 
 const Update_Food = ({
   id,
@@ -51,6 +51,10 @@ const Update_Food = ({
   };
   const [allCategory, setallCategory] = useState([]);
   const [allRestaurent, setallRestaurent] = useState([]);
+
+  const [alreadySetAsTodaysOffer, setalreadySetAsTodaysOffer] = useState(
+    setAsTodaysOfferStatus
+  );
 
   useEffect(() => {
     fetchAllCategory().then((response) => {
@@ -188,7 +192,7 @@ const Update_Food = ({
             alignItems: "center",
           }}
         >
-          <RiDeleteBin6Line
+          <DeleteButton
             style={{
               cursor: "pointer",
             }}
@@ -210,7 +214,7 @@ const Update_Food = ({
             alignItems: "center",
           }}
         >
-          {!setAsTodaysOfferStatus && (
+          {!alreadySetAsTodaysOffer && (
             <div
               className="btn btn-success"
               style={{
@@ -224,6 +228,7 @@ const Update_Food = ({
               }}
               onClick={(e) => {
                 setAsTodaysOffer(id);
+                setalreadySetAsTodaysOffer(true);
               }}
             >
               <strong>+</strong>

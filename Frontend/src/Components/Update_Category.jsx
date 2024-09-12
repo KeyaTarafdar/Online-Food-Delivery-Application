@@ -1,8 +1,8 @@
 // *Update_Category*
 import React, { useState, useEffect } from "react";
 import { HiPencil } from "react-icons/hi2";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteCategory, updateCategory } from "../utils/utils";
+import DeleteButton from "./DeleteButton";
 
 const Update_Category = ({ serial, name, image, id }) => {
   const [display, setdisplay] = useState("block");
@@ -105,7 +105,7 @@ const Update_Category = ({ serial, name, image, id }) => {
             alignItems: "center",
           }}
         >
-          <RiDeleteBin6Line
+          <DeleteButton
             style={{ cursor: "pointer" }}
             onClick={() => {
               deleteCategory(id).then((response) => {

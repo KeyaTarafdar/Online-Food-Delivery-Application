@@ -1,8 +1,8 @@
 // *Update_Res.jsx*
 import React, { useEffect, useState } from "react";
 import { HiPencil } from "react-icons/hi2";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { deleteRestaurent, updateRestaurent } from "../utils/utils";
+import DeleteButton from "./DeleteButton";
 
 const Update_Res = ({ serial, name, image, address, id }) => {
   const [clicked_update, setClicked_update] = useState(false);
@@ -126,7 +126,7 @@ const Update_Res = ({ serial, name, image, address, id }) => {
           data-toggle="modal"
           data-target={`#exampleModal-${id}`}
         >
-          <RiDeleteBin6Line
+          <DeleteButton
             title="Delete Restaurent"
             style={{ cursor: "pointer" }}
           />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaUser, FaGift } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { MdDeliveryDining, MdDelete } from "react-icons/md";
+import { MdDeliveryDining } from "react-icons/md";
 import { GrUpdate } from "react-icons/gr";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsEmojiLaughing } from "react-icons/bs";
@@ -35,6 +35,7 @@ import {
   getAllOrders,
 } from "../utils/utils";
 import TodaysOffer from "../Components/TodaysOffer";
+import DeleteButton from "../Components/DeleteButton";
 
 const Admin_control_panel = () => {
   var serial_food_item = 1,
@@ -62,7 +63,7 @@ const Admin_control_panel = () => {
     setTodays_info(false);
     setshowCancleOrders(false);
     setshowDeliveredOrders(false);
-    setUpdate(false)
+    setUpdate(false);
 
     getAllUsers();
   };
@@ -97,6 +98,10 @@ const Admin_control_panel = () => {
     setUpdate_food_item(false);
     setshowCancleOrders(false);
     setshowDeliveredOrders(false);
+
+    fetchAllFoods().then((response) => {
+      setfoods(response);
+    });
   };
 
   const [deliver_boy_info, setDelivery_boy_info] = useState(false);
@@ -788,7 +793,7 @@ const Admin_control_panel = () => {
                 </div>
                 <div
                   className="col-7 m-0 p-0"
-                  style={{cursor: "grab" }}
+                  style={{ cursor: "grab" }}
                   onClick={DeliverBoyInfo}
                 >
                   Delivery Boy Info
@@ -797,8 +802,24 @@ const Admin_control_panel = () => {
               <div
                 className="admin_menu"
                 style={{
-                  backgroundColor: update || update_web_details || update_delivery_boy || update_food_item || update_food_category || add_res ? "#5cb85c" : "",
-                  color: update || update_web_details || update_delivery_boy || update_food_item || update_food_category || add_res ? "white" : "black",
+                  backgroundColor:
+                    update ||
+                    update_web_details ||
+                    update_delivery_boy ||
+                    update_food_item ||
+                    update_food_category ||
+                    add_res
+                      ? "#5cb85c"
+                      : "",
+                  color:
+                    update ||
+                    update_web_details ||
+                    update_delivery_boy ||
+                    update_food_item ||
+                    update_food_category ||
+                    add_res
+                      ? "white"
+                      : "black",
                 }}
               >
                 <div className="col-2 pt-0">
@@ -1608,15 +1629,10 @@ const Admin_control_panel = () => {
                       <div
                         className="col-1"
                         style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",display:'flex',justifyContent:'center'
                         }}
                       >
-                        <MdDelete
-                          style={{
-                            fontSize: "24px",
-                            color: "black",
-                            cursor: "pointer",
-                          }}
+                        <DeleteButton
                           onClick={() => {
                             deleteDeliveryBoy(id).then((response) => {
                               alert(response);

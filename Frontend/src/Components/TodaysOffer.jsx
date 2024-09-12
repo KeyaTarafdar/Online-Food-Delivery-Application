@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { removeFromTodaysOffer } from "../utils/utils";
+import DeleteButton from "./DeleteButton";
 
 const TodaysOffer = ({
   id,
@@ -123,7 +123,7 @@ const TodaysOffer = ({
             alignItems: "center",
           }}
         >
-          <RiDeleteBin6Line
+          <DeleteButton
             style={{
               cursor: "pointer",
             }}
