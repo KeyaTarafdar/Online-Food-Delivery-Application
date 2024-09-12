@@ -105,6 +105,7 @@ module.exports.getUser = async (req, res) => {
     await user.populate({
       path: "cart",
     });
+
     await user.populate({
       path: "orders cancledOrders deliveredOrders",
       populate: { path: "foodId deliveryBoy" },
@@ -248,6 +249,10 @@ module.exports.createOrder = async (req, res) => {
         },
       },
     ]);
+
+    if (deliveryBoys.length === 0) {
+      deliveryBoys = await deliveryBoyModel.find({});
+    }
 
     const index = Math.floor(Math.random() * deliveryBoys.length);
     const deliveryBoyId = deliveryBoys[index]._id;

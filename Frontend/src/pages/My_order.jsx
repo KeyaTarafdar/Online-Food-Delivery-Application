@@ -351,7 +351,7 @@ const My_order = () => {
                         <td className="pl-1 pr-1">{elem.OTP}</td>
                         <td className="pl-1 pr-1">
                           <table>
-                            <tr>{elem.deliveryBoy.username}</tr>
+                            <tr>{elem.deliveryBoy.username? elem.deliveryBoy.username: ""}</tr>
                             <tr>{elem.deliveryBoy.contact}</tr>
                           </table>
                         </td>

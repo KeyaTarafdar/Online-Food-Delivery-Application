@@ -9,7 +9,7 @@ import { Link, Element } from "react-scroll";
 import Services from "../Components/Services";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
-import { findUser, fetchCompanyDetails } from "../utils/utils";
+import { fetchCompanyDetails } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 
 const Home1 = () => {
@@ -60,13 +60,6 @@ const Home1 = () => {
       setcompanyPhone(company.phone);
       setcompanyFB(company.fbLink);
       setcompanyInsta(company.instaLink);
-    });
-
-    // Find user
-    findUser().then((user) => {
-      if (user.name) {
-        navigate("/Home2");
-      }
     });
   }, []);
 
