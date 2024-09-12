@@ -1087,12 +1087,10 @@ const Admin_control_panel = () => {
                       time={elem.time}
                       id={elem._id}
                       delivery_sts={elem.deliverStatus}
-                      payment_sts={"payment_sts"}
-                      payment_mode={"payment_mode"}
+                      payment_sts={elem.paymentStatus}
+                      payment_mode={elem.paymentMode}
                       payment_id={"payment_id"}
                       food={elem.foodId}
-                      qty={"d"}
-                      res={"res"}
                       price={elem.totalAmount}
                       otp={elem.OTP}
                       deliveryBoyName={
