@@ -39,7 +39,7 @@ const Card = ({ id, name, image, price, restaurent }) => {
       <div className="card m-2 pb-2">
         <div
           className="m-0 p-0"
-          style={{ height: "340px", color: "black", borderRadius: "0.75rem" }}
+          style={{ height: "345px", color: "black", borderRadius: "0.75rem" }}
         >
           <div
             className="justify-center items-center"
@@ -47,7 +47,7 @@ const Card = ({ id, name, image, price, restaurent }) => {
               borderTopLeftRadius: "0.75rem",
               borderTopRightRadius: "0.75rem",
               backgroundColor: "indigo",
-              height: "60%",
+              height: "50%",
             }}
           >
             <img
@@ -67,12 +67,12 @@ const Card = ({ id, name, image, price, restaurent }) => {
             className="flex flex-col justify-center items-center m-0 p-0"
             style={{ height: "20%" }}
           >
-            <h5 className="mt-1">{name}</h5>
+            <h6 className="mt-1">{name}</h6>
             <h6 className="mt-1">{restaurent}</h6>
             <span>Price: {price}/-</span>
           </div>
 
-          <div className="pt-4">
+          <div className="pt-5">
             <button
               className="btn-xs btn-warning"
               onClick={() => {

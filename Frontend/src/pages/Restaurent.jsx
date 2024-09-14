@@ -90,19 +90,16 @@ const Restaurent = () => {
 
   // Logout API
   const handleLogout = async () => {
-    setLoading(true);
-    try {
-      if ((await logout()) === "Logout successfully") {
+    logout().then((response) => {
+      if (response === "Logout successfully") {
         setTimeout(() => {
           setLoading(false);
-          navigate("/Home2");
           setAccount("My Account");
-        }, 3000);
+        }, 2000);
+      } else {
+        setLoading(false);
       }
-    } catch (err) {
-      setLoading(false);
-      console.log(err.message);
-    }
+    });
   };
 
   const [companyName, setcompanyName] = useState(null);
@@ -557,7 +554,13 @@ const Restaurent = () => {
                         className="header_menu"
                         style={{ height: "25px", width: "25px" }}
                       />
-                      <span className="header_menu" onClick={handleLogout}>
+                      <span
+                        className="header_menu"
+                        onClick={() => {
+                          setLoading(true);
+                          handleLogout();
+                        }}
+                      >
                         &nbsp;&nbsp;Log&nbsp;out
                       </span>
                     </>

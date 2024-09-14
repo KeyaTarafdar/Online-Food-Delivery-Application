@@ -31,6 +31,8 @@ const My_cart = () => {
   const [userCart, setuserCart] = useState([]);
   const [uniqueCart, setUniqueCart] = useState([]);
 
+  const [userAddress, setuserAddress] = useState();
+
   const [loading, setLoading] = useState(true);
 
   const [totalAmount, settotalAmount] = useState(0);
@@ -59,6 +61,7 @@ const My_cart = () => {
 
     findUser().then((user) => {
       setuserCart(user.cart);
+      setuserAddress(user.address);
 
       const total = userCart.reduce((sum, item) => sum + item.price, 0);
       settotalAmount(total);
@@ -342,7 +345,9 @@ const My_cart = () => {
                   className="close"
                   data-dismiss="modal"
                   aria-label="Close"
-                  onClick={closeModal}
+                  onClick={() => {
+                    setModal(false);
+                  }}
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -393,6 +398,18 @@ const My_cart = () => {
               <div>
                 <h6>Total Price: {totalAmount}</h6>
               </div>
+              <div className="pt-1">
+                <h6>
+                  <strong>Delivery Address: </strong>
+                  {userAddress}
+                </h6>
+              </div>
+              <div style={{ color: "red" }}>
+                Want to change the delivery address?
+              </div>
+              <span>
+                Change it from <strong>"My Account"</strong>
+              </span>
               <div className="modal-footer">
                 <button
                   type="button"

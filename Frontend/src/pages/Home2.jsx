@@ -91,8 +91,10 @@ const Home2 = () => {
   const handleLogout = async () => {
     logout().then((response) => {
       if (response === "Logout successfully") {
-        setAccount("My Account");
-        setLoader(false);
+        setTimeout(() => {
+          setLoader(false);
+          setAccount("My Account");
+        }, 2000);
       } else {
         setLoader(false);
       }
