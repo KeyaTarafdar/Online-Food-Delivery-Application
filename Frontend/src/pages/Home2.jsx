@@ -89,16 +89,14 @@ const Home2 = () => {
   const [account, setAccount] = useState("My Account");
   // Logout API
   const handleLogout = async () => {
-    setLoader(true);
-    if ((await logout()) === "Logout successfully") {
-      setTimeout(() => {
-        setLoader(false);
-        navigate("/Home2");
+    logout().then((response) => {
+      if (response === "Logout successfully") {
         setAccount("My Account");
-      }, 3000);
-    } else {
-      setLoader(false);
-    }
+        setLoader(false);
+      } else {
+        setLoader(false);
+      }
+    });
   };
 
   const myAccount = async () => {
@@ -152,11 +150,11 @@ const Home2 = () => {
         setAccount("My Account");
       }
     });
-  }, [handleLogout]);
+  }, []);
 
   const [oops, setoops] = useState(false);
 
-  if (oops) {
+  if (oops || foods.length === 0) {
     return (
       <>
         <div>
@@ -180,7 +178,7 @@ const Home2 = () => {
           <div style={{ paddingTop: "8rem" }}>
             <img src="/Image/oops.jpg"></img>
           </div>
-          <div style={{paddingTop:'2rem'}}>
+          <div style={{ paddingTop: "2rem" }}>
             <h4>You Need to first Login!</h4>
           </div>
         </div>
@@ -199,7 +197,7 @@ const Home2 = () => {
           display: "flex",
         }}
       >
-        <div class="Home2_loader"></div>
+        <div className="Home2_loader"></div>
       </div>
     );
   }
@@ -278,7 +276,7 @@ const Home2 = () => {
                       if (account !== "My Account") {
                         navigate("/My_cart");
                       } else {
-                        setoops(true)
+                        setoops(true);
                       }
                     }}
                   >
@@ -299,7 +297,7 @@ const Home2 = () => {
                       if (account !== "My Account") {
                         navigate("/My_order");
                       } else {
-                        setoops(true)
+                        setoops(true);
                       }
                     }}
                   >
@@ -329,7 +327,13 @@ const Home2 = () => {
                         className="header_menu"
                         style={{ height: "25px", width: "25px" }}
                       />
-                      <span className="header_menu" onClick={handleLogout}>
+                      <span
+                        className="header_menu"
+                        onClick={() => {
+                          setLoader(true);
+                          handleLogout();
+                        }}
+                      >
                         &nbsp;&nbsp;Log&nbsp;out
                       </span>
                     </>
