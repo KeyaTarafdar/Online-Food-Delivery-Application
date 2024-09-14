@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://online-food-delivery-frontend.vercel.app/",
+    origin: "https://online-food-delivery-frontend.vercel.app",
     credentials: true,
   })
 );
@@ -37,4 +37,7 @@ app.get("/companyDetails", async (req, res) => {
   }
 });
 
-// app.listen(8000);
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
