@@ -44,7 +44,7 @@ export const fetchCompanyDetails = async () => {
 export const signUp = async (email, password, username, contact) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/users/register",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/register",
       {
         email,
         password,
