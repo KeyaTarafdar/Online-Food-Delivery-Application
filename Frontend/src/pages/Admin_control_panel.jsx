@@ -480,7 +480,7 @@ const Admin_control_panel = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/admins/uploadprofilepicture",
+        "https://online-food-delivery-backend-ffpc.onrender.com/admins/uploadprofilepicture",
         formData,
         {
           headers: {

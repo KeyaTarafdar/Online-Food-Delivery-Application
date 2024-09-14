@@ -5,7 +5,7 @@ import axios from "axios";
 // Logout user
 export const logout = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/users/logout", {
+    let response = await axios.get("https://online-food-delivery-backend-ffpc.onrender.com/users/logout", {
       withCredentials: true,
     });
     return response.data;
@@ -17,7 +17,7 @@ export const logout = async () => {
 // Find user
 export const findUser = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/users/getuser", {
+    let response = await axios.get("https://online-food-delivery-backend-ffpc.onrender.com/users/getuser", {
       withCredentials: true,
     });
     if (response.data) {
@@ -33,7 +33,7 @@ export const findUser = async () => {
 // Fetch company details
 export const fetchCompanyDetails = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/companyDetails");
+    let response = await axios.get("https://online-food-delivery-backend-ffpc.onrender.com/companyDetails");
     return response.data[0];
   } catch (err) {
     console.log(err.message);
@@ -81,7 +81,7 @@ export const loginUser = async (email, password) => {
 export const loginAdmin = async (email, password) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/admins/login",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/login",
       { email, password },
       { withCredentials: true }
     );
@@ -96,7 +96,7 @@ export const loginAdmin = async (email, password) => {
 export const loginDeliveryBoy = async (email, password) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/deliveryboys/login",
+      "https://online-food-delivery-backend-ffpc.onrender.com/deliveryboys/login",
       { email, password },
       { withCredentials: true }
     );
@@ -111,7 +111,7 @@ export const loginDeliveryBoy = async (email, password) => {
 export const logoutAdmin = async () => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/admins/logout",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/logout",
       {},
       { withCredentials: true }
     );
@@ -124,7 +124,7 @@ export const logoutAdmin = async () => {
 // Fetch Admin
 export const fetchAdmin = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/admins/getadmin", {
+    let response = await axios.get("https://online-food-delivery-backend-ffpc.onrender.com/admins/getadmin", {
       withCredentials: true,
     });
 
@@ -138,7 +138,7 @@ export const fetchAdmin = async () => {
 export const updateCompanyName = async (name) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/updatecompanyname",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/updatecompanyname",
       { name },
       { withCredentials: true }
     );
@@ -152,7 +152,7 @@ export const updateCompanyName = async (name) => {
 export const updateCompanyEmail = async (email) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/updatecompanyemail",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/updatecompanyemail",
       { email },
       { withCredentials: true }
     );
@@ -166,7 +166,7 @@ export const updateCompanyEmail = async (email) => {
 export const updateCompanyPhone = async (phone) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/updatecompanyphone",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/updatecompanyphone",
       { phone },
       { withCredentials: true }
     );
@@ -187,7 +187,7 @@ export const addDeliveryBoy = async (
 ) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/admins/createdeliveryboy",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/createdeliveryboy",
       { username, contact, email, password, address, serviceAddress },
       { withCredentials: true }
     );
@@ -201,7 +201,7 @@ export const addDeliveryBoy = async (
 export const fetchAllDeliveryBoy = async () => {
   try {
     let response = await axios.get(
-      "http://localhost:8000/admins/getdeliveryboy",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/getdeliveryboy",
       { withCredentials: true }
     );
     return response.data;
@@ -213,7 +213,7 @@ export const fetchAllDeliveryBoy = async () => {
 // Delete delivery boy
 export const deleteDeliveryBoy = async (id) => {
   let response = await axios.delete(
-    "http://localhost:8000/admins/deletedeliveryboy",
+    "https://online-food-delivery-backend-ffpc.onrender.com/admins/deletedeliveryboy",
     {
       params: {
         deliveryBoyId: id,
@@ -227,7 +227,7 @@ export const deleteDeliveryBoy = async (id) => {
 // Fetch all users
 export const fetchAllUsers = async () => {
   try {
-    let response = await axios.get("http://localhost:8000/admins/getallusers", {
+    let response = await axios.get("https://online-food-delivery-backend-ffpc.onrender.com/admins/getallusers", {
       withCredentials: true,
     });
     return response.data;
@@ -240,7 +240,7 @@ export const fetchAllUsers = async () => {
 export const addNewFoodItem = async (formData) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/foods/createfooditem",
+      "https://online-food-delivery-backend-ffpc.onrender.com/foods/createfooditem",
       formData,
       {
         headers: {
@@ -259,7 +259,7 @@ export const addNewFoodItem = async (formData) => {
 export const fetchAllFoods = async () => {
   try {
     let response = await axios.get(
-      "http://localhost:8000/foods/getallfooditems",
+      "https://online-food-delivery-backend-ffpc.onrender.com/foods/getallfooditems",
       { withCredentials: true }
     );
     return response.data;
@@ -272,7 +272,7 @@ export const fetchAllFoods = async () => {
 export const fetchSingleFood = async (id) => {
   try {
     let response = await axios.get(
-      "http://localhost:8000/foods/getsinglefooditem",
+      "https://online-food-delivery-backend-ffpc.onrender.com/foods/getsinglefooditem",
       {
         params: { foodId: id },
         withCredentials: true,
@@ -288,7 +288,7 @@ export const fetchSingleFood = async (id) => {
 export const deleteFoodItem = async (id) => {
   try {
     let response = await axios.delete(
-      "http://localhost:8000/foods/deletefooditem",
+      "https://online-food-delivery-backend-ffpc.onrender.com/foods/deletefooditem",
       {
         params: {
           id,
@@ -306,7 +306,7 @@ export const deleteFoodItem = async (id) => {
 export const updateFoodItem = async (formData) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/foods/updatefooditem",
+      "https://online-food-delivery-backend-ffpc.onrender.com/foods/updatefooditem",
       formData,
       {
         headers: {
@@ -325,7 +325,7 @@ export const updateFoodItem = async (formData) => {
 export const addNewRestaurent = async (formData) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/admins/addnewrestaurent",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/addnewrestaurent",
       formData,
       {
         headers: {
@@ -344,7 +344,7 @@ export const addNewRestaurent = async (formData) => {
 export const fetchAllRestaurent = async () => {
   try {
     let response = await axios.get(
-      "http://localhost:8000/admins/fetchallrestaurent",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/fetchallrestaurent",
       { withCredentials: true }
     );
     return response.data;
@@ -358,7 +358,7 @@ export const fetchSingleRestaurent = async (id) => {
   console.log(id);
   try {
     let response = await axios.get(
-      "http://localhost:8000/admins/fetchsinglerestaurent",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/fetchsinglerestaurent",
       { id },
       { withCredentials: true }
     );
@@ -372,7 +372,7 @@ export const fetchSingleRestaurent = async (id) => {
 export const deleteRestaurent = async (id) => {
   try {
     let response = await axios.delete(
-      "http://localhost:8000/admins/deleterestaurent",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/deleterestaurent",
       {
         params: {
           id,
@@ -390,7 +390,7 @@ export const deleteRestaurent = async (id) => {
 export const updateRestaurent = async (formData) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/updaterestaurent",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/updaterestaurent",
       formData,
       {
         headers: {
@@ -409,7 +409,7 @@ export const updateRestaurent = async (formData) => {
 export const addNewCategory = async (formData) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/admins/addnewcategory",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/addnewcategory",
       formData,
       {
         headers: {
@@ -428,7 +428,7 @@ export const addNewCategory = async (formData) => {
 export const fetchAllCategory = async () => {
   try {
     let response = await axios.get(
-      "http://localhost:8000/admins/getallcategory",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/getallcategory",
       { withCredentials: true }
     );
     return response.data;
@@ -441,7 +441,7 @@ export const fetchAllCategory = async () => {
 export const deleteCategory = async (id) => {
   try {
     let response = await axios.delete(
-      "http://localhost:8000/admins/deletecategory",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/deletecategory",
       {
         params: {
           id,
@@ -459,7 +459,7 @@ export const deleteCategory = async (id) => {
 export const updateCategory = async (formData) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/updatecategory",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/updatecategory",
       formData,
       {
         headers: {
@@ -478,7 +478,7 @@ export const updateCategory = async (formData) => {
 export const addToCart = async (id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/users/addtocart",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/addtocart",
       { foodId: id },
       { withCredentials: true }
     );
@@ -491,7 +491,7 @@ export const addToCart = async (id) => {
 export const deleteCartItem = async (id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/users/deleteitemfromcart",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/deleteitemfromcart",
       { foodId: id },
       { withCredentials: true }
     );
@@ -505,7 +505,7 @@ export const deleteCartItem = async (id) => {
 export const addToCartIncreaseQuantity = async (id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/users/addtocartincreasequantity",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/addtocartincreasequantity",
       { foodId: id },
       { withCredentials: true }
     );
@@ -519,7 +519,7 @@ export const addToCartIncreaseQuantity = async (id) => {
 export const deleteCartItemDecreaseQuantity = async (id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/users/deletecartitemdecreasequantity",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/deletecartitemdecreasequantity",
       { foodId: id },
       { withCredentials: true }
     );
@@ -533,7 +533,7 @@ export const deleteCartItemDecreaseQuantity = async (id) => {
 export const createOrder = async ({ userCart, totalAmount, time }) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/users/createorder",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/createorder",
       { userCart, totalAmount, time },
       { withCredentials: true }
     );
@@ -547,7 +547,7 @@ export const createOrder = async ({ userCart, totalAmount, time }) => {
 export const cancelSingleOrder = async (id) => {
   try {
     let response = await axios.delete(
-      'http://localhost:8000/users/cancleorder',
+      'https://online-food-delivery-backend-ffpc.onrender.com/users/cancleorder',
       {
         params: { id: id },
         withCredentials: true,
@@ -563,7 +563,7 @@ export const cancelSingleOrder = async (id) => {
 export const getAllOrders = async () => {
   try {
     let response = await axios.get(
-      'http://localhost:8000/admins/fetchallorders',
+      'https://online-food-delivery-backend-ffpc.onrender.com/admins/fetchallorders',
       {
         withCredentials: true,
       }
@@ -578,7 +578,7 @@ export const getAllOrders = async () => {
 export const confirmOrderDelete = async (id) => {
   try {
     let response = await axios.put(
-      'http://localhost:8000/admins/confirmdelete',
+      'https://online-food-delivery-backend-ffpc.onrender.com/admins/confirmdelete',
       { orderId: id },
       {
         withCredentials: true,
@@ -594,7 +594,7 @@ export const confirmOrderDelete = async (id) => {
 export const fetchDeliveryBoy = async () => {
   try {
     let response = await axios.get(
-      'http://localhost:8000/deliveryboys/fetchsingledeliveryboy',
+      'https://online-food-delivery-backend-ffpc.onrender.com/deliveryboys/fetchsingledeliveryboy',
       {
         withCredentials: true,
       }
@@ -609,7 +609,7 @@ export const fetchDeliveryBoy = async () => {
 export const deliverySuccessfull = async (otp, id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/deliveryboys/deliverysuccessfull",
+      "https://online-food-delivery-backend-ffpc.onrender.com/deliveryboys/deliverysuccessfull",
       { otp, orderId: id },
       { withCredentials: true }
     );
@@ -623,7 +623,7 @@ export const deliverySuccessfull = async (otp, id) => {
 export const setAsTodaysOffer = async (id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/todaysoffer",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/todaysoffer",
       { foodId: id },
       { withCredentials: true }
     );
@@ -637,7 +637,7 @@ export const setAsTodaysOffer = async (id) => {
 export const removeFromTodaysOffer = async (id) => {
   try {
     let response = await axios.put(
-      "http://localhost:8000/admins/removetodaysoffer",
+      "https://online-food-delivery-backend-ffpc.onrender.com/admins/removetodaysoffer",
       { foodId: id },
       { withCredentials: true }
     );

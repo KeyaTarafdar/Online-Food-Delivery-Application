@@ -45,7 +45,7 @@ const My_account = () => {
     setLoading(true);
     try {
       let response = await axios.put(
-        "http://localhost:8000/users/updateuser",
+        "https://online-food-delivery-backend-ffpc.onrender.com/users/updateuser",
         {
           username: newname || name,
           contact: newphone || phone,
@@ -97,7 +97,7 @@ const My_account = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/users/uploadprofilepicture",
+        "https://online-food-delivery-backend-ffpc.onrender.com/users/uploadprofilepicture",
         formData,
         {
           headers: {
