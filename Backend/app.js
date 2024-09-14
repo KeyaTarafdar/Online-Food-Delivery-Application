@@ -33,7 +33,7 @@ app.get("/companyDetails", async (req, res) => {
     const details = await companyDetailsModel.find({});
     res.send(details);
   } catch (err) {
-    res.send("Something went wrong");
+    res.send(err.message);
   }
 });
 
