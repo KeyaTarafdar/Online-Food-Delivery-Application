@@ -547,7 +547,7 @@ export const createOrder = async ({ userCart, totalAmount, time }) => {
 export const cancelSingleOrder = async (id) => {
   try {
     let response = await axios.delete(
-      `http://localhost:8000/users/cancleorder`,
+      'http://localhost:8000/users/cancleorder',
       {
         params: { id: id },
         withCredentials: true,
@@ -563,7 +563,7 @@ export const cancelSingleOrder = async (id) => {
 export const getAllOrders = async () => {
   try {
     let response = await axios.get(
-      `http://localhost:8000/admins/fetchallorders`,
+      'http://localhost:8000/admins/fetchallorders',
       {
         withCredentials: true,
       }
@@ -578,7 +578,7 @@ export const getAllOrders = async () => {
 export const confirmOrderDelete = async (id) => {
   try {
     let response = await axios.put(
-      `http://localhost:8000/admins/confirmdelete`,
+      'http://localhost:8000/admins/confirmdelete',
       { orderId: id },
       {
         withCredentials: true,
@@ -594,7 +594,7 @@ export const confirmOrderDelete = async (id) => {
 export const fetchDeliveryBoy = async () => {
   try {
     let response = await axios.get(
-      `http://localhost:8000/deliveryboys/fetchsingledeliveryboy`,
+      'http://localhost:8000/deliveryboys/fetchsingledeliveryboy',
       {
         withCredentials: true,
       }

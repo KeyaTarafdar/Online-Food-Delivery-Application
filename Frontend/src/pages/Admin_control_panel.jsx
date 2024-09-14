@@ -81,7 +81,19 @@ const Admin_control_panel = () => {
     setUpdate_food_category(false);
     setUpdate_food_item(false);
     setTodays_info(false);
+
     getAdmin();
+
+    getAllOrders().then((response) => {
+      const canceledOrders = response.filter(
+        (order) => order.isDeleted === true
+      );
+      setallCancledOrders(canceledOrders);
+      const deliveredOrders = response.filter(
+        (order) => order.deliverStatus === "Delivered"
+      );
+      setallDeliveredOrders(deliveredOrders);
+    });
   };
 
   const [todays_info, setTodays_info] = useState(false);
@@ -1134,7 +1146,8 @@ const Admin_control_panel = () => {
               className="col-12 m-0 p-0"
               style={{ height: "98vh", overflowY: "auto" }}
             >
-              <div className="m-0 p-0 d-flex">
+                <div className="btn btn-success mt-2">Cancled Orders</div>
+              <div className="m-0 p-0 d-flex mt-3">
                 <div
                   className="head col-1 pt-2 pb-0"
                   style={{ border: "1px solid black" }}
@@ -1230,12 +1243,10 @@ const Admin_control_panel = () => {
                     time={elem.time}
                     id={elem._id}
                     delivery_sts={elem.deliverStatus}
-                    payment_sts={"payment_sts"}
-                    payment_mode={"payment_mode"}
+                    payment_sts={elem.paymentStatus}
+                    payment_mode={elem.paymentMode}
                     payment_id={"payment_id"}
                     food={elem.foodId}
-                    qty={"d"}
-                    res={"res"}
                     price={elem.totalAmount}
                     otp={elem.OTP}
                     deliveryBoyName={
@@ -1253,125 +1264,126 @@ const Admin_control_panel = () => {
 
           {/* Show delivered orders */}
           {showDeliveredOrders ? (
-            <div
-              className="col-12 m-0 p-0"
-              style={{ height: "98vh", overflowY: "auto" }}
-            >
-              <div className="m-0 p-0 d-flex">
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Serial no
+            <>
+              <div
+                className="col-12 m-0 p-0"
+                style={{ height: "98vh", overflowY: "auto" }}
+              >
+                <div className="btn btn-success mt-2">Delivered Orders</div>
+                <div className="m-0 p-0 d-flex mt-3">
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Serial no
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Username
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Phone no
+                  </div>
+                  <div
+                    className="head col-3 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Address
+                  </div>
+                  <div
+                    className="head col-2 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Time
+                  </div>
+                  <div
+                    className="head col-2 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Order Id
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Delivery Status
+                  </div>
+                  <div
+                    className="head col-2 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Delivery Boy Name
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Delivery Boy Phone
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Payment Status
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Payment Mode
+                  </div>
+                  <div
+                    className="head col-2 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Payment Id
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    OTP
+                  </div>
+                  <div
+                    className="head col-1 pt-2 pb-0"
+                    style={{ border: "1px solid black" }}
+                  >
+                    Order Info
+                  </div>
                 </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Username
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Phone no
-                </div>
-                <div
-                  className="head col-3 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Address
-                </div>
-                <div
-                  className="head col-2 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Time
-                </div>
-                <div
-                  className="head col-2 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Order Id
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Delivery Status
-                </div>
-                <div
-                  className="head col-2 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Delivery Boy Name
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Delivery Boy Phone
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Payment Status
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Payment Mode
-                </div>
-                <div
-                  className="head col-2 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Payment Id
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  OTP
-                </div>
-                <div
-                  className="head col-1 pt-2 pb-0"
-                  style={{ border: "1px solid black" }}
-                >
-                  Order Info
-                </div>
+                {allDeliveredOrders.map((elem) => {
+                  return (
+                    <Table_row
+                      serial={serial_order++}
+                      name={elem.userId ? elem.userId.username : ""}
+                      phone={elem.userId.contact}
+                      address={elem.userId.address}
+                      time={elem.time}
+                      id={elem._id}
+                      delivery_sts={elem.deliverStatus}
+                      payment_sts={elem.paymentStatus}
+                      payment_mode={elem.paymentMode}
+                      payment_id={"payment_id"}
+                      food={elem.foodId}
+                      price={elem.totalAmount}
+                      otp={elem.OTP}
+                      deliveryBoyName={
+                        elem.deliveryBoy ? elem.deliveryBoy.username : ""
+                      }
+                      deliveryBoyPhone={
+                        elem.deliveryBoy ? elem.deliveryBoy.contact : ""
+                      }
+                      isDeleted={elem.isDeleted}
+                    />
+                  );
+                })}
               </div>
-              {allDeliveredOrders.map((elem) => {
-                return (
-                  <Table_row
-                    serial={serial_order++}
-                    name={elem.userId ? elem.userId.username : ""}
-                    phone={elem.userId.contact}
-                    address={elem.userId.address}
-                    time={elem.time}
-                    id={elem._id}
-                    delivery_sts={elem.deliverStatus}
-                    payment_sts={"payment_sts"}
-                    payment_mode={"payment_mode"}
-                    payment_id={"payment_id"}
-                    food={elem.foodId}
-                    qty={"d"}
-                    res={"res"}
-                    price={elem.totalAmount}
-                    otp={elem.OTP}
-                    deliveryBoyName={
-                      elem.deliveryBoy ? elem.deliveryBoy.username : ""
-                    }
-                    deliveryBoyPhone={
-                      elem.deliveryBoy ? elem.deliveryBoy.contact : ""
-                    }
-                    isDeleted={elem.isDeleted}
-                  />
-                );
-              })}
-            </div>
+            </>
           ) : null}
 
           {/* Todays Info------------------------------------------------------------------------------------------------------------------------ */}
@@ -1627,7 +1639,9 @@ const Admin_control_panel = () => {
                       <div
                         className="col-1"
                         style={{
-                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",display:'flex',justifyContent:'center'
+                          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px",
+                          display: "flex",
+                          justifyContent: "center",
                         }}
                       >
                         <DeleteButton

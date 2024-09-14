@@ -452,7 +452,7 @@ const Home2 = () => {
                             >
                               <h5 className="mt-1">{card.restaurent}</h5>
                               <h6 className="mt-1">{card.name}</h6>
-                              <span>Price: {card.price}</span>
+                              <span>Price: {card.price}/-</span>
                             </div>
                             <div className="pt-3">
                               <button
@@ -523,7 +523,7 @@ const Home2 = () => {
                               >
                                 <h5 className="mt-1">{card.restaurent}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
-                                <span>Price: {card.price}</span>
+                                <span>Price: {card.price}/-</span>
                               </div>
                               <div className="pt-3">
                                 <button
@@ -596,7 +596,7 @@ const Home2 = () => {
                               >
                                 <h5 className="mt-1">{card.res}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
-                                <span>Price: {card.price}</span>
+                                <span>Price: {card.price}/-</span>
                               </div>
                               <div className="pt-3">
                                 <button
@@ -669,7 +669,7 @@ const Home2 = () => {
                               >
                                 <h5 className="mt-1">{card.res}</h5>
                                 <h6 className="mt-1">{card.name}</h6>
-                                <span>Price: {card.price}</span>
+                                <span>Price: {card.price}/-</span>
                               </div>
                               <div className="pt-3">
                                 <button

@@ -3,8 +3,7 @@ const { generateToken } = require("../utils/generateToken");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const orderModel = require("../models/order-model");
 const userModel = require("../models/user-model");
-const adminModel = require("../models/admin-model");
-const { populate } = require("dotenv");
+const deliveredOrderModel = require("../models/deliveredOrder-model");
 
 // Login
 module.exports.loginDeliveryBoy = async (req, res) => {
@@ -52,7 +51,6 @@ module.exports.fetchSingleDeliveryBoy = async (req, res) => {
       path: "deliveryOrder",
       populate: { path: "foodId userId" },
     });
-    // console.log(deliveryBoy.deliveryOrder[0].userId);
     res.send(deliveryBoy);
   } catch (err) {
     res.send(err.message);
@@ -88,9 +86,13 @@ module.exports.deliverySuccessfull = async (req, res) => {
         { _id: orderId },
         { $set: { paymentStatus: "Paid", deliverStatus: "Delivered" } }
       );
+
+      await deliveredOrderModel.updateMany({
+        $push: { deliveredOrderId: orderId },
+      });
+
       return res.send("Delivery successfully");
     }
-    // console.log(order);
     res.send("OTP is not correct");
   } catch (err) {
     res.send(err.message);
