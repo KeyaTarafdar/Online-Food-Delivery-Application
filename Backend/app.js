@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://online-food-delivery-frontend.vercel.app/",
     credentials: true,
   })
 );

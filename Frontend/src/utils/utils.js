@@ -65,7 +65,7 @@ export const signUp = async (email, password, username, contact) => {
 export const loginUser = async (email, password) => {
   try {
     let response = await axios.post(
-      "http://localhost:8000/users/login",
+      "https://online-food-delivery-backend-ffpc.onrender.com/users/login",
       { email, password },
       { withCredentials: true }
     );
