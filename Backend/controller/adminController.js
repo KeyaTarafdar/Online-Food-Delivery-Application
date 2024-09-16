@@ -166,7 +166,6 @@ module.exports.getAdmin = async (req, res) => {
       path: "currentOrders",
       populate: { path: "deliveryBoy userId foodId" },
     });
-    // console.log(admin);
     res.send(admin);
   } catch (err) {
     res.send("Something went wrong");
