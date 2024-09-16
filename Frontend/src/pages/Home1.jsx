@@ -10,7 +10,6 @@ import Services from "../Components/Services";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { fetchCompanyDetails } from "../utils/utils";
-import { useNavigate } from "react-router-dom";
 
 const Home1 = () => {
   const [companyName, setcompanyName] = useState();
@@ -18,8 +17,6 @@ const Home1 = () => {
   const [companyPhone, setcompanyPhone] = useState();
   const [companyFB, setcompanyFB] = useState();
   const [companyInsta, setcompanyInsta] = useState();
-
-  const navigate = useNavigate();
 
   //Hamburger Menu-------------
   const [isHamburger_MenuOpen, setIsHamburger_MenuOpen] = useState(false);
