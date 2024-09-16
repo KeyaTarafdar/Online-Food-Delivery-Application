@@ -68,7 +68,7 @@ module.exports.loginUser = async (req, res) => {
               let token = generateToken(user);
               res.cookie("token", token, {
                 httpOnly: true, // Cookie is only accessible by the web server
-                secure: false, // Set to true if using HTTPS
+                secure: true, // Set to true if using HTTPS
                 sameSite: "Lax", // Controls whether cookies are sent with cross-site requests
               });
               res.send("Login successfully");
