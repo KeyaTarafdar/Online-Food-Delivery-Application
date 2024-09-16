@@ -1239,7 +1239,7 @@ const Admin_control_panel = () => {
                     serial={serial_order++}
                     name={elem.userId ? elem.userId.username : ""}
                     phone={elem.userId.contact}
-                    address={elem.userId.address}
+                    address={elem.orderAddress}
                     time={elem.time}
                     id={elem._id}
                     delivery_sts={elem.deliverStatus}
@@ -1362,7 +1362,7 @@ const Admin_control_panel = () => {
                       serial={serial_order++}
                       name={elem.userId ? elem.userId.username : ""}
                       phone={elem.userId.contact}
-                      address={elem.userId.address}
+                      address={elem.orderAddress}
                       time={elem.time}
                       id={elem._id}
                       delivery_sts={elem.deliverStatus}

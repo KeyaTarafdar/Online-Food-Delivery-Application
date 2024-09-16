@@ -155,7 +155,7 @@ module.exports.uploadProfilePicture = async (req, res) => {
   }
 };
 
-// Add to acrt
+// Add to cart
 module.exports.addToCart = async (req, res) => {
   try {
     let user = req.user;
@@ -232,54 +232,47 @@ module.exports.createOrder = async (req, res) => {
 
     const OTP = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 
-    let deliveryBoys = await deliveryBoyModel.aggregate([
-      {
-        $addFields: {
-          addressParts: { $split: ["$serviceAddress", ", "] },
-        },
-      },
-      {
-        $match: {
-          addressParts: { $elemMatch: { $in: [user.address] } },
-        },
-      },
-      {
-        $project: {
-          addressParts: 0,
-        },
-      },
-    ]);
+    let deliveryBoys = [];
+    deliveryBoyModel.find({}).then(async (response) => {
+      response = response.filter((item) => {
+        let serviceAddress = item.serviceAddress.split(", ");
+        return serviceAddress.some((e) => user.address.includes(e));
+      });
+      deliveryBoys = response;
+      if (deliveryBoys.length === 0) {
+        res.send("Sorry! Our services are not available in your area.");
+      } else {
+        const index = Math.floor(Math.random() * deliveryBoys.length);
+        const deliveryBoyId = deliveryBoys[index]._id;
 
-    if (deliveryBoys.length === 0) {
-      deliveryBoys = await deliveryBoyModel.find({});
-    }
+        let order = await orderModal.create({
+          userId: user._id,
+          foodId: foodIds,
+          time,
+          totalAmount,
+          orderAddress: user.address,
+          phone: user.contact,
+          OTP,
+          deliveryBoy: deliveryBoyId,
+        });
 
-    const index = Math.floor(Math.random() * deliveryBoys.length);
-    const deliveryBoyId = deliveryBoys[index]._id;
+        await adminModel.updateMany(
+          {},
+          { $push: { currentOrders: order._id } }
+        );
 
-    let order = await orderModal.create({
-      userId: user._id,
-      foodId: foodIds,
-      time,
-      totalAmount,
-      orderAddress: user.address,
-      phone: user.contact,
-      OTP,
-      deliveryBoy: deliveryBoyId,
+        await deliveryBoyModel.findOneAndUpdate(
+          { _id: deliveryBoyId },
+          { $push: { deliveryOrder: order._id } }
+        );
+
+        await userModel.findOneAndUpdate(
+          { _id: user._id },
+          { $push: { orders: order._id } }
+        );
+        res.send("Your order is placed successfully");
+      }
     });
-
-    await adminModel.updateMany({}, { $push: { currentOrders: order._id } });
-
-    await deliveryBoyModel.findOneAndUpdate(
-      { _id: deliveryBoyId },
-      { $push: { deliveryOrder: order._id } }
-    );
-
-    await userModel.findOneAndUpdate(
-      { _id: user._id },
-      { $push: { orders: order._id } }
-    );
-    res.send("Your order is placed successfully");
   } catch (err) {
     res.send(err.message);
   }
