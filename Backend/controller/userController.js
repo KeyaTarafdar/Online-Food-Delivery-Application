@@ -67,9 +67,10 @@ module.exports.loginUser = async (req, res) => {
             if (result) {
               let token = generateToken(user);
               res.cookie("token", token, {
-                httpOnly: false, // Cookie is only accessible by the web server
-                secure: false, // Set to true if using HTTPS
-                sameSite: "None", // Controls whether cookies are sent with cross-site requests
+                httpOnly: true, // Cookie is only accessible by the web server
+                secure: false,  // Set to true if using HTTPS
+                sameSite: 'None', // Controls whether cookies are sent with cross-site requests
+                path: '/',       // Cookie is available across the entire domain
               });
               res.send("Login successfully");
             } else {
