@@ -34,10 +34,10 @@ module.exports.registerUser = async (req, res) => {
           let token = generateToken(user);
           res.cookie("token", token, {
             httpOnly: true, // Cookie is only accessible by the web server
-            secure: false, // Set to true if using HTTPS
-            sameSite: "Lax", // Controls whether cookies are sent with cross-site requests
+            secure: true,  // Set to true if using HTTPS
+            sameSite: 'None', // Controls whether cookies are sent with cross-site requests
+            path: '/',       // Cookie is available across the entire domain
           });
-          dbgr("Cookie sent");
 
           res.send("User created successfully");
         });
