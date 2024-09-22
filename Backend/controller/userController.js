@@ -8,6 +8,7 @@ const fs = require("fs");
 const orderModel = require("../models/order-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const adminModel = require("../models/admin-model");
+const cloudinary = require("../utils/cloudinary");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
@@ -34,9 +35,9 @@ module.exports.registerUser = async (req, res) => {
           let token = generateToken(user);
           res.cookie("token", token, {
             httpOnly: true, // Cookie is only accessible by the web server
-            secure: true,  // Set to true if using HTTPS
-            sameSite: 'None', // Controls whether cookies are sent with cross-site requests
-            path: '/',       // Cookie is available across the entire domain
+            secure: true, // Set to true if using HTTPS
+            sameSite: "None", // Controls whether cookies are sent with cross-site requests
+            path: "/", // Cookie is available across the entire domain
           });
 
           res.send("User created successfully");
@@ -68,9 +69,9 @@ module.exports.loginUser = async (req, res) => {
               let token = generateToken(user);
               res.cookie("token", token, {
                 httpOnly: true, // Cookie is only accessible by the web server
-                secure: true,  // Set to true if using HTTPS
-                sameSite: 'None', // Controls whether cookies are sent with cross-site requests
-                path: '/',       // Cookie is available across the entire domain
+                secure: true, // Set to true if using HTTPS
+                sameSite: "None", // Controls whether cookies are sent with cross-site requests
+                path: "/", // Cookie is available across the entire domain
               });
               res.send("Login successfully");
             } else {
@@ -140,16 +141,28 @@ module.exports.uploadProfilePicture = async (req, res) => {
   }
   try {
     const oldImage = req.user.image;
+
+    const result = await cloudinary.uploader.upload(image, {
+      folder: userProfilePictures
+    });
+
     await userModel.updateOne(
       { email: req.user.email },
-      { $set: { image: req.file.filename } }
+      {
+        $set: {
+          image: {
+            public_id: result.public_id,
+            url: result.secure_url,
+          },
+        },
+      }
     );
-    if (oldImage)
-      fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
-        if (err) {
-          console.log(err.message);
-        }
-      });
+    // if (oldImage)
+    //   fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
+    //     if (err) {
+    //       console.log(err.message);
+    //     }
+    //   });
     res.send("File uploaded successfully.");
   } catch (err) {
     res.send(err.message);

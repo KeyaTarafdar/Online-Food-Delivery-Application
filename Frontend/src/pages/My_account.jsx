@@ -25,7 +25,6 @@ const My_account = () => {
   const [profilePicture, SetprofilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   const fetchUser = () => {
     findUser().then((user) => {
       setname(user.username);
@@ -90,8 +89,10 @@ const My_account = () => {
       return;
     }
 
-    setImage(file);
+    // setImage(file);
 
+    
+    setFileToBase(file)
     const formData = new FormData();
     formData.append("image", file);
 
@@ -111,6 +112,14 @@ const My_account = () => {
     } catch (err) {
       console.log(err.message);
     }
+  };
+
+  const setFileToBase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
   };
 
   const [companyName, setcompanyName] = useState();
