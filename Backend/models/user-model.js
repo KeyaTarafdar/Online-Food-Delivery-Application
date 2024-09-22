@@ -11,17 +11,7 @@ const userSchema = mongoose.Schema({
   cancledOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
   contact: Number,
   address: String,
-  // image: String,
-  image: {
-    public_id: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
+  image: String,
 });
 
 module.exports = mongoose.model("user", userSchema);

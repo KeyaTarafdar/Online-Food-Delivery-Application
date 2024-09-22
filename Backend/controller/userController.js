@@ -146,28 +146,16 @@ module.exports.uploadProfilePicture = async (req, res) => {
   }
   try {
     const oldImage = req.user.image;
-
-    const result = await cloudinary.uploader.upload(image, {
-      folder: userProfilePictures
-    });
-
     await userModel.updateOne(
       { email: req.user.email },
-      {
-        $set: {
-          image: {
-            public_id: result.public_id,
-            url: result.secure_url,
-          },
-        },
-      }
+      { $set: { image: req.file.filename } }
     );
-    // if (oldImage)
-    //   fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
-    //     if (err) {
-    //       console.log(err.message);
-    //     }
-    //   });
+    if (oldImage)
+      fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
+        if (err) {
+          console.log(err.message);
+        }
+      });
     res.send("File uploaded successfully.");
   } catch (err) {
     res.send(err.message);

@@ -25,6 +25,7 @@ const My_account = () => {
   const [profilePicture, SetprofilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
 
+
   const fetchUser = () => {
     findUser().then((user) => {
       setname(user.username);
@@ -44,7 +45,7 @@ const My_account = () => {
     setLoading(true);
     try {
       let response = await axios.put(
-        "https://online-food-delivery-backend-ffpc.onrender.com/users/updateuser",
+        "https://bon-appetite-online-food-delivery-website.onrender.com/users/updateuser",
         {
           username: newname || name,
           contact: newphone || phone,
@@ -89,16 +90,14 @@ const My_account = () => {
       return;
     }
 
-    // setImage(file);
+    setImage(file);
 
-    
-    setFileToBase(file)
     const formData = new FormData();
     formData.append("image", file);
 
     try {
       const response = await axios.post(
-        "https://online-food-delivery-backend-ffpc.onrender.com/users/uploadprofilepicture",
+        "https://bon-appetite-online-food-delivery-website.onrender.com/users/uploadprofilepicture",
         formData,
         {
           headers: {
@@ -112,14 +111,6 @@ const My_account = () => {
     } catch (err) {
       console.log(err.message);
     }
-  };
-
-  const setFileToBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
   };
 
   const [companyName, setcompanyName] = useState();
