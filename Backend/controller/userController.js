@@ -8,7 +8,6 @@ const fs = require("fs");
 const orderModel = require("../models/order-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const adminModel = require("../models/admin-model");
-const cloudinary = require("../utils/cloudinary");
 
 // Register User
 module.exports.registerUser = async (req, res) => {
