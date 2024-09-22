@@ -46,6 +46,10 @@ const Footer = ({ phone, email, fbLink, instaLink }) => {
             <div className="copyright">
               &copy;Prepared on 2023, Bon Apetite.com
             </div>
+            <div style={{fontSize:'20px',paddingTop:'1rem'}}>Developed By</div>
+            <div>Priya Acharjee</div>
+            <div>Shreya Kundu</div>
+            <div>Keya Tarafdar</div>
           </div>
         </div>
       </Navbar>
