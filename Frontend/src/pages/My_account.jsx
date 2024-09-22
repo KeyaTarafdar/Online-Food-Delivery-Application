@@ -32,7 +32,7 @@ const My_account = () => {
       setemail(user.email);
       setphone(user.contact);
       setaddress(user.address);
-      SetprofilePicture(user.image);
+      SetprofilePicture(user.image.url);
       setLoader(false);
     });
   };
@@ -83,26 +83,56 @@ const My_account = () => {
 
   const [image, setImage] = useState();
   // Upload profile image
+  // const handleProfileImage = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) {
+  //     alert("Please Upload an Image");
+  //     return;
+  //   }
+
+  //   setImage(file);
+
+  //   const formData = new FormData();
+  //   formData.append("image", file);
+
+  //   try {
+  //     const response = await axios.post(
+  //       "https://bon-appetite-online-food-delivery-website.onrender.com/users/uploadprofilepicture",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     alert(response.data);
+  //     fetchUser();
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
+
+  // Upload profile image
   const handleProfileImage = async (e) => {
     const file = e.target.files[0];
     if (!file) {
       alert("Please Upload an Image");
       return;
     }
+    const maxSizeInKB = 70;
+    if (file.size > maxSizeInKB * 1024) { 
+        alert(`File size should be less than ${maxSizeInKB} KB.`);
+        return;
+    }
 
-    setImage(file);
-
-    const formData = new FormData();
-    formData.append("image", file);
+    const imageData = await setFileToBase(file);
 
     try {
       const response = await axios.post(
-        "https://bon-appetite-online-food-delivery-website.onrender.com/users/uploadprofilepicture",
-        formData,
+        "http://localhost:8000/users/uploadprofilepicture",
+        { image: imageData }, 
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
           withCredentials: true,
         }
       );
@@ -111,6 +141,17 @@ const My_account = () => {
     } catch (err) {
       console.log(err.message);
     }
+  };
+
+  const setFileToBase = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+        resolve(reader.result); // Resolve the promise with the image data
+      };
+    });
   };
 
   const [companyName, setcompanyName] = useState();
@@ -199,7 +240,7 @@ const My_account = () => {
             >
               {profilePicture ? (
                 <img
-                  src={`/userProfilePictures/${profilePicture}`}
+                  src={profilePicture}
                   alt="Profile picture"
                   onClick={() => {
                     fileInputRef.current.click();

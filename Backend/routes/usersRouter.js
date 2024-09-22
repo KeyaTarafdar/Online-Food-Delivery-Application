@@ -38,10 +38,17 @@ router.get("/getuser", isLoggedIn, getUser);
 router.put("/updateuser", isLoggedIn, updateUser);
 
 // UPLOAD PROFILE PICTURE
+// router.post(
+//   "/uploadprofilepicture",
+//   isLoggedIn,
+//   uploadUserProfile.single("image"),
+//   uploadProfilePicture
+// );
+
+// UPLOAD PROFILE PICTURE (USING CLOUDINARY)
 router.post(
   "/uploadprofilepicture",
   isLoggedIn,
-  uploadUserProfile.single("image"),
   uploadProfilePicture
 );
 
