@@ -156,7 +156,7 @@ const Home2 = () => {
 
   const [oops, setoops] = useState(false);
 
-  if (oops || foods.length === 0) {
+  if (oops) {
     return (
       <>
         <div>
