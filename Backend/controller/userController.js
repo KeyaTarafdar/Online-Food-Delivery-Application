@@ -86,7 +86,7 @@ module.exports.loginUser = async (req, res) => {
       }
     }
   } catch (err) {
-    return res.status(501).send("Something went wrong");
+    return res.send(err.message);
   }
 };
 
