@@ -93,7 +93,11 @@ module.exports.loginUser = async (req, res) => {
 // Logout
 module.exports.logoutUser = async (req, res) => {
   try {
-    res.cookie("token", "");
+    res.clearCookie("token", {
+      path: '/', 
+      httpOnly: true, 
+      secure: true, 
+    });
     res.send("Logout successfully");
   } catch (err) {
     res.send("Something went wrong");
