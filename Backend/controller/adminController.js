@@ -59,9 +59,10 @@ module.exports.loginAdmin = async (req, res) => {
             if (result) {
               let token = generateToken(admin);
               res.cookie("token", token, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "Lax",
+                httpOnly: true, // Cookie is only accessible by the web server
+                secure: true,  // Set to true if using HTTPS
+                sameSite: 'None', // Controls whether cookies are sent with cross-site requests
+                path: '/',       // Cookie is available across the entire domain
               });
               res.send("Login successfully");
             } else {
