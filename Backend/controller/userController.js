@@ -93,10 +93,11 @@ module.exports.loginUser = async (req, res) => {
 // Logout
 module.exports.logoutUser = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      path: '/', 
-      httpOnly: true, 
-      secure: true, 
+    res.cookie("token", "", {
+      httpOnly: true, // Cookie is only accessible by the web server
+      secure: true, // Set to true if using HTTPS
+      sameSite: "None", // Controls whether cookies are sent with cross-site requests
+      path: "/", // Cookie is available across the entire domain
     });
     res.send("Logout successfully");
   } catch (err) {
