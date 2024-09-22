@@ -84,7 +84,12 @@ module.exports.loginAdmin = async (req, res) => {
 // Logout Admin
 module.exports.logoutAdmin = async (req, res) => {
   try {
-    res.cookie("token", "");
+    res.cookie("token", "", {
+      httpOnly: true, // Cookie is only accessible by the web server
+      secure: true, // Set to true if using HTTPS
+      sameSite: "None", // Controls whether cookies are sent with cross-site requests
+      path: "/", // Cookie is available across the entire domain
+    });
     res.send("Logout successfully");
   } catch (err) {
     res.send("Something went wrong");
