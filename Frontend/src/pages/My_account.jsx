@@ -149,7 +149,7 @@ const My_account = () => {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setImage(reader.result);
-        resolve(reader.result); // Resolve the promise with the image data
+        resolve(reader.result); 
       };
     });
   };
