@@ -289,8 +289,7 @@ module.exports.addNewRestaurent = async (req, res) => {
     return res.send("No file uploaded.");
   }
   try {
-    let { name, address } = req.body;
-    if (name && address) {
+    if (newRestaurentName && newRestaurentAddress) {
       let restaurent = await restaurentModel.findOne({ name, address });
       if (restaurent) {
         res.send("Restaurent already exists");
