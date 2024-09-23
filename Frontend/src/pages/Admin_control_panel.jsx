@@ -473,15 +473,18 @@ const Admin_control_panel = () => {
       return;
     }
 
-    setImage(file);
+    const maxSizeInKB = 70;
+    if (file.size > maxSizeInKB * 1024) {
+      alert(`File size should be less than ${maxSizeInKB} KB.`);
+      return;
+    }
 
-    const formData = new FormData();
-    formData.append("image", file);
+    const imageData = await setFileToBase(file);
 
     try {
       const response = await axios.post(
         "https://online-food-delivery-backend-ffpc.onrender.com/admins/uploadprofilepicture",
-        formData,
+        { image: imageData },
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -494,6 +497,16 @@ const Admin_control_panel = () => {
     } catch (err) {
       console.log(err.message);
     }
+  };
+
+  const setFileToBase = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+    });
   };
 
   const [newDeliveryBoyName, setnewDeliveryBoyName] = useState();
@@ -696,8 +709,8 @@ const Admin_control_panel = () => {
               <div className="col-6 admin_img ">
                 {profilePicture ? (
                   <img
-                    src={`/adminProfilePictures/${profilePicture}`}
-                    alt="Profile picture"
+                    src={profilePicture}
+                    alt="Profile"
                     onClick={() => {
                       fileInputRef.current.click();
                     }}
@@ -1146,7 +1159,7 @@ const Admin_control_panel = () => {
               className="col-12 m-0 p-0"
               style={{ height: "98vh", overflowY: "auto" }}
             >
-                <div className="btn btn-success mt-2">Cancled Orders</div>
+              <div className="btn btn-success mt-2">Cancled Orders</div>
               <div className="m-0 p-0 d-flex mt-3">
                 <div
                   className="head col-1 pt-2 pb-0"

@@ -60,9 +60,9 @@ module.exports.loginAdmin = async (req, res) => {
               let token = generateToken(admin);
               res.cookie("token", token, {
                 httpOnly: true, // Cookie is only accessible by the web server
-                secure: true,  // Set to true if using HTTPS
-                sameSite: 'None', // Controls whether cookies are sent with cross-site requests
-                path: '/',       // Cookie is available across the entire domain
+                secure: true, // Set to true if using HTTPS
+                sameSite: "None", // Controls whether cookies are sent with cross-site requests
+                path: "/", // Cookie is available across the entire domain
               });
               res.send("Login successfully");
             } else {
@@ -247,24 +247,33 @@ module.exports.getAllUsers = async (req, res) => {
 
 // Upload Profile Picture
 module.exports.uploadProfilePicture = async (req, res) => {
-  if (!req.file) {
+  const image = req.body.image;
+  if (!image) {
     return res.status(400).send("No file uploaded.");
   }
   try {
-    const oldImage = req.admin.image;
+    const oldImage = req.admin.image.public_id;
+
+    const result = await cloudinary.uploader.upload(image, {
+      folder: "adminProfilePictures",
+      width: 300,
+      crop: "scale",
+    });
+
     await adminModel.updateOne(
       { email: req.admin.email },
-      { $set: { image: req.file.filename } }
+      {
+        $set: {
+          image: {
+            public_id: result.public_id,
+            url: result.secure_url,
+          },
+        },
+      }
     );
-    if (oldImage)
-      fs.unlink(
-        `../Frontend/public/adminProfilePictures/${oldImage}`,
-        (err) => {
-          if (err) {
-            console.log(err.message);
-          }
-        }
-      );
+    if (oldImage) {
+      await cloudinary.uploader.destroy(req.admin.image.public_id);
+    }
     res.send("File uploaded successfully.");
   } catch (err) {
     res.send(err.message);

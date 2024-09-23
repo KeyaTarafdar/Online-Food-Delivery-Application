@@ -154,32 +154,9 @@ module.exports.updateUser = async (req, res) => {
 };
 
 // Upload Profile Picture
-// module.exports.uploadProfilePicture = async (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).send("No file uploaded.");
-//   }
-//   try {
-//     const oldImage = req.user.image;
-//     await userModel.updateOne(
-//       { email: req.user.email },
-//       { $set: { image: req.file.filename } }
-//     );
-//     if (oldImage)
-//       fs.unlink(`../Frontend/public/userProfilePictures/${oldImage}`, (err) => {
-//         if (err) {
-//           console.log(err.message);
-//         }
-//       });
-//     res.send("File uploaded successfully.");
-//   } catch (err) {
-//     res.send(err.message);
-//   }
-// };
-
-// Upload Profile Picture
 module.exports.uploadProfilePicture = async (req, res) => {
   const image = req.body.image;
-  if (!req.body) {
+  if (!image) {
     return res.status(400).send("No file uploaded.");
   }
   try {

@@ -81,7 +81,6 @@ router.get("/getallusers", isLoggedIn, getAllUsers);
 router.post(
   "/uploadprofilepicture",
   isLoggedIn,
-  uploadAdminProfile.single("image"),
   uploadProfilePicture
 );
 

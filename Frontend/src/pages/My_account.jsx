@@ -25,7 +25,6 @@ const My_account = () => {
   const [profilePicture, SetprofilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   const fetchUser = () => {
     findUser().then((user) => {
       setname(user.username);
@@ -81,38 +80,6 @@ const My_account = () => {
 
   const fileInputRef = useRef(null);
 
-  const [image, setImage] = useState();
-  // Upload profile image
-  // const handleProfileImage = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) {
-  //     alert("Please Upload an Image");
-  //     return;
-  //   }
-
-  //   setImage(file);
-
-  //   const formData = new FormData();
-  //   formData.append("image", file);
-
-  //   try {
-  //     const response = await axios.post(
-  //       "https://bon-appetite-online-food-delivery-website.onrender.com/users/uploadprofilepicture",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     alert(response.data);
-  //     fetchUser();
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
-
   // Upload profile image
   const handleProfileImage = async (e) => {
     const file = e.target.files[0];
@@ -121,9 +88,9 @@ const My_account = () => {
       return;
     }
     const maxSizeInKB = 70;
-    if (file.size > maxSizeInKB * 1024) { 
-        alert(`File size should be less than ${maxSizeInKB} KB.`);
-        return;
+    if (file.size > maxSizeInKB * 1024) {
+      alert(`File size should be less than ${maxSizeInKB} KB.`);
+      return;
     }
 
     const imageData = await setFileToBase(file);
@@ -131,7 +98,7 @@ const My_account = () => {
     try {
       const response = await axios.post(
         "https://online-food-delivery-application-8hro.onrender.com/users/uploadprofilepicture",
-        { image: imageData }, 
+        { image: imageData },
         {
           withCredentials: true,
         }
@@ -148,8 +115,7 @@ const My_account = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setImage(reader.result);
-        resolve(reader.result); 
+        resolve(reader.result);
       };
     });
   };
