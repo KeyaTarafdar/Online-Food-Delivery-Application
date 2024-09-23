@@ -1918,7 +1918,7 @@ const Admin_control_panel = () => {
                       <Update_Res
                         serial={serial_res++}
                         name={name}
-                        image={image}
+                        image={image.url}
                         address={address}
                         id={_id}
                       />
