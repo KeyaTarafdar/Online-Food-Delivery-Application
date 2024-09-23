@@ -11,6 +11,8 @@ const categoryModel = require("../models/category-model");
 const orderModel = require("../models/order-model");
 const foodModel = require("../models/food-model");
 const fs = require("fs");
+const cloudinary = require("../utils/cloudinary");
+require("dotenv").config();
 
 // Create Admin
 module.exports.createAdmin = async (req, res) => {

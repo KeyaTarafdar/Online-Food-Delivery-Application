@@ -17,7 +17,6 @@ const {
   cancleOrder,
   checkIsLoggedIn,
 } = require("../controller/userController");
-const { uploadUserProfile } = require("../middlewares/multer");
 
 router.get("/", (req, res) => {
   res.send("User");
