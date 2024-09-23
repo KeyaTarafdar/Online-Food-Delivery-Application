@@ -486,9 +486,6 @@ const Admin_control_panel = () => {
         "https://online-food-delivery-backend-ffpc.onrender.com/admins/uploadprofilepicture",
         { image: imageData },
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
           withCredentials: true,
         }
       );
