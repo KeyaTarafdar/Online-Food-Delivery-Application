@@ -309,7 +309,7 @@ module.exports.addNewRestaurent = async (req, res) => {
             url: result.secure_url,
           },
         });
-        res.send(`${name} added successfully`);
+        res.send(`${newRestaurentName} added successfully`);
       }
     } else {
       res.send("Something is missing");
@@ -346,12 +346,9 @@ module.exports.deleteRestaurent = async (req, res) => {
     let id = req.query.id;
     let restaurent = await restaurentModel.findOne({ _id: id });
     let oldImage = restaurent.image;
-    if (oldImage)
-      fs.unlink(`../Frontend/public/restaurentPictures/${oldImage}`, (err) => {
-        if (err) {
-          console.log(err.message);
-        }
-      });
+    if (oldImage) {
+      await cloudinary.uploader.destroy(oldImage.public_id);
+    }
     await restaurentModel.findOneAndDelete({ _id: id });
     if (restaurent) {
       res.send(`${restaurent.name} Restaurent deleted successfully`);

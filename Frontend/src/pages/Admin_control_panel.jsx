@@ -443,7 +443,7 @@ const Admin_control_panel = () => {
     fetchAdmin().then((response) => {
       if (response) {
         setadminName(response.username);
-        SetprofilePicture(response.image.url);
+        if (response.image) SetprofilePicture(response.image.url);
         setallOrders(response.currentOrders);
       }
     });
@@ -485,7 +485,7 @@ const Admin_control_panel = () => {
 
     try {
       const response = await axios.post(
-        "https://online-food-delivery-application-8hro.onrender.com/admins/uploadprofilepicture",
+        "http://localhost:8000/admins/uploadprofilepicture",
         { image: imageData },
         {
           withCredentials: true,
@@ -562,24 +562,19 @@ const Admin_control_panel = () => {
   const [newRestaurentAddress, setnewRestaurentAddress] = useState();
 
   // Add new restaurent
-  const handleAddNewRestaurent = async() => {
+  const handleAddNewRestaurent = async () => {
     if (!image) {
       alert("Please Upload an Image");
       return;
     }
-    alert(image.size)
     const maxSizeInKB = 70;
     if (image.size > maxSizeInKB * 1024) {
       alert(`File size should be less than ${maxSizeInKB} KB.`);
       return;
     }
 
-    // formData.append("image", image);
-    // formData.append("name", newRestaurentName);
-    // formData.append("address", newRestaurentAddress);
-
     setAdd_res(true);
-    
+
     const imageData = await setFileToBase(image);
 
     addNewRestaurent(imageData, newRestaurentName, newRestaurentAddress).then(

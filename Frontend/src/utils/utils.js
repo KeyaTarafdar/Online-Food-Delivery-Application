@@ -154,7 +154,6 @@ export const fetchAdmin = async () => {
         withCredentials: true,
       }
     );
-
     return response.data;
   } catch (err) {
     console.log(err.message);
