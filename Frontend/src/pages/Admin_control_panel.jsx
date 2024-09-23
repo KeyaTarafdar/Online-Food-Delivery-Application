@@ -568,7 +568,7 @@ const Admin_control_panel = () => {
       return;
     }
     const maxSizeInKB = 70;
-    if (file.size > maxSizeInKB * 1024) {
+    if (image.size > maxSizeInKB * 1024) {
       alert(`File size should be less than ${maxSizeInKB} KB.`);
       return;
     }
@@ -579,7 +579,7 @@ const Admin_control_panel = () => {
 
     setAdd_res(true);
     
-    const imageData = await setFileToBase(file);
+    const imageData = await setFileToBase(image);
 
     addNewRestaurent(imageData, newRestaurentName, newRestaurentAddress).then(
       (response) => {
