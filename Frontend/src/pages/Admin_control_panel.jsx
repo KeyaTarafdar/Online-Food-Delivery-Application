@@ -567,6 +567,7 @@ const Admin_control_panel = () => {
       alert("Please Upload an Image");
       return;
     }
+    alert(image.size)
     const maxSizeInKB = 70;
     if (image.size > maxSizeInKB * 1024) {
       alert(`File size should be less than ${maxSizeInKB} KB.`);
