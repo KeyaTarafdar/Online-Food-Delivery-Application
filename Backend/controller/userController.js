@@ -8,6 +8,8 @@ const fs = require("fs");
 const orderModel = require("../models/order-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const adminModel = require("../models/admin-model");
+const cloudinary = require("../utils/cloudinary");
+require("dotenv").config();
 
 // Check isLoggedIn
 module.exports.checkIsLoggedIn = async (req, res) => {
