@@ -284,7 +284,8 @@ module.exports.uploadProfilePicture = async (req, res) => {
 
 // Add new restaurent
 module.exports.addNewRestaurent = async (req, res) => {
-  if (!req.file) {
+  const { imageData, newRestaurentName, newRestaurentAddress } = req.body;
+  if (!imageData) {
     return res.send("No file uploaded.");
   }
   try {
@@ -294,10 +295,19 @@ module.exports.addNewRestaurent = async (req, res) => {
       if (restaurent) {
         res.send("Restaurent already exists");
       } else {
+        const result = await cloudinary.uploader.upload(imageData, {
+          folder: "restaurentPictures",
+          // width: 300,
+          // crop: "scale",
+        });
+
         await restaurentModel.create({
-          name,
-          address,
-          image: req.file.filename,
+          name: newRestaurentName,
+          address: newRestaurentAddress,
+          image: {
+            public_id: result.public_id,
+            url: result.secure_url,
+          },
         });
         res.send(`${name} added successfully`);
       }

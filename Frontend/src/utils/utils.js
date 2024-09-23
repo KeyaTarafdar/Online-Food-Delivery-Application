@@ -6,9 +6,12 @@ import axios from "axios";
 // Check isLoggedIn
 export const checkIsLoggedIn = async () => {
   try {
-    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/users/checkisloggedin", {
-      withCredentials: true,
-    });
+    let response = await axios.get(
+      "https://online-food-delivery-application-8hro.onrender.com/users/checkisloggedin",
+      {
+        withCredentials: true,
+      }
+    );
     return response.data;
   } catch (err) {
     console.log(err);
@@ -18,9 +21,12 @@ export const checkIsLoggedIn = async () => {
 // Logout user
 export const logout = async () => {
   try {
-    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/users/logout", {
-      withCredentials: true,
-    });
+    let response = await axios.get(
+      "https://online-food-delivery-application-8hro.onrender.com/users/logout",
+      {
+        withCredentials: true,
+      }
+    );
     return response.data;
   } catch (err) {
     console.log(err);
@@ -30,9 +36,12 @@ export const logout = async () => {
 // Find user
 export const findUser = async () => {
   try {
-    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/users/getuser", {
-      withCredentials: true,
-    });
+    let response = await axios.get(
+      "https://online-food-delivery-application-8hro.onrender.com/users/getuser",
+      {
+        withCredentials: true,
+      }
+    );
     if (response.data) {
       return response.data;
     } else {
@@ -46,7 +55,9 @@ export const findUser = async () => {
 // Fetch company details
 export const fetchCompanyDetails = async () => {
   try {
-    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/companyDetails");
+    let response = await axios.get(
+      "https://online-food-delivery-application-8hro.onrender.com/companyDetails"
+    );
     return response.data[0];
   } catch (err) {
     console.log(err.message);
@@ -137,9 +148,12 @@ export const logoutAdmin = async () => {
 // Fetch Admin
 export const fetchAdmin = async () => {
   try {
-    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/admins/getadmin", {
-      withCredentials: true,
-    });
+    let response = await axios.get(
+      "https://online-food-delivery-application-8hro.onrender.com/admins/getadmin",
+      {
+        withCredentials: true,
+      }
+    );
 
     return response.data;
   } catch (err) {
@@ -240,9 +254,12 @@ export const deleteDeliveryBoy = async (id) => {
 // Fetch all users
 export const fetchAllUsers = async () => {
   try {
-    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/admins/getallusers", {
-      withCredentials: true,
-    });
+    let response = await axios.get(
+      "https://online-food-delivery-application-8hro.onrender.com/admins/getallusers",
+      {
+        withCredentials: true,
+      }
+    );
     return response.data;
   } catch (err) {
     console.log(err.message);
@@ -335,15 +352,20 @@ export const updateFoodItem = async (formData) => {
 };
 
 // Add new restaurent
-export const addNewRestaurent = async (formData) => {
+export const addNewRestaurent = async (
+  image,
+  newRestaurentName,
+  newRestaurentAddress
+) => {
   try {
     let response = await axios.post(
       "https://online-food-delivery-application-8hro.onrender.com/admins/addnewrestaurent",
-      formData,
+      // formData,
+      { imageData, newRestaurentName, newRestaurentAddress },
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        // headers: {
+        //   "Content-Type": "multipart/form-data",
+        // },
         withCredentials: true,
       }
     );
@@ -560,7 +582,7 @@ export const createOrder = async ({ userCart, totalAmount, time }) => {
 export const cancelSingleOrder = async (id) => {
   try {
     let response = await axios.delete(
-      'https://online-food-delivery-application-8hro.onrender.com/users/cancleorder',
+      "https://online-food-delivery-application-8hro.onrender.com/users/cancleorder",
       {
         params: { id: id },
         withCredentials: true,
@@ -576,7 +598,7 @@ export const cancelSingleOrder = async (id) => {
 export const getAllOrders = async () => {
   try {
     let response = await axios.get(
-      'https://online-food-delivery-application-8hro.onrender.com/admins/fetchallorders',
+      "https://online-food-delivery-application-8hro.onrender.com/admins/fetchallorders",
       {
         withCredentials: true,
       }
@@ -591,7 +613,7 @@ export const getAllOrders = async () => {
 export const confirmOrderDelete = async (id) => {
   try {
     let response = await axios.put(
-      'https://online-food-delivery-application-8hro.onrender.com/admins/confirmdelete',
+      "https://online-food-delivery-application-8hro.onrender.com/admins/confirmdelete",
       { orderId: id },
       {
         withCredentials: true,
@@ -607,7 +629,7 @@ export const confirmOrderDelete = async (id) => {
 export const fetchDeliveryBoy = async () => {
   try {
     let response = await axios.get(
-      'https://online-food-delivery-application-8hro.onrender.com/deliveryboys/fetchsingledeliveryboy',
+      "https://online-food-delivery-application-8hro.onrender.com/deliveryboys/fetchsingledeliveryboy",
       {
         withCredentials: true,
       }

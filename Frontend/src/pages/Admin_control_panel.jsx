@@ -562,21 +562,33 @@ const Admin_control_panel = () => {
   const [newRestaurentAddress, setnewRestaurentAddress] = useState();
 
   // Add new restaurent
-  const handleAddNewRestaurent = () => {
-    const formData = new FormData();
+  const handleAddNewRestaurent = async() => {
+    if (!image) {
+      alert("Please Upload an Image");
+      return;
+    }
+    const maxSizeInKB = 70;
+    if (file.size > maxSizeInKB * 1024) {
+      alert(`File size should be less than ${maxSizeInKB} KB.`);
+      return;
+    }
 
-    formData.append("image", image);
-    formData.append("name", newRestaurentName);
-    formData.append("address", newRestaurentAddress);
+    // formData.append("image", image);
+    // formData.append("name", newRestaurentName);
+    // formData.append("address", newRestaurentAddress);
 
     setAdd_res(true);
+    
+    const imageData = await setFileToBase(file);
 
-    addNewRestaurent(formData).then((response) => {
-      alert(response);
-      fetchAllRestaurent().then((response) => {
-        setrestaurents(response);
-      });
-    });
+    addNewRestaurent(imageData, newRestaurentName, newRestaurentAddress).then(
+      (response) => {
+        alert(response);
+        fetchAllRestaurent().then((response) => {
+          setrestaurents(response);
+        });
+      }
+    );
   };
 
   // Fetch all foods

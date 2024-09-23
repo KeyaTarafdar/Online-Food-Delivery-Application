@@ -84,7 +84,6 @@ router.post("/uploadprofilepicture", isLoggedIn, uploadProfilePicture);
 router.post(
   "/addnewrestaurent",
   isLoggedIn,
-  uploadRestaurent.single("image"),
   addNewRestaurent
 );
 
