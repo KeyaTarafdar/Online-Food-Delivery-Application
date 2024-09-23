@@ -353,7 +353,7 @@ export const updateFoodItem = async (formData) => {
 
 // Add new restaurent
 export const addNewRestaurent = async (
-  image,
+  imageData,
   newRestaurentName,
   newRestaurentAddress
 ) => {
