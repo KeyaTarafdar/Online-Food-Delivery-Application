@@ -441,9 +441,11 @@ const Admin_control_panel = () => {
   const [profilePicture, SetprofilePicture] = useState(null);
   const getAdmin = () => {
     fetchAdmin().then((response) => {
-      setadminName(response.username);
-      SetprofilePicture(response.image);
-      setallOrders(response.currentOrders);
+      if (response) {
+        setadminName(response.username);
+        SetprofilePicture(response.image.url);
+        setallOrders(response.currentOrders);
+      }
     });
   };
 
