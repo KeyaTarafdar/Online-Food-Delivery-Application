@@ -290,14 +290,15 @@ module.exports.addNewRestaurent = async (req, res) => {
   }
   try {
     if (newRestaurentName && newRestaurentAddress) {
-      let restaurent = await restaurentModel.findOne({ name, address });
+      let restaurent = await restaurentModel.findOne({
+        name: newRestaurentName,
+        address: newRestaurentAddress,
+      });
       if (restaurent) {
         res.send("Restaurent already exists");
       } else {
         const result = await cloudinary.uploader.upload(imageData, {
           folder: "restaurentPictures",
-          // width: 300,
-          // crop: "scale",
         });
 
         await restaurentModel.create({
