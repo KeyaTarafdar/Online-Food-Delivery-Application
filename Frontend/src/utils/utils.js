@@ -2,6 +2,19 @@
 import axios from "axios";
 
 // USER FUNCTIONS-------------------------------------------------------------------------------
+
+// Check isLoggedIn
+export const checkIsLoggedIn = async () => {
+  try {
+    let response = await axios.get("https://online-food-delivery-application-8hro.onrender.com/users/checkisloggedin", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // Logout user
 export const logout = async () => {
   try {

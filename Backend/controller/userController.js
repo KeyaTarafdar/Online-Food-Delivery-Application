@@ -9,6 +9,19 @@ const orderModel = require("../models/order-model");
 const deliveryBoyModel = require("../models/deliveryBoy-model");
 const adminModel = require("../models/admin-model");
 
+// Check isLoggedIn
+module.exports.checkIsLoggedIn = async (req, res) => {
+  try {
+    if (req.user) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  } catch (err) {
+    res.send(err.send);
+  }
+};
+
 // Register User
 module.exports.registerUser = async (req, res) => {
   try {
@@ -173,7 +186,7 @@ module.exports.uploadProfilePicture = async (req, res) => {
     const result = await cloudinary.uploader.upload(image, {
       folder: "userProfilePictures",
       width: 300,
-      crop: "scale"
+      crop: "scale",
     });
     await userModel.updateOne(
       { email: req.user.email },

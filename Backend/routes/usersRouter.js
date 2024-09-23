@@ -15,12 +15,16 @@ const {
   deleteCartItemDecreaseQuantity,
   createOrder,
   cancleOrder,
+  checkIsLoggedIn,
 } = require("../controller/userController");
 const { uploadUserProfile } = require("../middlewares/multer");
 
 router.get("/", (req, res) => {
   res.send("User");
 });
+
+// CHECK ISLOGGEDIN
+router.get("/checkisloggedin", isLoggedIn, checkIsLoggedIn);
 
 // USER REGISTER
 router.post("/register", registerUser);
@@ -46,11 +50,7 @@ router.put("/updateuser", isLoggedIn, updateUser);
 // );
 
 // UPLOAD PROFILE PICTURE (USING CLOUDINARY)
-router.post(
-  "/uploadprofilepicture",
-  isLoggedIn,
-  uploadProfilePicture
-);
+router.post("/uploadprofilepicture", isLoggedIn, uploadProfilePicture);
 
 // ADD TO CART
 router.put("/addtocart", isLoggedIn, addToCart);

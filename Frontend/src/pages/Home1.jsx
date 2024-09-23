@@ -9,9 +9,12 @@ import { Link, Element } from "react-scroll";
 import Services from "../Components/Services";
 import { NavLink } from "react-router-dom";
 import Footer from "../Components/Footer";
-import { fetchCompanyDetails } from "../utils/utils";
+import { useNavigate } from "react-router-dom";
+import { fetchCompanyDetails, checkIsLoggedIn } from "../utils/utils";
 
 const Home1 = () => {
+  const navigate = useNavigate();
+
   const [companyName, setcompanyName] = useState();
   const [companyEmail, setcompanyEmail] = useState();
   const [companyPhone, setcompanyPhone] = useState();
@@ -50,6 +53,11 @@ const Home1 = () => {
   };
 
   useEffect(() => {
+    checkIsLoggedIn().then((response) => {
+      if (response) {
+        navigate("/Home2");
+      }
+    });
     // Fetching company details
     fetchCompanyDetails().then((company) => {
       setcompanyName(company.name.toUpperCase());
