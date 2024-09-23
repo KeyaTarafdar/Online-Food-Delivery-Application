@@ -130,7 +130,7 @@ const My_account = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/users/uploadprofilepicture",
+        "https://online-food-delivery-application-8hro.onrender.com/users/uploadprofilepicture",
         { image: imageData }, 
         {
           withCredentials: true,
