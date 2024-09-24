@@ -485,7 +485,7 @@ const Admin_control_panel = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/admins/uploadprofilepicture",
+        "https://online-food-delivery-application-8hro.onrender.com/admins/uploadprofilepicture",
         { image: imageData },
         {
           withCredentials: true,
