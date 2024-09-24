@@ -54,8 +54,7 @@ const Home1 = () => {
 
   useEffect(() => {
     checkIsLoggedIn().then((response) => {
-      if (response) {
-        alert(response)
+      if (response !== "You need to login first") {
         navigate("/Home2");
       }
     });
