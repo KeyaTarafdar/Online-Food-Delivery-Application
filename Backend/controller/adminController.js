@@ -409,7 +409,7 @@ module.exports.addNewCategory = async (req, res) => {
   try {
     if (categoryName) {
       let category = await categoryModel.findOne({ name: categoryName });
-      if (restaurent) {
+      if (category) {
         res.send(`${category.name} category already exists`);
       } else {
         const result = await cloudinary.uploader.upload(imageData, {
