@@ -31,6 +31,16 @@ const Update_Category = ({ serial, name, image, id }) => {
     });
   };
 
+  const setFileToBase = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+    });
+  };
+
   useEffect(() => {
     setdisplay("block");
   }, [id]);
