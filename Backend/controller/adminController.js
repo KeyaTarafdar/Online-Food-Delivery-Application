@@ -462,28 +462,38 @@ module.exports.deleteCategory = async (req, res) => {
 // Update Category
 module.exports.updateCategory = async (req, res) => {
   try {
-    let { id, name } = req.body;
-    let image = req.file;
-    if (name !== "undefined") {
-      await categoryModel.findOneAndUpdate({ _id: id }, { $set: { name } });
-    }
-
-    if (image !== undefined) {
-      let category = await categoryModel.findOne({ _id: id });
-      const oldImage = category.image;
-      if (oldImage)
-        fs.unlink(`../Frontend/public/categoryPictures/${oldImage}`, (err) => {
-          if (err) {
-            console.log(err.message);
-          }
-        });
+    let { id, imageData, updatedCategoryName } = req.body;
+    if (updatedCategoryName !== "undefined") {
       await categoryModel.findOneAndUpdate(
         { _id: id },
-        { $set: { image: image.filename } }
+        { $set: { name: updatedCategoryName } }
       );
     }
 
-    res.send(`${name} category updated successfully`);
+    if (imageData !== undefined) {
+      const result = await cloudinary.uploader.upload(imageData, {
+        folder: "categoryPictures",
+      });
+
+      let category = await categoryModel.findOne({ _id: id });
+      const oldImage = category.image;
+      if (oldImage) {
+        await cloudinary.uploader.destroy(oldImage.public_id);
+      }
+      await categoryModel.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            image: {
+              public_id: result.public_id,
+              url: result.secure_url,
+            },
+          },
+        }
+      );
+    }
+
+    res.send(`${updatedCategoryName} category updated successfully`);
   } catch (err) {
     res.send(err.message);
   }

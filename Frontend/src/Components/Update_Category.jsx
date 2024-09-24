@@ -12,16 +12,26 @@ const Update_Category = ({ serial, name, image, id }) => {
   const [updatedCategoryName, setupdatedCategoryName] = useState();
   const [updatedCategoryImage, setupdatedCategoryImage] = useState();
 
-  const handleClick_update = () => {
+  const handleClick_update = async () => {
     setClicked_update(!clicked_update);
 
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    formData.append("id", id);
-    formData.append("image", updatedCategoryImage);
-    formData.append("name", updatedCategoryName);
+    // formData.append("id", id);
+    // formData.append("image", updatedCategoryImage);
+    // formData.append("name", updatedCategoryName);
+    const maxSizeInKB = 70;
+    if (
+      updatedCategoryImage &&
+      updatedCategoryImage.size > maxSizeInKB * 1024
+    ) {
+      alert(`File size should be less than ${maxSizeInKB} KB.`);
+      return;
+    }
 
-    updateCategory(formData).then((response) => {
+    const imageData = await setFileToBase(categoryImage);
+
+    updateCategory(id, imageData, updatedCategoryName).then((response) => {
       alert(response);
     });
   };

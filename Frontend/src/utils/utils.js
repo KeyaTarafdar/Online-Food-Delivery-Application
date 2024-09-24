@@ -483,15 +483,12 @@ export const deleteCategory = async (id) => {
 };
 
 // Update Category
-export const updateCategory = async (formData) => {
+export const updateCategory = async (id, imageData, updatedCategoryName) => {
   try {
     let response = await axios.put(
       "https://online-food-delivery-application-8hro.onrender.com/admins/updatecategory",
-      formData,
+      { id, imageData, updatedCategoryName },
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
         withCredentials: true,
       }
     );
