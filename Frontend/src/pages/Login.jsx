@@ -31,8 +31,8 @@ const Login = () => {
 
     // Login API
     loginUser(email, password).then((userResponse) => {
+      setLoading(true);
       if (userResponse === "Login successfully") {
-        setLoading(true);
         setTimeout(() => {
           setLoading(false);
           navigate("/Home2");
@@ -40,7 +40,6 @@ const Login = () => {
       } else {
         loginAdmin(email, password).then((adminResponse) => {
           if (adminResponse === "Login successfully") {
-            setLoading(true);
             setTimeout(() => {
               setLoading(false);
               navigate("/Admin");
@@ -48,13 +47,13 @@ const Login = () => {
           } else {
             loginDeliveryBoy(email, password).then((deliveryBoyResponse) => {
               if (deliveryBoyResponse === "Login successfully") {
-                setLoading(true);
                 setTimeout(() => {
                   setLoading(false);
                   navigate("/DeliveryBoy");
                 }, 3000);
               } else {
                 alert(deliveryBoyResponse);
+                setLoading(false);
               }
             });
           }
