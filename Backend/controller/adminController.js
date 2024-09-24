@@ -470,7 +470,7 @@ module.exports.updateCategory = async (req, res) => {
       );
     }
 
-    if (imageData !== undefined) {
+    if (imageData !== null) {
       const result = await cloudinary.uploader.upload(imageData, {
         folder: "categoryPictures",
       });
