@@ -74,7 +74,7 @@ const Update_Category = ({ serial, name, image, id }) => {
           }}
         >
           <img
-            src={`/categoryPictures/${image}`}
+            src={image}
             style={{ height: "100%", width: "30%" }}
           ></img>
         </div>

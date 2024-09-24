@@ -882,7 +882,7 @@ const Menu = () => {
                         style={{ height: "50%", width: "9%" }}
                       >
                         <img
-                          src={`/categoryPictures/${image}`}
+                          src={image.url}
                           alt="categories"
                           style={{
                             boxShadow:

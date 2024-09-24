@@ -108,7 +108,6 @@ router.delete("/deleterestaurent", isLoggedIn, deleteRestaurent);
 router.post(
   "/addnewcategory",
   isLoggedIn,
-  uploadCategory.single("image"),
   addNewCategory
 );
 

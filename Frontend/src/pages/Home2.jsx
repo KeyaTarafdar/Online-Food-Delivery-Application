@@ -136,9 +136,6 @@ const Home2 = () => {
     fetchAllFoods().then((response) => {
       setfoods(response);
     });
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 3000);
   }, [handleAddToCart]);
 
   useEffect(() => {

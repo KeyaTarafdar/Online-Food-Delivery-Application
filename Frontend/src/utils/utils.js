@@ -359,12 +359,8 @@ export const addNewRestaurent = async (
   try {
     let response = await axios.post(
       "https://online-food-delivery-application-8hro.onrender.com/admins/addnewrestaurent",
-      // formData,
       { imageData, newRestaurentName, newRestaurentAddress },
       {
-        // headers: {
-        //   "Content-Type": "multipart/form-data",
-        // },
         withCredentials: true,
       }
     );
@@ -440,15 +436,12 @@ export const updateRestaurent = async (formData) => {
 };
 
 // Add new category
-export const addNewCategory = async (formData) => {
+export const addNewCategory = async (imageData, categoryName) => {
   try {
     let response = await axios.post(
       "https://online-food-delivery-application-8hro.onrender.com/admins/addnewcategory",
-      formData,
+      { imageData, categoryName },
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
         withCredentials: true,
       }
     );

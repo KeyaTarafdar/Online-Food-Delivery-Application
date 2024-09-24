@@ -603,13 +603,20 @@ const Admin_control_panel = () => {
   const [allCategory, setallCategory] = useState([]);
 
   // Add new category
-  const handleAddNewCategory = () => {
-    const formData = new FormData();
+  const handleAddNewCategory = async () => {
+    if (!image) {
+      alert("Please Upload an Image");
+      return;
+    }
+    const maxSizeInKB = 70;
+    if (image.size > maxSizeInKB * 1024) {
+      alert(`File size should be less than ${maxSizeInKB} KB.`);
+      return;
+    }
 
-    formData.append("image", categoryImage);
-    formData.append("name", categoryName);
+    const imageData = await setFileToBase(categoryImage);
 
-    addNewCategory(formData).then((response) => {
+    addNewCategory(imageData, categoryName).then((response) => {
       alert(response);
       fetchAllCategory().then((response) => {
         setallCategory(response);
@@ -2064,7 +2071,7 @@ const Admin_control_panel = () => {
                       <Update_Category
                         serial={serial_food_category++}
                         name={name}
-                        image={image}
+                        image={image.url}
                         id={_id}
                       />
                     </>

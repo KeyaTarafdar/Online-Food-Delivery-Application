@@ -402,18 +402,29 @@ module.exports.updateRestaurent = async (req, res) => {
 
 // Add new category
 module.exports.addNewCategory = async (req, res) => {
-  if (!req.file) {
+  const { imageData, categoryName } = req.body;
+  if (!imageData) {
     return res.send("No file uploaded.");
   }
   try {
-    let { name } = req.body;
-    if (name) {
-      await categoryModel.create({
-        name,
-        image: req.file.filename,
-      });
+    if (categoryName) {
+      let category = await categoryModel.findOne({ name: categoryName });
+      if (restaurent) {
+        res.send(`${category.name} category already exists`);
+      } else {
+        const result = await cloudinary.uploader.upload(imageData, {
+          folder: "categoryPictures",
+        });
+        await categoryModel.create({
+          name: categoryName,
+          image: {
+            public_id: result.public_id,
+            url: result.secure_url,
+          },
+        });
+      }
+      res.send(`${categoryName} category is created`);
     }
-    res.send(`${name} Category is created`);
   } catch (err) {
     res.send(err.message);
   }
