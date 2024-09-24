@@ -447,12 +447,9 @@ module.exports.deleteCategory = async (req, res) => {
     if (id) {
       let category = await categoryModel.findOne({ _id: id });
       const oldImage = category.image;
-      if (oldImage)
-        fs.unlink(`../Frontend/public/categoryPictures/${oldImage}`, (err) => {
-          if (err) {
-            console.log(err.message);
-          }
-        });
+      if (oldImage) {
+        await cloudinary.uploader.destroy(oldImage.public_id);
+      }
 
       await categoryModel.findOneAndDelete({ _id: id });
       res.send(`${category.name} deleted successfully`);
