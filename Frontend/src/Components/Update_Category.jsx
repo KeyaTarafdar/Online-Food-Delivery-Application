@@ -14,12 +14,7 @@ const Update_Category = ({ serial, name, image, id }) => {
 
   const handleClick_update = async () => {
     setClicked_update(!clicked_update);
-
-    // const formData = new FormData();
-
-    // formData.append("id", id);
-    // formData.append("image", updatedCategoryImage);
-    // formData.append("name", updatedCategoryName);
+    
     const maxSizeInKB = 70;
     if (
       updatedCategoryImage &&
@@ -29,7 +24,7 @@ const Update_Category = ({ serial, name, image, id }) => {
       return;
     }
 
-    const imageData = await setFileToBase(categoryImage);
+    const imageData = await setFileToBase(updatedCategoryImage);
 
     updateCategory(id, imageData, updatedCategoryName).then((response) => {
       alert(response);
