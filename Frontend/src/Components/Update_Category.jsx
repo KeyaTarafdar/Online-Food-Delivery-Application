@@ -73,10 +73,7 @@ const Update_Category = ({ serial, name, image, id }) => {
             alignItems: "center",
           }}
         >
-          <img
-            src={image}
-            style={{ height: "100%", width: "30%" }}
-          ></img>
+          <img src={image} style={{ height: "100%", width: "30%" }}></img>
         </div>
         <div
           className="col-2"
@@ -104,16 +101,14 @@ const Update_Category = ({ serial, name, image, id }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onClick={() => {
+            deleteCategory(id).then((response) => {
+              alert(response);
+              setdisplay("none");
+            });
+          }}
         >
-          <DeleteButton
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              deleteCategory(id).then((response) => {
-                alert(response);
-                setdisplay("none");
-              });
-            }}
-          />
+          <DeleteButton style={{ cursor: "pointer" }} />
         </div>
       </div>
 

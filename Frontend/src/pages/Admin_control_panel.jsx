@@ -85,14 +85,16 @@ const Admin_control_panel = () => {
     getAdmin();
 
     getAllOrders().then((response) => {
-      const canceledOrders = response.filter(
-        (order) => order.isDeleted === true
-      );
-      setallCancledOrders(canceledOrders);
-      const deliveredOrders = response.filter(
-        (order) => order.deliverStatus === "Delivered"
-      );
-      setallDeliveredOrders(deliveredOrders);
+      if (response && Array.isArray(response)) {
+        const canceledOrders = response.filter(
+          (order) => order.isDeleted === true
+        );
+        setallCancledOrders(canceledOrders);
+        const deliveredOrders = response.filter(
+          (order) => order.deliverStatus === "Delivered"
+        );
+        setallDeliveredOrders(deliveredOrders);
+      }
     });
   };
 
@@ -645,14 +647,16 @@ const Admin_control_panel = () => {
     });
 
     getAllOrders().then((response) => {
-      const canceledOrders = response.filter(
-        (order) => order.isDeleted === true
-      );
-      setallCancledOrders(canceledOrders);
-      const deliveredOrders = response.filter(
-        (order) => order.deliverStatus === "Delivered"
-      );
-      setallDeliveredOrders(deliveredOrders);
+      if (response && Array.isArray(response)) {
+        const canceledOrders = response.filter(
+          (order) => order.isDeleted === true
+        );
+        setallCancledOrders(canceledOrders);
+        const deliveredOrders = response.filter(
+          (order) => order.deliverStatus === "Delivered"
+        );
+        setallDeliveredOrders(deliveredOrders);
+      }
     });
     setallLoading(false);
   }, []);
