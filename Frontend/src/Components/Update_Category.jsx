@@ -14,7 +14,7 @@ const Update_Category = ({ serial, name, image, id }) => {
 
   const handleClick_update = async () => {
     setClicked_update(!clicked_update);
-    
+
     const maxSizeInKB = 70;
     if (
       updatedCategoryImage &&
@@ -23,8 +23,11 @@ const Update_Category = ({ serial, name, image, id }) => {
       alert(`File size should be less than ${maxSizeInKB} KB.`);
       return;
     }
-
-    const imageData = await setFileToBase(updatedCategoryImage);
+    if (updatedCategoryImage) {
+      let imageData = await setFileToBase(updatedCategoryImage);
+    } else {
+      let imageData = null;
+    }
 
     updateCategory(id, imageData, updatedCategoryName).then((response) => {
       alert(response);
