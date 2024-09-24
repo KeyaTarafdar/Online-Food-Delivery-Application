@@ -30,8 +30,8 @@ const Login = () => {
     }
 
     // Login API
+    setLoading(true);
     loginUser(email, password).then((userResponse) => {
-      setLoading(true);
       if (userResponse === "Login successfully") {
         setTimeout(() => {
           setLoading(false);
