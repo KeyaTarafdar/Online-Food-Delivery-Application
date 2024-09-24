@@ -604,7 +604,7 @@ const Admin_control_panel = () => {
 
   // Add new category
   const handleAddNewCategory = async () => {
-    if (!image) {
+    if (!categoryImage) {
       alert("Please Upload an Image");
       return;
     }
