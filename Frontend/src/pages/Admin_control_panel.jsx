@@ -609,7 +609,7 @@ const Admin_control_panel = () => {
       return;
     }
     const maxSizeInKB = 70;
-    if (image.size > maxSizeInKB * 1024) {
+    if (categoryImage.size > maxSizeInKB * 1024) {
       alert(`File size should be less than ${maxSizeInKB} KB.`);
       return;
     }
