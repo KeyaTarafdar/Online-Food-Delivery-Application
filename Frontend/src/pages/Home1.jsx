@@ -55,6 +55,7 @@ const Home1 = () => {
   useEffect(() => {
     checkIsLoggedIn().then((response) => {
       if (response) {
+        alert(response)
         navigate("/Home2");
       }
     });
