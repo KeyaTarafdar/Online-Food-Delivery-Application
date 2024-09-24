@@ -445,6 +445,7 @@ export const addNewCategory = async (imageData, categoryName) => {
         withCredentials: true,
       }
     );
+    alert(response.data);
     return response.data;
   } catch (err) {
     console.log(err.message);
