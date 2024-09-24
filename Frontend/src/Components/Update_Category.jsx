@@ -23,11 +23,10 @@ const Update_Category = ({ serial, name, image, id }) => {
       alert(`File size should be less than ${maxSizeInKB} KB.`);
       return;
     }
+    let imageData = null;
     if (updatedCategoryImage) {
-      let imageData = await setFileToBase(updatedCategoryImage);
-    } else {
-      let imageData = null;
-    }
+      imageData = await setFileToBase(updatedCategoryImage);
+    } 
 
     updateCategory(id, imageData, updatedCategoryName).then((response) => {
       alert(response);
