@@ -402,7 +402,7 @@ module.exports.updateRestaurent = async (req, res) => {
         }
       );
     }
-    res.send(`${restaurent.name} restaurent updated successfully`);
+    res.send("Restaurent updated successfully");
   } catch (err) {
     res.send(err.message);
   }
