@@ -26,7 +26,7 @@ const Update_Category = ({ serial, name, image, id }) => {
     let imageData = null;
     if (updatedCategoryImage) {
       imageData = await setFileToBase(updatedCategoryImage);
-    } 
+    }
 
     updateCategory(id, imageData, updatedCategoryName).then((response) => {
       alert(response);

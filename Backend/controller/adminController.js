@@ -363,38 +363,46 @@ module.exports.deleteRestaurent = async (req, res) => {
 // Update Restaurent
 module.exports.updateRestaurent = async (req, res) => {
   try {
-    let { id, name, address } = req.body;
-    let image = req.file;
+    let { id, imageData, updatedRestaurentName, updatedRestaurentAddress } =
+      req.body;
 
-    if (name !== "undefined") {
-      await restaurentModel.findOneAndUpdate({ _id: id }, { $set: { name } });
-    }
-    if (address !== "undefined") {
+    if (updatedRestaurentName !== "undefined") {
       await restaurentModel.findOneAndUpdate(
         { _id: id },
-        { $set: { address } }
+        { $set: { name: updatedRestaurentName } }
+      );
+    }
+    if (updatedRestaurentAddress !== "undefined") {
+      await restaurentModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { address: updatedRestaurentAddress } }
       );
     }
 
-    if (image !== undefined) {
+    if (imageData !== null) {
+      const result = await cloudinary.uploader.upload(imageData, {
+        folder: "restaurentPictures",
+      });
+
       let restaurent = await restaurentModel.findOne({ _id: id });
       const oldImage = restaurent.image;
-      if (oldImage)
-        fs.unlink(
-          `../Frontend/public/restaurentPictures/${oldImage}`,
-          (err) => {
-            if (err) {
-              console.log(err.message);
-            }
-          }
-        );
+      if (oldImage) {
+        await cloudinary.uploader.destroy(oldImage.public_id);
+      }
+
       await restaurentModel.findOneAndUpdate(
         { _id: id },
-        { $set: { image: image.filename } }
+        {
+          $set: {
+            image: {
+              public_id: result.public_id,
+              url: result.secure_url,
+            },
+          },
+        }
       );
     }
-
-    res.send("Restaurent updated successfully");
+    res.send(`${restaurent.name} restaurent updated successfully`);
   } catch (err) {
     res.send(err.message);
   }

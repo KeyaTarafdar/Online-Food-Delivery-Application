@@ -417,15 +417,17 @@ export const deleteRestaurent = async (id) => {
 };
 
 // Update Restautrent
-export const updateRestaurent = async (formData) => {
+export const updateRestaurent = async (
+  id,
+  imageData,
+  updatedRestaurentName,
+  updatedRestaurentAddress
+) => {
   try {
     let response = await axios.put(
       "https://online-food-delivery-application-8hro.onrender.com/admins/updaterestaurent",
-      formData,
+      { id, imageData, updatedRestaurentName, updatedRestaurentAddress },
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
         withCredentials: true,
       }
     );

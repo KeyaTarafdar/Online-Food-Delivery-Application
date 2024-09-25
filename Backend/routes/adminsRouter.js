@@ -30,10 +30,6 @@ const {
   setAsTodaysOffer,
   removeFromTodaysOffer,
 } = require("../controller/adminController");
-const {
-  uploadRestaurent,
-  uploadCategory,
-} = require("../middlewares/multer");
 
 // ADMIN REGISTER
 if (process.env.NODE_ENV === "development") {
@@ -91,7 +87,6 @@ router.post(
 router.put(
   "/updaterestaurent",
   isLoggedIn,
-  uploadRestaurent.single("image"),
   updateRestaurent
 );
 
@@ -121,7 +116,6 @@ router.delete("/deletecategory", isLoggedIn, deleteCategory);
 router.put(
   "/updatecategory",
   isLoggedIn,
-  uploadCategory.single("image"),
   updateCategory
 );
 
